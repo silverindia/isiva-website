@@ -1,5 +1,6 @@
-// Mobile nav toggle
 document.addEventListener('DOMContentLoaded', () => {
+
+  // Mobile nav toggle
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
   if (toggle && links) {
@@ -8,6 +9,23 @@ document.addEventListener('DOMContentLoaded', () => {
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       toggle.textContent = open ? 'Close' : 'Menu';
     });
+  }
+
+  // More dropdown — click to open, click outside to close
+  const moreNav = document.querySelector('.nav-more');
+  const moreBtn = document.querySelector('.nav-more__label');
+  if (moreNav && moreBtn) {
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      moreNav.classList.toggle('is-open');
+    });
+    document.addEventListener('click', () => {
+      moreNav.classList.remove('is-open');
+    });
+    const moreMenu = moreNav.querySelector('.nav-more__menu');
+    if (moreMenu) {
+      moreMenu.addEventListener('click', (e) => e.stopPropagation());
+    }
   }
 
   // Scroll reveal
@@ -25,4 +43,5 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
+
 });
