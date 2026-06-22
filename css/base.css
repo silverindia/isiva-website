@@ -276,12 +276,12 @@ img { max-width: 100%; display: block; }
   transition: color 0.2s var(--ease);
 }
 
-.nav-more:hover .nav-more__label { color: var(--ply-green-deep); }
+.nav-more__label { color: var(--ply-green-deep); }
 
 .nav-more__menu {
   display: none;
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 4px);
   right: 0;
   background: #fff;
   border: 1px solid var(--thread);
@@ -294,7 +294,7 @@ img { max-width: 100%; display: block; }
   z-index: 100;
 }
 
-.nav-more:hover .nav-more__menu { display: block; }
+.nav-more.is-open .nav-more__menu { display: block; }
 
 .nav-more__menu li a {
   display: block;
