@@ -665,7 +665,7 @@ body {
 
 </style>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");</script>
+<script>emailjs.init("XiIqPBh9qXU9V4qI6");</script>
 </head>
 <body>
 <nav class="isiva-nav" aria-label="Site navigation">
@@ -809,7 +809,7 @@ body {
 
         <!-- PRIVACY NOTICE -->
         <div class="reg-privacy">
-          <strong>Data Privacy Notice</strong> — In accordance with India's Digital Personal Data Protection Act 2023 (DPDP Act), your personal information (name, institution, email, mobile number) is collected solely for the purpose of OBE training access, progress tracking, certificate issuance, and training feedback. Your data will not be shared with any third party without your explicit consent. You may request deletion of your data at any time by writing to <a href="mailto:drisivamech@gmail.com">drisivamech@gmail.com</a>. By registering, you consent to these terms.
+          <strong>Data Privacy Notice</strong> — In accordance with India's Digital Personal Data Protection Act 2023 (DPDP Act), your personal information (name, institution, email, mobile number) is collected solely for the purpose of OBE training access, progress tracking, certificate issuance, and training feedback. Your data will not be shared with any third party without your explicit consent. You may request deletion of your data at any time by writing to <a href="mailto:isiva@mahendraengineeringcollege.ac.in">isiva@mahendraengineeringcollege.ac.in</a>. By registering, you consent to these terms.
         </div>
 
         <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#2C3E50;margin-bottom:16px;cursor:pointer">
@@ -2084,10 +2084,11 @@ function govEsc(id){const info=GESC[id];const box=document.getElementById('gov-e
 
 // ══ REGISTRATION & SESSION MANAGEMENT ══════════════════════════════════
 
-const EMAILJS_SERVICE  = 'service_e8m44al';   // replace after EmailJS setup
-const EMAILJS_TEMPLATE = 'template_l4zyg6i';  // replace after EmailJS setup
-const EMAILJS_KEY      = 'XiIqPBh9qXU9V4qI6';   // replace after EmailJS setup
-const GFORM_URL        = 'https://docs.google.com/forms/d/1eRbGfLmUS8nb-l06cTWmbR1LFKM70GHN7lJjFVByLTI/formResponse'; // replace after Google Form setup
+const EMAILJS_SERVICE          = 'service_e8m44a1';
+const EMAILJS_TEMPLATE         = 'template_l4zyg6i';    // OTP template
+const EMAILJS_WELCOME_TEMPLATE = 'template_5xwkeg5'; // create this in EmailJS → replace here
+const EMAILJS_KEY              = 'XiIqPBh9qXU9V4qI6';
+const GFORM_URL                = 'https://docs.google.com/forms/d/1eRbGfLmUS8nb-l06cTWmbR1LFKM70GHN7lJjFVByLTI/formResponse'; // replace with your form's formResponse URL
 // Google Form field entry IDs (replace with yours):
 const GF = {
   name:    'entry.1986181708',
@@ -2173,24 +2174,63 @@ function portalLogout() {
 // ── OTP Logic ──────────────────────────────────────────────────────────
 function sendOTP() {
   const email = document.getElementById('rf-email').value.trim();
-  const phone = document.getElementById('rf-phone').value.trim();
 
   if (!email || !validateEmail(email)) {
     showErr('err-email', 'Please enter a valid email address first');
     document.getElementById('rf-email').focus(); return;
   }
 
+  // ── FIX 2: Check if email already registered (localStorage) ──
+  // Also check sessionStorage for a known-registered flag
+  const existingUser = getUser();
+  if (existingUser && existingUser.email === email) {
+    // Already registered on this device — skip OTP, go straight to portal
+    showPortal(existingUser);
+    return;
+  }
+
+  // Check registered-emails list stored in localStorage
+  let knownEmails = [];
+  try { knownEmails = JSON.parse(localStorage.getItem('obe_known_emails') || '[]'); } catch(e) {}
+  if (knownEmails.includes(email.toLowerCase())) {
+    // Known email — show a "already registered" message instead of sending OTP
+    document.getElementById('otp-box').style.display = 'block';
+    document.getElementById('otp-box').style.background = '#FAEEDA';
+    document.getElementById('otp-box').style.borderColor = '#FAC775';
+    document.getElementById('otp-box').innerHTML = `
+      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:6px">⚠ Email already registered</div>
+      <div style="font-size:12px;color:#633806;line-height:1.65;margin-bottom:10px">
+        <strong>${email}</strong> is already registered on this portal.<br>
+        If you are on a new device, please check your welcome email for your personal access link,
+        or use the device where you originally registered.
+      </div>
+      <button onclick="alreadyRegisteredLogin('${email}')" style="padding:8px 16px;background:#854F0B;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">
+        Re-enter portal →
+      </button>
+      <div style="font-size:11px;color:#854F0B;margin-top:8px">
+        Not your email? <a href="#" onclick="document.getElementById('rf-email').value='';document.getElementById('otp-box').style.display='none';return false;" style="color:#993C1D">Change email</a>
+      </div>`;
+    return;
+  }
+
   // Generate 6-digit OTP
   generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
 
-  // Send OTP via EmailJS
+  // ── FIX 3: Send OTP to registrant's email (to_email must be dynamic) ──
   if (typeof emailjs !== 'undefined') {
     emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      to_email:  email,
-      to_name:   document.getElementById('rf-name').value || 'Participant',
+      to_email:  email,           // registrant's email — NOT hardcoded
+      to_name:   document.getElementById('rf-name').value.trim() || 'Participant',
       otp_code:  generatedOTP,
-      subject:   'Your OBE Training Portal OTP'
-    }, EMAILJS_KEY).catch(e => console.warn('EmailJS:', e));
+      reply_to:  'drisivamech@gmail.com'
+    }, EMAILJS_KEY)
+    .then(() => {
+      console.log('OTP sent to', email);
+    })
+    .catch(e => {
+      console.warn('EmailJS OTP error:', e);
+      showErr('err-phone', 'Could not send OTP. Please check your email address and try again.');
+    });
   }
 
   // Show OTP box
@@ -2231,6 +2271,39 @@ function otpMove(el, nextId) {
 function otpBack(e, el, prevId) {
   if (e.key === 'Backspace' && !el.value && prevId)
     document.getElementById(prevId).focus();
+}
+
+function alreadyRegisteredLogin(email) {
+  // Restore minimal session from known email and open portal
+  const knownEmails = JSON.parse(localStorage.getItem('obe_known_emails') || '[]');
+  if (knownEmails.includes(email.toLowerCase())) {
+    // We have the email but not the full user object (different device / cleared storage)
+    // Show a prompt to enter their name to restore a lightweight session
+    document.getElementById('otp-box').innerHTML = `
+      <div style="font-size:12px;font-weight:600;color:#0F6E56;margin-bottom:8px">✓ Email recognised — quick re-entry</div>
+      <div style="font-size:11px;color:#444;margin-bottom:8px">Enter your name to re-enter the portal on this device:</div>
+      <input type="text" id="restore-name" placeholder="Your full name"
+        style="width:100%;font-size:13px;padding:8px 10px;border-radius:7px;border:1px solid #5DCAA5;outline:none;margin-bottom:8px;font-family:inherit">
+      <button onclick="restoreSession('${email}')" style="padding:8px 16px;background:#0F6E56;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">
+        Enter portal →
+      </button>`;
+  }
+}
+
+function restoreSession(email) {
+  const name = document.getElementById('restore-name') ?
+    document.getElementById('restore-name').value.trim() : '';
+  if (!name) { return; }
+  const userData = {
+    name, email,
+    desig: 'Returning user', inst: 'Previously registered',
+    role: '', dept: '', phone: '',
+    token: btoa(email).slice(0,16),
+    date: new Date().toISOString(),
+    restored: true
+  };
+  saveUser(userData);
+  showPortal(userData);
 }
 
 function verifyOTP() {
@@ -2316,31 +2389,49 @@ function submitRegistration() {
   // Save to localStorage
   saveUser(userData);
 
-  // Submit to Google Form (no-cors, fire and forget)
-  const formData = new FormData();
-  formData.append(GF.name,  name);
-  formData.append(GF.desig, desig);
-  formData.append(GF.inst,  inst);
-  formData.append(GF.role,  role);
-  formData.append(GF.dept,  dept);
-  formData.append(GF.email, email);
-  formData.append(GF.phone, phone);
-  formData.append(GF.token, token);
-  formData.append(GF.date,  userData.date);
-  fetch(GFORM_URL, { method:'POST', mode:'no-cors', body: formData }).catch(()=>{});
+  // Save email to known-emails list (prevents duplicate OTP sending)
+  let knownEmails = [];
+  try { knownEmails = JSON.parse(localStorage.getItem('obe_known_emails') || '[]'); } catch(e) {}
+  if (!knownEmails.includes(email.toLowerCase())) {
+    knownEmails.push(email.toLowerCase());
+    localStorage.setItem('obe_known_emails', JSON.stringify(knownEmails));
+  }
 
-  // Send welcome email with magic link via EmailJS
+  // ── FIX: Submit to Google Form using URLSearchParams (more reliable than FormData with no-cors) ──
+  const gfParams = new URLSearchParams();
+  gfParams.append(GF.name,  name);
+  gfParams.append(GF.desig, desig);
+  gfParams.append(GF.inst,  inst);
+  gfParams.append(GF.role,  role);
+  gfParams.append(GF.dept,  dept || '');
+  gfParams.append(GF.email, email);
+  gfParams.append(GF.phone, phone);
+  gfParams.append(GF.token, token);
+  gfParams.append(GF.date,  userData.date);
+  fetch(GFORM_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: gfParams.toString()
+  }).then(() => console.log('Google Form submitted'))
+    .catch(e => console.warn('Google Form error:', e));
+
+  // ── FIX 3: Send welcome email with magic link ──
+  // Uses a SECOND EmailJS template — must be created in EmailJS dashboard
+  // Template name: obe_welcome_template  (create this if not done yet)
   const magicLink = `https://isiva.in/obe-portal.html?token=${token}`;
   if (typeof emailjs !== 'undefined') {
-    emailjs.send(EMAILJS_SERVICE, 'obe_welcome_template', {
-      to_email:     email,
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_WELCOME_TEMPLATE, {
+      to_email:     email,           // registrant's email
       to_name:      name,
       institution:  inst,
       role:         role,
       magic_link:   magicLink,
       portal_url:   'https://isiva.in/obe-portal.html',
-      subject:      'Welcome to OBE Training Portal — Your Access Link'
-    }, EMAILJS_KEY).catch(e => console.warn('EmailJS welcome:', e));
+      reply_to:     'drisivamech@gmail.com'
+    }, EMAILJS_KEY)
+    .then(() => console.log('Welcome email sent to', email))
+    .catch(e => console.warn('Welcome email error:', e));
   }
 
   // Show success
