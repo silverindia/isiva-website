@@ -1,0 +1,2362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBE Faculty Training Portal — Dr. I. Siva</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D2B4E;
+  --blue: #1A5276;
+  --mid: #2E86C1;
+  --sky: #AED6F1;
+  --ink: #0D1B2A;
+  --muted: #5D6D7E;
+  --pale: #F0F4F8;
+  --white: #FFFFFF;
+  --border: #D6E4F0;
+  --gold: #D4AC0D;
+  --green: #1A7A4A;
+  --green-bg: #E8F8F0;
+  --amber: #B7770D;
+  --amber-bg: #FEF9E7;
+  --coral: #A93226;
+  --coral-bg: #FDEDEC;
+  --purple: #6C3483;
+  --purple-bg: #F4ECF7;
+  --r: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--pale);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.65;
+}
+/* ── LAYOUT ── */
+.portal-wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  color: #fff;
+  padding: 56px 40px 48px;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: rgba(46,134,193,0.18);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 30%;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(212,172,13,0.10);
+}
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 14px;
+  position: relative; z-index: 1;
+}
+.hero-title span { color: var(--sky); }
+.hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 28px;
+  max-width: 560px;
+  position: relative; z-index: 1;
+}
+.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; position: relative; z-index: 1; }
+.hero-tag {
+  font-size: 12px; font-weight: 500;
+  padding: 4px 12px; border-radius: 20px;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.12);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-top: 36px;
+  position: relative; z-index: 1;
+}
+.hero-stat {
+  background: rgba(255,255,255,0.07);
+  padding: 16px 20px;
+  text-align: center;
+}
+.hero-stat-n { font-size: 26px; font-weight: 600; color: #fff; }
+.hero-stat-l { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.progress-label { font-size: 13px; font-weight: 500; color: var(--navy); white-space: nowrap; }
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--pale);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mid), var(--green));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.progress-pct { font-size: 13px; font-weight: 600; color: var(--mid); min-width: 36px; text-align: right; }
+.cert-badge {
+  display: none;
+  font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 20px;
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid #A9DFBF;
+}
+
+/* ── NAV TABS ── */
+.tab-nav {
+  display: flex; gap: 4px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 4px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tab-btn {
+  flex-shrink: 0;
+  font-size: 13px; font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { background: var(--pale); color: var(--ink); }
+.tab-btn.active { background: var(--navy); color: #fff; }
+
+/* ── MODULE CARDS ── */
+.module-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.module-card:hover { box-shadow: 0 4px 20px rgba(13,43,78,0.1); }
+.module-card.active { border-color: var(--mid); }
+.module-header {
+  display: flex; align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+  gap: 16px;
+}
+.module-num {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}
+.module-meta { flex: 1; }
+.module-title { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.module-desc { font-size: 12px; color: var(--muted); }
+.module-right { text-align: right; flex-shrink: 0; }
+.module-time { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.module-status {
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: var(--pale);
+}
+.module-status.done { background: var(--green-bg); color: var(--green); border-color: #A9DFBF; }
+.chevron { transition: transform 0.2s; color: var(--muted); font-size: 18px; margin-left: 8px; }
+.chevron.open { transform: rotate(180deg); }
+
+/* ── MODULE BODY ── */
+.module-body { display: none; border-top: 1px solid var(--border); }
+.module-body.open { display: block; }
+
+/* ── TABS INSIDE MODULE ── */
+.inner-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--pale);
+  padding: 0 24px;
+}
+.inner-tab {
+  font-size: 13px; font-weight: 500;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.inner-tab.active { color: var(--mid); border-bottom-color: var(--mid); }
+
+/* ── CONTENT PANEL ── */
+.content-panel { padding: 28px 28px; display: none; }
+.content-panel.active { display: block; }
+
+/* ── TOPIC LIST ── */
+.topic-list { list-style: none; }
+.topic-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.topic-item:last-child { border-bottom: none; }
+.topic-dot {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--pale);
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.topic-dot.done { background: var(--green); border-color: var(--green); }
+.topic-dot svg { display: none; }
+.topic-dot.done svg { display: block; }
+.topic-content { flex: 1; }
+.topic-title { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+.topic-note { font-size: 12px; color: var(--muted); }
+.topic-bloom {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px;
+  background: var(--pale); color: var(--mid);
+  border: 1px solid var(--border);
+  margin-left: 6px; vertical-align: middle;
+}
+
+/* ── CONTENT TYPOGRAPHY ── */
+.prose h3 { font-size: 15px; font-weight: 600; color: var(--navy); margin: 20px 0 8px; }
+.prose p { font-size: 14px; color: #2C3E50; line-height: 1.7; margin-bottom: 10px; }
+.prose ul { padding-left: 18px; margin-bottom: 10px; }
+.prose ul li { font-size: 14px; color: #2C3E50; margin-bottom: 4px; }
+.callout {
+  border-left: 3px solid var(--mid);
+  background: #EBF5FB;
+  padding: 14px 18px;
+  border-radius: 0 var(--r) var(--r) 0;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.callout strong { color: var(--navy); }
+.callout.amber { border-left-color: var(--amber); background: var(--amber-bg); }
+.callout.green { border-left-color: var(--green); background: var(--green-bg); }
+.callout.purple { border-left-color: var(--purple); background: var(--purple-bg); }
+
+/* ── DATA TABLE ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 20px; }
+.data-table th {
+  background: var(--navy); color: #fff;
+  padding: 9px 12px; text-align: left; font-weight: 500;
+}
+.data-table th:first-child { border-radius: 6px 0 0 0; }
+.data-table th:last-child { border-radius: 0 6px 0 0; }
+.data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: top; }
+.data-table tr:nth-child(even) td { background: var(--pale); }
+.bloom-chip {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px;
+}
+
+/* ── CO-PO MATRIX ── */
+.matrix-wrap { overflow-x: auto; margin: 12px 0; }
+.matrix-table { border-collapse: collapse; font-size: 12px; }
+.matrix-table th, .matrix-table td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+.matrix-table thead th { background: var(--navy); color: #fff; font-weight: 500; text-align: center; }
+.matrix-table thead th:first-child { text-align: left; }
+.matrix-table td:first-child { font-weight: 600; color: var(--navy); background: #F7FBFF; }
+.cell-s0 { background: #fff; color: #ccc; text-align: center; }
+.cell-s1 { background: #E8F8F0; color: #1A7A4A; font-weight: 700; text-align: center; }
+.cell-s2 { background: #EBF5FB; color: #1A5276; font-weight: 700; text-align: center; }
+.cell-s3 { background: #EDE7F6; color: #4A235A; font-weight: 700; text-align: center; }
+.matrix-avg { background: var(--pale) !important; font-weight: 600; text-align: center; color: var(--navy) !important; }
+
+/* ── QUIZ ── */
+.quiz-q { margin-bottom: 24px; }
+.quiz-q-text { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 12px; line-height: 1.55; }
+.quiz-q-num { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.05em; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  cursor: pointer;
+  font-size: 13px;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--white);
+}
+.quiz-option:hover { border-color: var(--mid); background: #F0F8FF; }
+.quiz-option.selected { border-color: var(--mid); background: #EBF5FB; }
+.quiz-option.correct { border-color: var(--green); background: var(--green-bg); }
+.quiz-option.wrong { border-color: var(--coral); background: var(--coral-bg); }
+.quiz-option input[type=radio] { margin-top: 2px; flex-shrink: 0; }
+.quiz-feedback { font-size: 12px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.ok { background: var(--green-bg); color: var(--green); }
+.quiz-feedback.no { background: var(--coral-bg); color: var(--coral); }
+.quiz-submit-btn {
+  margin-top: 8px;
+  padding: 7px 18px;
+  font-size: 13px; font-weight: 500;
+  background: var(--mid);
+  color: #fff;
+  border: none; border-radius: var(--r);
+  cursor: pointer;
+}
+.quiz-submit-btn:hover { background: var(--blue); }
+.quiz-result {
+  display: none;
+  margin-top: 20px;
+  padding: 20px 24px;
+  border-radius: var(--r);
+  text-align: center;
+}
+.quiz-result.show { display: block; }
+.quiz-result-score { font-size: 36px; font-weight: 700; font-family: 'Playfair Display', serif; }
+.quiz-result-msg { font-size: 14px; margin-top: 6px; }
+.quiz-restart { margin-top: 14px; font-size: 13px; padding: 7px 18px; border-radius: var(--r); border: 1px solid; cursor: pointer; background: transparent; }
+
+/* ── TOOL PANEL ── */
+.tool-panel { padding: 24px 28px; }
+.tool-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+/* ── CO-PO INTERACTIVE ── */
+.ipo-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+.ipo-table th { background: var(--navy); color: #fff; padding: 8px 10px; text-align: center; font-weight: 500; white-space: nowrap; }
+.ipo-table th:first-child { text-align: left; min-width: 160px; }
+.ipo-table td { padding: 7px 8px; border: 1px solid var(--border); vertical-align: middle; }
+.ipo-table td:first-child { background: #F7FBFF; font-size: 12px; }
+.ipo-cell-btn {
+  width: 32px; height: 26px; border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--pale);
+  color: var(--muted);
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; display: block; margin: auto;
+  transition: all 0.1s;
+}
+.ipo-cell-btn.s1 { background: #E8F8F0; color: #1A7A4A; border-color: #82E0AA; }
+.ipo-cell-btn.s2 { background: #EBF5FB; color: #1A5276; border-color: #85C1E9; }
+.ipo-cell-btn.s3 { background: #EDE7F6; color: #4A235A; border-color: #BB8FCE; }
+.ipo-avg { font-size: 12px; font-weight: 700; text-align: center; background: var(--pale) !important; }
+.ipo-co-label { display: block; font-size: 11px; font-weight: 700; color: var(--mid); }
+.ipo-co-text { font-size: 11px; color: var(--muted); }
+.att-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
+.att-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; text-align: center; }
+.att-card-n { font-size: 26px; font-weight: 700; font-family: 'Playfair Display', serif; }
+.att-card-l { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: var(--r);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; border: 1px solid;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+.btn-primary:hover { background: var(--blue); border-color: var(--blue); }
+.btn-outline { background: transparent; color: var(--navy); border-color: var(--border); }
+.btn-outline:hover { background: var(--pale); border-color: var(--mid); }
+.btn-green { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ── FOOTER ── */
+.portal-footer {
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+.portal-footer a { color: var(--mid); text-decoration: none; }
+.portal-footer a:hover { text-decoration: underline; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero { padding: 36px 20px 32px; }
+  .hero-stats { grid-template-columns: repeat(2,1fr); }
+  .content-panel { padding: 20px 16px; }
+  .module-header { padding: 16px; }
+  .att-summary { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── ISIVA.IN MATCHING NAV ── */
+.isiva-nav {
+  background: #0D2B4E;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 12px rgba(13,43,78,0.18);
+}
+.isiva-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 0;
+  height: 54px;
+}
+.isiva-brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px; font-weight: 700;
+  color: #fff; text-decoration: none;
+  margin-right: 32px; white-space: nowrap; flex-shrink: 0;
+}
+.isiva-brand span { font-size: 12px; font-weight: 400; color: #AED6F1; margin-left: 5px; font-family: 'Inter', sans-serif; }
+.isiva-nav-links { display: flex; align-items: center; gap: 2px; flex: 1; }
+.isiva-nav-link {
+  font-size: 13px; font-weight: 400;
+  color: rgba(255,255,255,0.72);
+  text-decoration: none;
+  padding: 6px 11px; border-radius: 6px;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.isiva-nav-link:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.isiva-nav-link.active {
+  background: rgba(174,214,241,0.18);
+  color: #AED6F1;
+  font-weight: 500;
+  border-bottom: 2px solid #AED6F1;
+  border-radius: 6px 6px 0 0;
+}
+.isiva-more { position: relative; margin-left: 2px; }
+.isiva-more-btn {
+  font-size: 13px; font-weight: 400;
+  color: rgba(255,255,255,0.72);
+  background: transparent; border: none;
+  padding: 6px 11px; border-radius: 6px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: background .15s, color .15s;
+}
+.isiva-more-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.isiva-dropdown {
+  display: none; position: absolute; top: 42px; right: 0;
+  background: #0D2B4E; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px; min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  overflow: hidden; z-index: 200;
+}
+.isiva-dropdown a {
+  display: block; padding: 9px 16px;
+  font-size: 13px; color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: background .12s;
+}
+.isiva-dropdown a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.isiva-more:hover .isiva-dropdown { display: block; }
+.isiva-mobile-btn {
+  display: none; margin-left: auto;
+  background: transparent; border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8); font-size: 12px;
+  padding: 5px 12px; border-radius: 6px; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.isiva-mobile-nav { display: none; background: #0A2240; padding: 8px 0; }
+.isiva-mobile-nav a { display: block; padding: 9px 24px; font-size: 13px; color: rgba(255,255,255,0.8); text-decoration: none; }
+.isiva-mobile-nav a:hover { background: rgba(255,255,255,0.07); color: #fff; }
+.isiva-mobile-nav a.active { color: #AED6F1; font-weight: 500; }
+@media (max-width: 768px) {
+  .isiva-nav-links { display: none; }
+  .isiva-mobile-btn { display: block; }
+  .isiva-mobile-nav.open { display: block; }
+}
+
+
+/* ── REGISTRATION GATE ── */
+#reg-gate {
+  min-height: calc(100vh - 54px);
+  background: linear-gradient(135deg, #0D2B4E 0%, #1A5276 60%, #0F6E56 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+}
+.reg-card {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%; max-width: 520px;
+  box-shadow: 0 24px 64px rgba(13,43,78,0.28);
+  overflow: hidden;
+}
+.reg-card-top {
+  background: #0D2B4E;
+  padding: 28px 32px 24px;
+  position: relative; overflow: hidden;
+}
+.reg-card-top::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: rgba(174,214,241,0.10);
+}
+.reg-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  color: #AED6F1; text-transform: uppercase; margin-bottom: 8px;
+}
+.reg-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px; font-weight: 700; color: #fff;
+  margin-bottom: 6px; line-height: 1.25;
+}
+.reg-subtitle {
+  font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5;
+}
+.reg-body { padding: 28px 32px; }
+.reg-field { margin-bottom: 16px; }
+.reg-label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: #0D2B4E; margin-bottom: 5px; letter-spacing: .02em;
+}
+.reg-label span { color: #993C1D; margin-left: 2px; }
+.reg-input {
+  width: 100%; font-size: 13px;
+  padding: 10px 12px; border-radius: 8px;
+  border: 1.5px solid #D6E4F0;
+  background: #F7FBFF; color: #0D1B2A;
+  font-family: 'Inter', sans-serif;
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+.reg-input:focus { border-color: #2E86C1; box-shadow: 0 0 0 3px rgba(46,134,193,0.12); }
+.reg-input.error { border-color: #993C1D; background: #FFF8F8; }
+.reg-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230D2B4E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer; }
+.reg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.reg-otp-row { display: flex; gap: 8px; }
+.reg-otp-label { flex: 1; }
+.reg-otp-btn {
+  align-self: flex-end; padding: 10px 14px;
+  font-size: 12px; font-weight: 500;
+  border: 1.5px solid #0F6E56; border-radius: 8px;
+  background: transparent; color: #0F6E56; cursor: pointer;
+  white-space: nowrap; font-family: 'Inter', sans-serif;
+  transition: all .15s;
+}
+.reg-otp-btn:hover { background: #0F6E56; color: #fff; }
+.reg-otp-btn:disabled { opacity: .45; cursor: default; }
+.reg-submit {
+  width: 100%; padding: 13px;
+  background: #0D2B4E; color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  font-family: 'Playfair Display', Georgia, serif;
+  cursor: pointer; margin-top: 6px;
+  transition: background .15s, transform .1s;
+  letter-spacing: .02em;
+}
+.reg-submit:hover { background: #1A5276; transform: translateY(-1px); }
+.reg-submit:active { transform: translateY(0); }
+.reg-submit:disabled { opacity: .55; cursor: default; transform: none; }
+.reg-divider { height: 1px; background: #EBF5FB; margin: 16px 0; }
+.reg-privacy {
+  font-size: 11px; color: #5D6D7E; line-height: 1.6;
+  background: #F7FBFF; border-radius: 8px;
+  padding: 10px 12px; border-left: 3px solid #2E86C1;
+  margin-bottom: 16px;
+}
+.reg-privacy strong { color: #0D2B4E; }
+.reg-privacy a { color: #2E86C1; text-decoration: none; }
+.reg-error { font-size: 11px; color: #993C1D; margin-top: 4px; display: none; }
+.reg-success { display: none; text-align: center; padding: 32px 24px; }
+.reg-success-icon { font-size: 48px; margin-bottom: 12px; }
+.reg-success-title { font-family: 'Playfair Display', serif; font-size: 20px; color: #0D2B4E; margin-bottom: 8px; }
+.reg-success-msg { font-size: 13px; color: #5D6D7E; line-height: 1.7; margin-bottom: 20px; }
+.reg-access-btn {
+  display: inline-block; padding: 12px 28px;
+  background: #0F6E56; color: #fff; border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  transition: background .15s;
+}
+.reg-access-btn:hover { background: #085041; }
+.howto-steps { text-align: left; margin: 16px 0; }
+.howto-step { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #EBF5FB; font-size: 12px; color: #2C3E50; line-height: 1.55; }
+.howto-step:last-child { border-bottom: none; }
+.howto-num { width: 20px; height: 20px; border-radius: 50%; background: #0D2B4E; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+/* Welcome back bar */
+#welcome-bar {
+  display: none;
+  background: linear-gradient(90deg, #0D2B4E, #1A5276);
+  color: #fff; padding: 10px 24px;
+  font-size: 13px; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+#welcome-bar.show { display: flex; }
+.welcome-name { font-weight: 500; color: #AED6F1; }
+.welcome-logout {
+  font-size: 11px; padding: 4px 10px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25); background: transparent;
+  color: rgba(255,255,255,0.7); cursor: pointer; font-family: 'Inter', sans-serif;
+}
+.welcome-logout:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+/* OTP verification box */
+#otp-box {
+  display: none; margin-top: 12px;
+  background: #E1F5EE; border-radius: 8px; padding: 14px 16px;
+  border: 1px solid #5DCAA5;
+}
+.otp-inputs { display: flex; gap: 8px; margin: 10px 0; }
+.otp-digit {
+  width: 44px; height: 48px; text-align: center;
+  font-size: 20px; font-weight: 700; border-radius: 8px;
+  border: 1.5px solid #5DCAA5; background: #fff;
+  color: #0D2B4E; font-family: 'Playfair Display', serif;
+  outline: none; transition: border-color .15s;
+}
+.otp-digit:focus { border-color: #0F6E56; box-shadow: 0 0 0 3px rgba(15,110,86,0.15); }
+.otp-verify-btn {
+  padding: 9px 20px; background: #0F6E56; color: #fff;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+}
+.otp-timer { font-size: 11px; color: #5D6D7E; margin-top: 6px; }
+
+</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");</script>
+</head>
+<body>
+<nav class="isiva-nav" aria-label="Site navigation">
+  <div class="isiva-nav-inner">
+    <a href="https://isiva.in/index.html" class="isiva-brand">Dr. I. Siva <span>ME · PhD</span></a>
+    <div class="isiva-nav-links">
+      <a href="https://isiva.in/index.html" class="isiva-nav-link">Home</a>
+      <a href="https://isiva.in/research.html" class="isiva-nav-link">Research</a>
+      <a href="https://isiva.in/publications.html" class="isiva-nav-link">Publications</a>
+      <a href="https://isiva.in/cv.html" class="isiva-nav-link">CV &amp; Experience</a>
+      <a href="https://isiva.in/contact.html" class="isiva-nav-link">Contact</a>
+      <a href="https://isiva.in/obe-portal.html" class="isiva-nav-link active" aria-current="page">OBE Training</a>
+      <div class="isiva-more">
+        <button class="isiva-more-btn" aria-haspopup="true">More ▾</button>
+        <div class="isiva-dropdown" role="menu">
+          <a href="https://isiva.in/events.html" role="menuitem">Events</a>
+          <a href="https://isiva.in/highlights.html" role="menuitem">Highlights</a>
+          <a href="https://isiva.in/classroom.html" role="menuitem">Classroom</a>
+          <a href="https://isiva.in/research-direction.html" role="menuitem">Research Direction</a>
+          <a href="https://isiva.in/entrepreneurship.html" role="menuitem">Entrepreneurship</a>
+        </div>
+      </div>
+    </div>
+    <button class="isiva-mobile-btn" onclick="isivaMobileNav()" aria-label="Toggle menu">Menu</button>
+  </div>
+  <div class="isiva-mobile-nav" id="isiva-mobile-nav">
+    <a href="https://isiva.in/index.html">Home</a>
+    <a href="https://isiva.in/research.html">Research</a>
+    <a href="https://isiva.in/publications.html">Publications</a>
+    <a href="https://isiva.in/cv.html">CV &amp; Experience</a>
+    <a href="https://isiva.in/contact.html">Contact</a>
+    <a href="https://isiva.in/obe-portal.html" class="active">OBE Training</a>
+    <a href="https://isiva.in/events.html">Events</a>
+    <a href="https://isiva.in/highlights.html">Highlights</a>
+    <a href="https://isiva.in/classroom.html">Classroom</a>
+    <a href="https://isiva.in/research-direction.html">Research Direction</a>
+    <a href="https://isiva.in/entrepreneurship.html">Entrepreneurship</a>
+  </div>
+</nav>
+
+<!-- ══ WELCOME BACK BAR ══ -->
+<div id="welcome-bar">
+  <span>Welcome back, <span class="welcome-name" id="wb-name"></span> 👋 &nbsp;Your progress is saved on this device.</span>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span id="wb-inst" style="font-size:11px;color:rgba(255,255,255,0.55)"></span>
+    <button class="welcome-logout" onclick="portalLogout()">Not you? Sign out</button>
+  </div>
+</div>
+
+<!-- ══ REGISTRATION GATE ══ -->
+<div id="reg-gate">
+  <div class="reg-card">
+    <div class="reg-card-top">
+      <div class="reg-eyebrow">Free · NBA + NAAC Aligned · 5 Modules</div>
+      <div class="reg-title">OBE Faculty Training Portal</div>
+      <div class="reg-subtitle">Register once to access all modules, quizzes, interactive tools, and your certificate of completion.</div>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <div class="reg-body" id="reg-form-wrap">
+      <form id="reg-form" onsubmit="return false">
+
+        <div class="reg-grid">
+          <div class="reg-field">
+            <label class="reg-label" for="rf-name">Full name <span>*</span></label>
+            <input class="reg-input" type="text" id="rf-name" placeholder="Dr. / Prof. / Mr. / Ms." autocomplete="name" required>
+            <div class="reg-error" id="err-name">Please enter your full name</div>
+          </div>
+          <div class="reg-field">
+            <label class="reg-label" for="rf-desig">Designation <span>*</span></label>
+            <input class="reg-input" type="text" id="rf-desig" placeholder="Professor / HOD / IQAC Director" required>
+            <div class="reg-error" id="err-desig">Please enter your designation</div>
+          </div>
+        </div>
+
+        <div class="reg-field">
+          <label class="reg-label" for="rf-inst">Institution <span>*</span></label>
+          <input class="reg-input" type="text" id="rf-inst" placeholder="Institution / University name" required>
+          <div class="reg-error" id="err-inst">Please enter your institution name</div>
+        </div>
+
+        <div class="reg-grid">
+          <div class="reg-field">
+            <label class="reg-label" for="rf-role">Role <span>*</span></label>
+            <select class="reg-input reg-select" id="rf-role" required>
+              <option value="">Select role…</option>
+              <option>Faculty (Course designer)</option>
+              <option>HOD / Programme coordinator</option>
+              <option>IQAC Administrator</option>
+              <option>Principal / Dean</option>
+              <option>External Reviewer / Auditor</option>
+              <option>Research Scholar</option>
+              <option>Other</option>
+            </select>
+            <div class="reg-error" id="err-role">Please select your role</div>
+          </div>
+          <div class="reg-field">
+            <label class="reg-label" for="rf-dept">Department</label>
+            <input class="reg-input" type="text" id="rf-dept" placeholder="Mechanical / CSE / Civil…">
+          </div>
+        </div>
+
+        <div class="reg-field">
+          <label class="reg-label" for="rf-email">Email address <span>*</span></label>
+          <input class="reg-input" type="email" id="rf-email" placeholder="your@institution.ac.in" autocomplete="email" required>
+          <div class="reg-error" id="err-email">Please enter a valid email address</div>
+        </div>
+
+        <div class="reg-field">
+          <label class="reg-label" for="rf-phone">Mobile number <span>*</span></label>
+          <div class="reg-otp-row">
+            <div class="reg-otp-label">
+              <input class="reg-input" type="tel" id="rf-phone" placeholder="+91 98765 43210" autocomplete="tel" required style="width:100%">
+              <div class="reg-error" id="err-phone">Please enter a valid 10-digit mobile number</div>
+            </div>
+            <button class="reg-otp-btn" type="button" id="otp-send-btn" onclick="sendOTP()">Send OTP</button>
+          </div>
+        </div>
+
+        <!-- OTP BOX -->
+        <div id="otp-box">
+          <div style="font-size:12px;font-weight:600;color:#04342C;margin-bottom:6px">Enter the 6-digit OTP sent to your email</div>
+          <div style="font-size:11px;color:#0F6E56;margin-bottom:8px">Check your inbox (and spam folder) for an email from OBE Training Portal.</div>
+          <div class="otp-inputs">
+            <input class="otp-digit" id="od1" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od2')" onkeydown="otpBack(event,this,'')">
+            <input class="otp-digit" id="od2" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od3')" onkeydown="otpBack(event,this,'od1')">
+            <input class="otp-digit" id="od3" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od4')" onkeydown="otpBack(event,this,'od2')">
+            <input class="otp-digit" id="od4" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od5')" onkeydown="otpBack(event,this,'od3')">
+            <input class="otp-digit" id="od5" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od6')" onkeydown="otpBack(event,this,'od4')">
+            <input class="otp-digit" id="od6" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'')" onkeydown="otpBack(event,this,'od5')">
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="otp-verify-btn" type="button" onclick="verifyOTP()">Verify OTP</button>
+            <span class="otp-timer" id="otp-timer"></span>
+          </div>
+          <div class="reg-error" id="err-otp" style="display:none;margin-top:6px">Incorrect OTP. Please try again.</div>
+          <div id="otp-verified-msg" style="display:none;font-size:12px;color:#0F6E56;font-weight:600;margin-top:6px">✓ Email verified</div>
+        </div>
+
+        <div class="reg-divider"></div>
+
+        <!-- PRIVACY NOTICE -->
+        <div class="reg-privacy">
+          <strong>Data Privacy Notice</strong> — In accordance with India's Digital Personal Data Protection Act 2023 (DPDP Act), your personal information (name, institution, email, mobile number) is collected solely for the purpose of OBE training access, progress tracking, certificate issuance, and training feedback. Your data will not be shared with any third party without your explicit consent. You may request deletion of your data at any time by writing to <a href="mailto:drisivamech@gmail.com">drisivamech@gmail.com</a>. By registering, you consent to these terms.
+        </div>
+
+        <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#2C3E50;margin-bottom:16px;cursor:pointer">
+          <input type="checkbox" id="rf-consent" style="margin-top:3px;flex-shrink:0">
+          <span>I have read and agree to the data privacy notice. I consent to being contacted for training feedback and related communication.</span>
+        </label>
+        <div class="reg-error" id="err-consent">Please accept the privacy notice to continue</div>
+
+        <button class="reg-submit" type="button" id="reg-submit-btn" onclick="submitRegistration()">
+          Register &amp; Access Portal →
+        </button>
+
+      </form>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="reg-success" id="reg-success">
+      <div class="reg-success-icon">🎓</div>
+      <div class="reg-success-title">Registration Successful!</div>
+      <div class="reg-success-msg" id="reg-success-msg"></div>
+
+      <!-- HOW TO RETURN -->
+      <div style="background:#F0F4F8;border-radius:10px;padding:16px;text-align:left;margin-bottom:20px">
+        <div style="font-size:12px;font-weight:700;color:#0D2B4E;margin-bottom:4px;text-align:center">📌 How to return next time</div>
+        <div class="howto-steps">
+          <div class="howto-step">
+            <div class="howto-num">1</div>
+            <span><strong>Same device / browser:</strong> Simply visit <strong>isiva.in/obe-portal.html</strong> again — your session is saved and the portal opens directly. No login needed.</span>
+          </div>
+          <div class="howto-step">
+            <div class="howto-num">2</div>
+            <span><strong>Different device / phone / new browser:</strong> Check your registered email for the welcome message from OBE Training Portal. Click the <strong>"Return to Portal"</strong> link in that email — it will open the portal with your session automatically restored.</span>
+          </div>
+          <div class="howto-step">
+            <div class="howto-num">3</div>
+            <span><strong>Bookmark this page:</strong> Press <strong>Ctrl+D</strong> (Windows/Linux) or <strong>Cmd+D</strong> (Mac) to bookmark the portal URL right now for easy access.</span>
+          </div>
+          <div class="howto-step">
+            <div class="howto-num">4</div>
+            <span><strong>If asked to register again:</strong> Your session was cleared (browser data deleted). Simply re-register — it takes under a minute, and your certificate record is preserved in our registry.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="reg-access-btn" onclick="openPortal()">Enter OBE Training Portal →</button>
+    </div>
+  </div>
+</div>
+
+<div id="portal-main" style="display:none"><div class="portal-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Faculty Training Portal · NBA + NAAC Aligned</div>
+    <h1 class="hero-title">Outcomes-Based Education<br><span>Training for Academic Excellence</span></h1>
+    <p class="hero-sub">A structured five-module programme for faculty, HODs, programme coordinators, and IQAC administrators to implement OBE across your institution.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">NBA Tier I &amp; II</span>
+      <span class="hero-tag">NAAC A++ Ready</span>
+      <span class="hero-tag">CO-PO Mapping</span>
+      <span class="hero-tag">Attainment Calculator</span>
+      <span class="hero-tag">Certificate of Completion</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">5</div><div class="hero-stat-l">Modules</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">255</div><div class="hero-stat-l">Minutes</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">59</div><div class="hero-stat-l">Topics</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">59</div><div class="hero-stat-l">Quiz Questions</div></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <span class="progress-label">Your progress</span>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="progress-pct" id="prog-pct">0%</span>
+    <span class="cert-badge" id="cert-badge">🎓 Certificate Unlocked</span>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showView('modules',this)">All Modules</button>
+    <button class="tab-btn" onclick="showView('overview',this)">Programme Guide</button>
+    <button class="tab-btn" onclick="showView('matrix-tool',this)">CO-PO Matrix Tool</button>
+    <button class="tab-btn" onclick="showView('attainment-tool',this)">Attainment Calculator</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  VIEW: MODULES                             -->
+  <!-- ══════════════════════════════════════════ -->
+  <div id="view-modules">
+
+    <!-- MODULE 1 -->
+    <div class="module-card" id="card-1">
+      <div class="module-header" onclick="toggleModule(1)">
+        <div class="module-num" style="background:#DEEAF1;color:#1A5276;">1</div>
+        <div class="module-meta">
+          <div class="module-title">OBE Foundations</div>
+          <div class="module-desc">Bloom's taxonomy · NBA POs · Framework differences · Implementation roadmap</div>
+        </div>
+        <div class="module-right">
+          <div class="module-time">45 min · 10 Qs</div>
+          <div class="module-status" id="status-1">Not started</div>
+        </div>
+        <span class="chevron" id="chev-1">▾</span>
+      </div>
+      <div class="module-body" id="body-1">
+        <div class="inner-tabs">
+          <button class="inner-tab active" onclick="innerTab(1,'learn',this)">Learn</button>
+          <button class="inner-tab" onclick="innerTab(1,'quiz',this)">Quiz</button>
+        </div>
+        <div class="content-panel active" id="panel-1-learn">
+          <div class="prose">
+            <h3>1.1 What is OBE?</h3>
+            <p>Outcomes-Based Education is a learner-centred philosophy where curriculum, teaching, and assessment are all aligned to clearly defined, measurable outcomes students must demonstrate by programme completion. The shift is from <em>what is taught</em> to <em>what is actually learned and demonstrated</em>.</p>
+            <div class="callout"><strong>Core Principle:</strong> An 'outcome' is a specific, observable, measurable statement of what a student will know, understand, or be able to do at the end of a unit of learning — written in terms of student performance, not teacher activity.</div>
+
+            <h3>1.2 Bloom's Taxonomy</h3>
+            <p>All Course Outcomes must be anchored to a specific cognitive level using Bloom's revised taxonomy (Anderson &amp; Krathwohl, 2001):</p>
+            <table class="data-table">
+              <tr><th>Level</th><th>Category</th><th>Key Action Verbs</th></tr>
+              <tr><td>6</td><td>Create</td><td>Design, Develop, Formulate, Construct, Plan, Generate</td></tr>
+              <tr><td>5</td><td>Evaluate</td><td>Judge, Justify, Critique, Assess, Recommend, Defend</td></tr>
+              <tr><td>4</td><td>Analyse</td><td>Compare, Differentiate, Examine, Break down, Relate</td></tr>
+              <tr><td>3</td><td>Apply</td><td>Solve, Use, Demonstrate, Compute, Implement, Calculate</td></tr>
+              <tr><td>2</td><td>Understand</td><td>Explain, Describe, Summarise, Classify, Interpret</td></tr>
+              <tr><td>1</td><td>Remember</td><td>Define, List, Name, Recall, State, Identify</td></tr>
+            </table>
+            <div class="callout amber"><strong>NBA Guideline:</strong> UG engineering COs should predominantly be at Levels 3 (Apply) and 4 (Analyse). Design courses must include Levels 5–6.</div>
+
+            <h3>1.3 Vision → Mission → PEO → PO → CO Hierarchy</h3>
+            <table class="data-table">
+              <tr><th>Level</th><th>Description</th></tr>
+              <tr><td>Institutional Vision &amp; Mission</td><td>Broad aspirational statements of the institution's purpose</td></tr>
+              <tr><td>Programme Educational Objectives (PEOs)</td><td>Career/professional accomplishments 3–5 years after graduation (4–6 PEOs)</td></tr>
+              <tr><td>Programme Outcomes (POs)</td><td>What students can do at graduation — NBA mandates all 12 POs</td></tr>
+              <tr><td>Programme Specific Outcomes (PSOs)</td><td>2–3 outcomes unique to the specific engineering programme</td></tr>
+              <tr><td>Course Outcomes (COs)</td><td>5–8 measurable outcomes per course; must map to POs and PSOs</td></tr>
+            </table>
+
+            <h3>1.4 The 12 NBA Programme Outcomes</h3>
+            <table class="data-table">
+              <tr><th>PO</th><th>Graduate Attribute</th></tr>
+              <tr><td>PO1</td><td>Engineering Knowledge</td></tr>
+              <tr><td>PO2</td><td>Problem Analysis</td></tr>
+              <tr><td>PO3</td><td>Design / Development of Solutions</td></tr>
+              <tr><td>PO4</td><td>Investigation of Complex Problems</td></tr>
+              <tr><td>PO5</td><td>Modern Tool Usage</td></tr>
+              <tr><td>PO6</td><td>Engineer and Society</td></tr>
+              <tr><td>PO7</td><td>Environment and Sustainability</td></tr>
+              <tr><td>PO8</td><td>Ethics</td></tr>
+              <tr><td>PO9</td><td>Individual and Team Work</td></tr>
+              <tr><td>PO10</td><td>Communication</td></tr>
+              <tr><td>PO11</td><td>Project Management and Finance</td></tr>
+              <tr><td>PO12</td><td>Life-Long Learning</td></tr>
+            </table>
+
+            <h3>1.5 NBA vs NAAC — Key Differences</h3>
+            <table class="data-table">
+              <tr><th>Parameter</th><th>NBA</th><th>NAAC</th></tr>
+              <tr><td>Scope</td><td>Programme-level</td><td>Institution-level</td></tr>
+              <tr><td>Key document</td><td>Self-Assessment Report (SAR)</td><td>Self-Study Report (SSR)</td></tr>
+              <tr><td>OBE criterion</td><td>Criterion 2 (quantitative)</td><td>Criterion 1 (qualitative + quantitative)</td></tr>
+              <tr><td>Data required</td><td>3-year CO/PO attainment trend</td><td>Evidence of CO-based curriculum design</td></tr>
+            </table>
+          </div>
+
+            <!-- ═══ PHASE 1 INFOGRAPHIC 1: BLOOM'S PYRAMID ═══ -->
+            <div class="infographic-block" style="margin:28px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+              <div style="background:var(--navy);padding:12px 18px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:13px;font-weight:600;color:#fff">Interactive Infographic</span>
+                <span style="font-size:12px;color:var(--sky)">Bloom's Taxonomy Pyramid — click any level to explore</span>
+              </div>
+              <div style="padding:20px">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+                  <div>
+                    <svg width="100%" viewBox="0 0 320 420" role="img" id="pyr-svg">
+                      <title>Bloom's taxonomy pyramid</title>
+                      <g id="ptb6" onclick="pselect(6)" style="cursor:pointer">
+                        <polygon points="160,18 220,78 100,78" fill="#534AB7" stroke="#3C3489" stroke-width="0.5"/>
+                        <text x="160" y="52" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="500" fill="#EEEDFE">Create</text>
+                        <text x="160" y="67" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#AFA9EC">Level 6</text>
+                      </g>
+                      <g id="ptb5" onclick="pselect(5)" style="cursor:pointer">
+                        <polygon points="100,82 220,82 246,130 74,130" fill="#7F77DD" stroke="#534AB7" stroke-width="0.5"/>
+                        <text x="160" y="103" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="500" fill="#EEEDFE">Evaluate</text>
+                        <text x="160" y="118" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#CECBF6">Level 5</text>
+                      </g>
+                      <g id="ptb4" onclick="pselect(4)" style="cursor:pointer">
+                        <polygon points="74,134 246,134 272,190 48,190" fill="#0F6E56" stroke="#085041" stroke-width="0.5"/>
+                        <text x="160" y="158" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="500" fill="#E1F5EE">Analyse</text>
+                        <text x="160" y="174" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#9FE1CB">Level 4</text>
+                      </g>
+                      <g id="ptb3" onclick="pselect(3)" style="cursor:pointer">
+                        <polygon points="48,194 272,194 298,256 22,256" fill="#1D9E75" stroke="#0F6E56" stroke-width="0.5"/>
+                        <text x="160" y="221" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="500" fill="#E1F5EE">Apply</text>
+                        <text x="160" y="237" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#9FE1CB">Level 3</text>
+                      </g>
+                      <g id="ptb2" onclick="pselect(2)" style="cursor:pointer">
+                        <polygon points="22,260 298,260 316,316 4,316" fill="#BA7517" stroke="#854F0B" stroke-width="0.5"/>
+                        <text x="160" y="284" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="500" fill="#FAEEDA">Understand</text>
+                        <text x="160" y="300" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#FAC775">Level 2</text>
+                      </g>
+                      <g id="ptb1" onclick="pselect(1)" style="cursor:pointer">
+                        <polygon points="4,320 316,320 316,390 4,390" fill="#993C1D" stroke="#712B13" stroke-width="0.5"/>
+                        <text x="160" y="351" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="500" fill="#FAECE7">Remember</text>
+                        <text x="160" y="367" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#F5C4B3">Level 1</text>
+                      </g>
+                      <text x="160" y="410" text-anchor="middle" font-size="10" fill="#888">← Lower order · Higher order →</text>
+                    </svg>
+                    <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:4px">Click any level to explore</p>
+                  </div>
+                  <div id="pyr-detail-panel">
+                    <div id="pyr-default">
+                      <p style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px">Bloom's Revised Taxonomy</p>
+                      <p style="font-size:13px;color:#2C3E50;line-height:1.65;margin-bottom:10px">Anderson &amp; Krathwohl (2001) revised Bloom's original framework into six cognitive levels — from basic recall at the base to complex creation at the apex. Every CO must be anchored to one specific level using an action verb from that tier.</p>
+                      <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+                        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#2C3E50"><span style="width:12px;height:12px;border-radius:2px;background:#534AB7;flex-shrink:0"></span>Create / Evaluate — higher-order, complex</div>
+                        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#2C3E50"><span style="width:12px;height:12px;border-radius:2px;background:#0F6E56;flex-shrink:0"></span>Analyse / Apply — <strong>NBA core for UG engineering</strong></div>
+                        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#2C3E50"><span style="width:12px;height:12px;border-radius:2px;background:#993C1D;flex-shrink:0"></span>Understand / Remember — foundational</div>
+                      </div>
+                      <div class="callout" style="margin-top:14px">For NBA UG engineering, most COs should be at <strong>Level 3 (Apply)</strong> and <strong>Level 4 (Analyse)</strong>. Design courses must include at least 2 COs at Levels 5–6.</div>
+                    </div>
+                    <div id="pyr-level-card" style="display:none;border:1.5px solid #ccc;border-radius:10px;padding:14px">
+                      <div id="pyr-badge" style="display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:8px"></div>
+                      <div id="pyr-ltitle" style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:4px"></div>
+                      <div id="pyr-ldesc" style="font-size:12px;color:#444;line-height:1.65;margin-bottom:10px"></div>
+                      <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:5px;letter-spacing:.06em">ACTION VERBS</div>
+                      <div id="pyr-verbs" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px"></div>
+                      <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:5px;letter-spacing:.06em">EXAMPLE CO</div>
+                      <div id="pyr-co" style="font-size:12px;border-left:2px solid #ccc;padding:6px 10px;border-radius:0 6px 6px 0;line-height:1.55;margin-bottom:8px"></div>
+                      <div id="pyr-nba" style="font-size:11px;color:#555;padding:6px 10px;border-radius:6px;line-height:1.5"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ PHASE 1 INFOGRAPHIC 2: HIERARCHY ═══ -->
+            <div class="infographic-block" style="margin:28px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+              <div style="background:var(--navy);padding:12px 18px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:13px;font-weight:600;color:#fff">Interactive Infographic</span>
+                <span style="font-size:12px;color:var(--sky)">Vision → PEO → PO → CO Hierarchy — click each level</span>
+              </div>
+              <div style="padding:20px;display:flex;flex-direction:column;gap:0">
+                <div id="hier-vision" onclick="htog('vision')" style="border-radius:10px;border:0.5px solid #AFA9EC;background:#EEEDFE;padding:12px 16px;cursor:pointer;margin-bottom:0">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:32px;height:32px;border-radius:8px;background:#534AB7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">🏛</div>
+                    <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#26215C">Institutional Vision &amp; Mission</div><div style="font-size:11px;color:#534AB7">Why the institution exists — the foundation of everything</div></div>
+                    <span style="font-size:10px;font-weight:700;background:#534AB7;color:#EEEDFE;padding:2px 8px;border-radius:10px">L0</span>
+                    <span id="hc-vision" style="font-size:14px;color:#888;transition:transform .2s;display:inline-block">▾</span>
+                  </div>
+                  <div id="hb-vision" style="display:none;margin-top:10px;padding-top:10px;border-top:0.5px solid #AFA9EC;font-size:12px;color:#3C3489;line-height:1.65">Broad aspirational statements that define the institution's purpose and long-term direction. Every element in OBE — from PEOs down to COs — must be traceable back to the Vision and Mission.<br><br><strong>Vision eg:</strong> "To be a globally recognised institution producing innovative, ethical, and socially responsible engineers."<br><strong>Mission eg:</strong> "To impart quality technical education through outcome-based learning, research, and industry collaboration."<br><br><span style="font-size:11px;background:#534AB7;color:#EEEDFE;padding:2px 8px;border-radius:10px;margin-right:4px">Reviewed every 5 years</span><span style="font-size:11px;background:#534AB7;color:#EEEDFE;padding:2px 8px;border-radius:10px;margin-right:4px">Governing Body approval</span><span style="font-size:11px;background:#534AB7;color:#EEEDFE;padding:2px 8px;border-radius:10px">NAAC Criterion 1.1</span></div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;height:24px;justify-content:flex-end"><div style="width:1.5px;height:16px;background:#888"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #888"></div></div>
+                <div id="hier-peo" onclick="htog('peo')" style="border-radius:10px;border:0.5px solid #BB8FCE;background:#EDE7F6;padding:12px 16px;cursor:pointer">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:32px;height:32px;border-radius:8px;background:#7F77DD;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">🎯</div>
+                    <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#26215C">Programme Educational Objectives (PEOs)</div><div style="font-size:11px;color:#6C3483">Graduate accomplishments 3–5 years after graduation</div></div>
+                    <span style="font-size:10px;font-weight:700;background:#7F77DD;color:#EEEDFE;padding:2px 8px;border-radius:10px">L1</span>
+                    <span id="hc-peo" style="font-size:14px;color:#888;transition:transform .2s;display:inline-block">▾</span>
+                  </div>
+                  <div id="hb-peo" style="display:none;margin-top:10px;padding-top:10px;border-top:0.5px solid #BB8FCE;font-size:12px;color:#3C3489;line-height:1.65">Broad statements describing career and professional accomplishments expected 3–5 years after graduation. Validated by alumni and employers. Typically 4–6 PEOs per programme.<br><br><strong>PEO1:</strong> Graduates will apply engineering knowledge to design and develop solutions to complex problems in industry or research.<br><strong>PEO2:</strong> Graduates will demonstrate professional integrity and effective communication in multidisciplinary environments.<br><strong>PEO3:</strong> Graduates will pursue continuous learning through higher education or professional development.<br><br><span style="font-size:11px;background:#7F77DD;color:#EEEDFE;padding:2px 8px;border-radius:10px;margin-right:4px">4–6 PEOs</span><span style="font-size:11px;background:#7F77DD;color:#EEEDFE;padding:2px 8px;border-radius:10px;margin-right:4px">Alumni/employer validated</span><span style="font-size:11px;background:#7F77DD;color:#EEEDFE;padding:2px 8px;border-radius:10px">NBA SAR Criterion 1</span></div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;height:24px;justify-content:flex-end"><div style="width:1.5px;height:16px;background:#888"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #888"></div></div>
+                <div id="hier-po" onclick="htog('po')" style="border-radius:10px;border:0.5px solid #5DCAA5;background:#E1F5EE;padding:12px 16px;cursor:pointer">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:32px;height:32px;border-radius:8px;background:#0F6E56;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">🎓</div>
+                    <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#04342C">Programme Outcomes (POs) + PSOs</div><div style="font-size:11px;color:#0F6E56">12 NBA-mandated POs — what students can do at graduation</div></div>
+                    <span style="font-size:10px;font-weight:700;background:#0F6E56;color:#E1F5EE;padding:2px 8px;border-radius:10px">L2</span>
+                    <span id="hc-po" style="font-size:14px;color:#888;transition:transform .2s;display:inline-block">▾</span>
+                  </div>
+                  <div id="hb-po" style="display:none;margin-top:10px;padding-top:10px;border-top:0.5px solid #5DCAA5;font-size:12px;color:#04342C;line-height:1.65">NBA mandates all 12 POs for UG engineering. PSOs (2–3) capture what is unique to the specific discipline. PO attainment is computed by aggregating CO attainment across all courses.<br><br><strong>PO1</strong> Engineering Knowledge &nbsp;|&nbsp; <strong>PO2</strong> Problem Analysis &nbsp;|&nbsp; <strong>PO3</strong> Design/Development &nbsp;|&nbsp; <strong>PO4</strong> Investigation &nbsp;|&nbsp; <strong>PO5</strong> Modern Tool Usage &nbsp;|&nbsp; <strong>PO6</strong> Engineer &amp; Society &nbsp;|&nbsp; <strong>PO7</strong> Environment &nbsp;|&nbsp; <strong>PO8</strong> Ethics &nbsp;|&nbsp; <strong>PO9</strong> Team Work &nbsp;|&nbsp; <strong>PO10</strong> Communication &nbsp;|&nbsp; <strong>PO11</strong> Project Management &nbsp;|&nbsp; <strong>PO12</strong> Life-Long Learning<br><br><span style="font-size:11px;background:#0F6E56;color:#E1F5EE;padding:2px 8px;border-radius:10px;margin-right:4px">Exactly 12 POs</span><span style="font-size:11px;background:#0F6E56;color:#E1F5EE;padding:2px 8px;border-radius:10px;margin-right:4px">2–3 PSOs</span><span style="font-size:11px;background:#0F6E56;color:#E1F5EE;padding:2px 8px;border-radius:10px">NBA SAR Criterion 2</span></div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;height:24px;justify-content:flex-end"><div style="width:1.5px;height:16px;background:#888"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #888"></div></div>
+                <div id="hier-co" onclick="htog('co')" style="border-radius:10px;border:0.5px solid #EF9F27;background:#FAEEDA;padding:12px 16px;cursor:pointer">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:32px;height:32px;border-radius:8px;background:#BA7517;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">📋</div>
+                    <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#412402">Course Outcomes (COs)</div><div style="font-size:11px;color:#854F0B">5–8 per course — measurable, Bloom's-anchored, maps to POs</div></div>
+                    <span style="font-size:10px;font-weight:700;background:#BA7517;color:#FAEEDA;padding:2px 8px;border-radius:10px">L3</span>
+                    <span id="hc-co" style="font-size:14px;color:#888;transition:transform .2s;display:inline-block">▾</span>
+                  </div>
+                  <div id="hb-co" style="display:none;margin-top:10px;padding-top:10px;border-top:0.5px solid #EF9F27;font-size:12px;color:#412402;line-height:1.65">Specific, observable, measurable statements of what a student will be able to do at the end of a course. Each CO: one Bloom's verb + knowledge/skill + context/standard. Maps to POs using strength 1/2/3.<br><br><strong>CO1 [BL2]:</strong> Explain the laws of thermodynamics and their applications in engineering systems.<br><strong>CO3 [BL3]:</strong> Apply Bernoulli's equation to solve problems in pipe flow and flow measurement devices.<br><strong>CO5 [BL5]:</strong> Evaluate and recommend optimal heat exchanger designs for given industrial thermal specifications.<br><br><span style="font-size:11px;background:#BA7517;color:#FAEEDA;padding:2px 8px;border-radius:10px;margin-right:4px">5–8 per course</span><span style="font-size:11px;background:#BA7517;color:#FAEEDA;padding:2px 8px;border-radius:10px;margin-right:4px">One Bloom's verb each</span><span style="font-size:11px;background:#BA7517;color:#FAEEDA;padding:2px 8px;border-radius:10px">NBA SAR 2.2–2.4</span></div>
+                </div>
+                <div style="margin-top:12px;padding:10px 14px;background:#F0F4F8;border-radius:8px;font-size:12px;color:#2C3E50;border-left:3px solid var(--mid)"><strong>Design down, deliver up:</strong> Design the curriculum starting from Vision and working downward. When teaching, start from COs and build upward — CO attainment → PO attainment → PEO validation → Mission fulfilled.</div>
+              </div>
+            </div>
+
+            <!-- ═══ PHASE 1 INFOGRAPHIC 3: CO ANATOMY BUILDER ═══ -->
+            <div class="infographic-block" style="margin:28px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+              <div style="background:var(--navy);padding:12px 18px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:13px;font-weight:600;color:#fff">Interactive Tool</span>
+                <span style="font-size:12px;color:var(--sky)">CO Anatomy Builder — type a CO and get instant feedback</span>
+              </div>
+              <div style="padding:20px">
+                <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Try a preset or type your own:</p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+                  <button onclick="cabPreset(0)" style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer">Good CO (Level 3)</button>
+                  <button onclick="cabPreset(1)" style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer">Good CO (Level 5)</button>
+                  <button onclick="cabPreset(2)" style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer">Vague verb ⚠</button>
+                  <button onclick="cabPreset(3)" style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer">Multi-verb error ⚠</button>
+                  <button onclick="cabPreset(4)" style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer">Topic statement ⚠</button>
+                </div>
+                <textarea id="cab-input" rows="3" oninput="cabAnalyse()" placeholder="Type a Course Outcome — e.g. 'Design a heat exchanger for given thermal specifications using IS standards'" style="width:100%;font-size:13px;padding:10px 12px;border-radius:8px;border:1.5px solid var(--mid);background:var(--pale);color:var(--ink);resize:none;outline:none;font-family:inherit;line-height:1.6"></textarea>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+                  <div id="cab-verb-card" style="border-radius:8px;border:0.5px solid var(--border);padding:10px 12px;background:var(--pale)"><div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.06em;margin-bottom:4px">ACTION VERB</div><div id="cab-verb" style="font-size:13px;font-weight:500;color:var(--muted)">—</div><div id="cab-verb-sub" style="font-size:10px;color:var(--muted);margin-top:2px"></div></div>
+                  <div id="cab-skill-card" style="border-radius:8px;border:0.5px solid var(--border);padding:10px 12px;background:var(--pale)"><div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.06em;margin-bottom:4px">KNOWLEDGE / SKILL</div><div id="cab-skill" style="font-size:13px;font-weight:500;color:var(--muted)">—</div><div id="cab-skill-sub" style="font-size:10px;color:var(--muted);margin-top:2px"></div></div>
+                  <div id="cab-ctx-card" style="border-radius:8px;border:0.5px solid var(--border);padding:10px 12px;background:var(--pale)"><div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.06em;margin-bottom:4px">CONTEXT / STANDARD</div><div id="cab-ctx" style="font-size:13px;font-weight:500;color:var(--muted)">—</div><div id="cab-ctx-sub" style="font-size:10px;color:var(--muted);margin-top:2px"></div></div>
+                </div>
+                <div style="margin-top:10px;background:var(--pale);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;font-weight:500;color:var(--navy)">Bloom's level detected</span><span id="cab-bloom-label" style="font-size:12px;color:var(--muted)">—</span></div>
+                  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px">
+                    <div id="cbl1" style="text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:var(--pale);border:0.5px solid var(--border);color:var(--muted)">Remember</div>
+                    <div id="cbl2" style="text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:var(--pale);border:0.5px solid var(--border);color:var(--muted)">Understand</div>
+                    <div id="cbl3" style="text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:var(--pale);border:0.5px solid var(--border);color:var(--muted)">Apply</div>
+                    <div id="cbl4" style="text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:var(--pale);border:0.5px solid var(--border);color:var(--muted)">Analyse</div>
+                    <div id="cbl5" style="text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:var(--pale);border:0.5px solid var(--border);color:var(--muted)">Evaluate</div>
+                    <div id="cbl6" style="text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:var(--pale);border:0.5px solid var(--border);color:var(--muted)">Create</div>
+                  </div>
+                </div>
+                <div id="cab-feedback" style="display:flex;flex-direction:column;gap:6px;margin-top:10px"></div>
+              </div>
+            </div>
+
+            <!-- ═══ PHASE 1 INFOGRAPHIC 4: VERB WHEEL ═══ -->
+            <div class="infographic-block" style="margin:28px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+              <div style="background:var(--navy);padding:12px 18px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:13px;font-weight:600;color:#fff">Reference Tool</span>
+                <span style="font-size:12px;color:var(--sky)">Bloom's Action Verb Bank — filter by course type, click to copy</span>
+              </div>
+              <div style="padding:20px">
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+                  <button class="vw-filt active" data-vf="all" onclick="vwFilter('all',this)" style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #444;background:#444;color:#fff;cursor:pointer;font-family:inherit">All</button>
+                  <button class="vw-filt" data-vf="theory" onclick="vwFilter('theory',this)" style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:inherit">Theory</button>
+                  <button class="vw-filt" data-vf="lab" onclick="vwFilter('lab',this)" style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:inherit">Lab / Practical</button>
+                  <button class="vw-filt" data-vf="design" onclick="vwFilter('design',this)" style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:inherit">Design / Project</button>
+                  <button class="vw-filt" data-vf="pg" onclick="vwFilter('pg',this)" style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:inherit">PG / Research</button>
+                </div>
+                <div id="vw-levels"></div>
+                <p style="font-size:11px;color:var(--muted);margin-top:8px">Click any verb to copy to clipboard &nbsp;<span id="vw-copied" style="display:none;color:#0F6E56;font-weight:600">✓ Copied</span></p>
+              </div>
+            </div>
+
+            <!-- ═══ PHASE 1 INFOGRAPHIC 5: CO GOVERNANCE ═══ -->
+            <div class="infographic-block" style="margin:28px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+              <div style="background:var(--navy);padding:12px 18px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:13px;font-weight:600;color:#fff">Process Infographic</span>
+                <span style="font-size:12px;color:var(--sky)">CO Design &amp; Review Governance — Construction and Escalation pathways</span>
+              </div>
+              <div style="padding:20px">
+                <div style="display:flex;gap:4px;background:var(--pale);border:0.5px solid var(--border);border-radius:8px;padding:3px;margin-bottom:16px">
+                  <button class="gov-tab active" onclick="govTab('construct',this)" style="flex:1;font-size:12px;font-weight:500;padding:7px 10px;border:none;background:var(--white);color:var(--navy);cursor:pointer;border-radius:6px;border:0.5px solid var(--border);font-family:inherit">🏗 CO Construction</button>
+                  <button class="gov-tab" onclick="govTab('revise',this)" style="flex:1;font-size:12px;font-weight:500;padding:7px 10px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:6px;font-family:inherit">🔄 CO Revision &amp; Escalation</button>
+                </div>
+                <div id="gov-construct">
+                  <div style="background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:10px;padding:12px 14px;margin-bottom:10px">
+                    <div style="font-size:11px;font-weight:700;color:#534AB7;margin-bottom:8px;letter-spacing:.04em">STEP 1 — EXPERT INPUT (before drafting)</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+                      <div onclick="govTip('ind')" style="background:#fff;border:0.5px solid #AFA9EC;border-radius:7px;padding:8px;cursor:pointer"><div style="font-size:11px;font-weight:600;color:#26215C;margin-bottom:2px">🏭 Industry experts</div><div style="font-size:10px;color:#534AB7">Skill gaps, tools, job roles</div></div>
+                      <div onclick="govTip('acad')" style="background:#fff;border:0.5px solid #AFA9EC;border-radius:7px;padding:8px;cursor:pointer"><div style="font-size:11px;font-weight:600;color:#26215C;margin-bottom:2px">🎓 Academic experts</div><div style="font-size:10px;color:#534AB7">Research frontiers, curriculum</div></div>
+                      <div onclick="govTip('prof')" style="background:#fff;border:0.5px solid #AFA9EC;border-radius:7px;padding:8px;cursor:pointer"><div style="font-size:11px;font-weight:600;color:#26215C;margin-bottom:2px">🏅 Professional societies</div><div style="font-size:10px;color:#534AB7">IEI, ASME, IEEE, BIS standards</div></div>
+                    </div>
+                    <div id="gov-tip-box" style="display:none;margin-top:8px;padding:8px 10px;background:#fff;border-radius:6px;border-left:2px solid #534AB7;font-size:11px;color:#26215C;line-height:1.55"></div>
+                  </div>
+                  <div style="display:flex;justify-content:center;margin:4px 0"><div style="width:1.5px;height:20px;background:#aaa"></div></div>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <div onclick="govStage('draft')" style="border:0.5px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;background:var(--white)"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✏️</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">CO Drafting — Course Faculty</div><div style="font-size:11px;color:var(--muted)">5–8 COs using Bloom's template</div></div><span style="font-size:10px;background:#E1F5EE;color:#0F6E56;padding:2px 7px;border-radius:10px;font-weight:600">Course faculty</span></div><div id="govs-draft" style="display:none;margin-top:8px;font-size:11px;color:#2C3E50;line-height:1.6;padding-top:8px;border-top:0.5px solid var(--border)">Synthesises all expert inputs and drafts COs using Bloom's action verbs. Each CO must have a verb + knowledge/skill + context. Draft is self-reviewed against the CO writing template before submission to the Department Review Committee.</div></div>
+                    <div style="display:flex;justify-content:center"><div style="width:1.5px;height:16px;background:#aaa"></div></div>
+                    <div onclick="govStage('dept')" style="border:0.5px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;background:var(--white)"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#FAEEDA;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">👥</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">Department CO-PO Review Committee</div><div style="font-size:11px;color:var(--muted)">HOD + 2 senior faculty — Bloom's and PO coverage check</div></div><span style="font-size:10px;background:#FAEEDA;color:#854F0B;padding:2px 7px;border-radius:10px;font-weight:600">HOD + peers</span></div><div id="govs-dept" style="display:none;margin-top:8px;font-size:11px;color:#2C3E50;line-height:1.6;padding-top:8px;border-top:0.5px solid var(--border)">Reviews COs for Bloom's level appropriateness, CO-PO mapping completeness, no overlap with other programme courses, and adequate programme-level PO coverage. Returns to faculty if revision needed.</div></div>
+                    <div style="display:flex;justify-content:center"><div style="width:1.5px;height:16px;background:#aaa"></div></div>
+                    <div onclick="govStage('iqac')" style="border:0.5px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;background:var(--white)"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#EDE7F6;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🛡</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">IQAC Sign-off</div><div style="font-size:11px;color:var(--muted)">Institution-wide consistency and NBA/NAAC compliance</div></div><span style="font-size:10px;background:#EDE7F6;color:#534AB7;padding:2px 7px;border-radius:10px;font-weight:600">IQAC</span></div><div id="govs-iqac" style="display:none;margin-top:8px;font-size:11px;color:#2C3E50;line-height:1.6;padding-top:8px;border-top:0.5px solid var(--border)">Verifies COs conform to OBE policy, meet NBA Criterion 2 standards, and are consistent in quality across all courses. Enters approved COs into course file and LMS before semester begins.</div></div>
+                    <div style="display:flex;justify-content:center"><div style="width:1.5px;height:16px;background:#aaa"></div></div>
+                    <div onclick="govStage('bos')" style="border:0.5px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;background:var(--white)"><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:#DEEAF1;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">⚖️</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">Board of Studies (BoS)</div><div style="font-size:11px;color:var(--muted)">Formal ratification — COs enter the curriculum</div></div><span style="font-size:10px;background:#DEEAF1;color:#185FA5;padding:2px 7px;border-radius:10px;font-weight:600">BoS</span></div><div id="govs-bos" style="display:none;margin-top:8px;font-size:11px;color:#2C3E50;line-height:1.6;padding-top:8px;border-top:0.5px solid var(--border)">Formally ratifies the CO set as part of the curriculum. BoS meeting minutes with CO list as annexure are primary evidence for NBA SAR Criterion 2 and NAAC SSR Criterion 1.1.</div></div>
+                  </div>
+                </div>
+                <div id="gov-revise" style="display:none">
+                  <div style="background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:10px;padding:12px 14px;margin-bottom:10px">
+                    <div style="font-size:11px;font-weight:700;color:#0F6E56;margin-bottom:8px;letter-spacing:.04em">STEP 1 — FEEDBACK SOURCES (triggers revision)</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">
+                      <div onclick="govTip2('class')" style="background:#fff;border:0.5px solid #5DCAA5;border-radius:7px;padding:7px;cursor:pointer"><div style="font-size:10px;font-weight:600;color:#04342C;margin-bottom:1px">👨‍🎓 Student feedback</div><div style="font-size:10px;color:#0F6E56">Course-end survey, CO relevance</div></div>
+                      <div onclick="govTip2('teacher')" style="background:#fff;border:0.5px solid #5DCAA5;border-radius:7px;padding:7px;cursor:pointer"><div style="font-size:10px;font-weight:600;color:#04342C;margin-bottom:1px">👩‍🏫 Course teacher</div><div style="font-size:10px;color:#0F6E56">Attainment data, teachability</div></div>
+                      <div onclick="govTip2('ext')" style="background:#fff;border:0.5px solid #5DCAA5;border-radius:7px;padding:7px;cursor:pointer"><div style="font-size:10px;font-weight:600;color:#04342C;margin-bottom:1px">🔍 External examiner</div><div style="font-size:10px;color:#0F6E56">SEE review, Bloom's alignment</div></div>
+                      <div onclick="govTip2('ind2')" style="background:#fff;border:0.5px solid #5DCAA5;border-radius:7px;padding:7px;cursor:pointer"><div style="font-size:10px;font-weight:600;color:#04342C;margin-bottom:1px">🏭 Industry experts</div><div style="font-size:10px;color:#0F6E56">New tools, changing skill needs</div></div>
+                      <div onclick="govTip2('acad2')" style="background:#fff;border:0.5px solid #5DCAA5;border-radius:7px;padding:7px;cursor:pointer"><div style="font-size:10px;font-weight:600;color:#04342C;margin-bottom:1px">🎓 Academic experts</div><div style="font-size:10px;color:#0F6E56">Curriculum updates, research</div></div>
+                      <div onclick="govTip2('prof2')" style="background:#fff;border:0.5px solid #5DCAA5;border-radius:7px;padding:7px;cursor:pointer"><div style="font-size:10px;font-weight:600;color:#04342C;margin-bottom:1px">🏅 Professional societies</div><div style="font-size:10px;color:#0F6E56">Updated standards, frameworks</div></div>
+                    </div>
+                    <div id="gov-tip2-box" style="display:none;margin-top:8px;padding:8px 10px;background:#fff;border-radius:6px;border-left:2px solid #0F6E56;font-size:11px;color:#04342C;line-height:1.55"></div>
+                  </div>
+                  <div style="display:flex;justify-content:center;margin:4px 0"><div style="width:1.5px;height:16px;background:#aaa"></div></div>
+                  <div style="border:0.5px solid var(--border);border-radius:9px;padding:10px 14px;background:var(--white);margin-bottom:6px"><div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:3px">📋 Course Committee Meeting</div><div style="font-size:11px;color:#2C3E50;line-height:1.6">Feedback consolidated by Course Coordinator and presented during grading period. Committee reviews CO attainment data + all feedback sources and proposes revisions with rationale. <strong>Output:</strong> Signed meeting minutes with proposed CO changes.</div></div>
+                  <div style="margin-top:12px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.04em">ESCALATION PATHWAY — click each node</div>
+                  <div style="display:flex;align-items:center;gap:0;overflow-x:auto;padding:4px 0">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:68px">
+                      <div onclick="govEsc('cc')" style="width:38px;height:38px;border-radius:50%;background:#FAEEDA;border:1px solid #FAC775;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">👤</div>
+                      <div style="font-size:10px;font-weight:500;color:#854F0B;text-align:center;line-height:1.3">Course<br>coordinator</div>
+                    </div>
+                    <div style="font-size:18px;color:#aaa;margin-bottom:14px;flex-shrink:0">›</div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:68px">
+                      <div onclick="govEsc('mc')" style="width:38px;height:38px;border-radius:50%;background:#E1F5EE;border:1px solid #5DCAA5;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">👥</div>
+                      <div style="font-size:10px;font-weight:500;color:#0F6E56;text-align:center;line-height:1.3">Module<br>coordinator</div>
+                    </div>
+                    <div style="font-size:18px;color:#aaa;margin-bottom:14px;flex-shrink:0">›</div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:68px">
+                      <div onclick="govEsc('pc')" style="width:38px;height:38px;border-radius:50%;background:#DEEAF1;border:1px solid #85B7EB;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">🗂</div>
+                      <div style="font-size:10px;font-weight:500;color:#185FA5;text-align:center;line-height:1.3">Programme<br>coordinator</div>
+                    </div>
+                    <div style="font-size:18px;color:#aaa;margin-bottom:14px;flex-shrink:0">›</div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:68px">
+                      <div onclick="govEsc('bos2')" style="width:38px;height:38px;border-radius:50%;background:#EDE7F6;border:1px solid #AFA9EC;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">⚖️</div>
+                      <div style="font-size:10px;font-weight:500;color:#534AB7;text-align:center;line-height:1.3">Board of<br>Studies</div>
+                    </div>
+                    <div style="font-size:18px;color:#aaa;margin-bottom:14px;flex-shrink:0">›</div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:68px">
+                      <div onclick="govEsc('ac')" style="width:38px;height:38px;border-radius:50%;background:#FAECE7;border:1px solid #F0997B;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">🏛</div>
+                      <div style="font-size:10px;font-weight:500;color:#993C1D;text-align:center;line-height:1.3">Academic<br>Council</div>
+                    </div>
+                  </div>
+                  <div id="gov-esc-box" style="margin-top:10px;padding:10px 12px;border-radius:8px;border-left:2px solid var(--mid);background:#EBF5FB;font-size:12px;color:#2C3E50;line-height:1.6;display:none"></div>
+                </div>
+              </div>
+            </div>
+
+          <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="markComplete(1)">✓ Mark as Complete</button>
+            <button class="btn btn-outline" onclick="innerTab(1,'quiz',document.querySelectorAll('#body-1 .inner-tab')[1])">Take Quiz →</button>
+          </div>
+        </div>
+        <div class="content-panel" id="panel-1-quiz">
+          <div id="quiz-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2 -->
+    <div class="module-card" id="card-2">
+      <div class="module-header" onclick="toggleModule(2)">
+        <div class="module-num" style="background:#E2EFDA;color:#1A7A4A;">2</div>
+        <div class="module-meta">
+          <div class="module-title">Writing Course Outcomes</div>
+          <div class="module-desc">CO anatomy · Bloom's alignment · Common mistakes · CO-PO mapping strength</div>
+        </div>
+        <div class="module-right">
+          <div class="module-time">50 min · 12 Qs</div>
+          <div class="module-status" id="status-2">Not started</div>
+        </div>
+        <span class="chevron" id="chev-2">▾</span>
+      </div>
+      <div class="module-body" id="body-2">
+        <div class="inner-tabs">
+          <button class="inner-tab active" onclick="innerTab(2,'learn',this)">Learn</button>
+          <button class="inner-tab" onclick="innerTab(2,'quiz',this)">Quiz</button>
+        </div>
+        <div class="content-panel active" id="panel-2-learn">
+          <div class="prose">
+            <h3>2.1 Anatomy of a Well-Written CO</h3>
+            <p>Every well-written CO has three parts:</p>
+            <table class="data-table">
+              <tr><th>Element</th><th>What it means</th><th>Example</th></tr>
+              <tr><td>Action verb</td><td>Single Bloom's verb — observable and measurable</td><td>Design</td></tr>
+              <tr><td>Knowledge/skill</td><td>Specific content or skill demonstrated</td><td>a heat exchanger for given thermal specifications</td></tr>
+              <tr><td>Context/standard</td><td>Conditions or performance standard</td><td>using IS standards and sustainability considerations</td></tr>
+            </table>
+            <div class="callout green"><strong>Well-written CO example:</strong> "Design a heat exchanger for given thermal specifications using relevant IS standards and sustainability considerations." [BL5, maps to PO1, PO3, PO7]</div>
+
+            <h3>2.2 Common CO Writing Mistakes</h3>
+            <table class="data-table">
+              <tr><th>Mistake</th><th>Wrong</th><th>Correct</th></tr>
+              <tr><td>Vague verb</td><td>Understand thermodynamics</td><td>Explain the laws of thermodynamics and their engineering applications</td></tr>
+              <tr><td>Multi-verb CO</td><td>Analyse and design and evaluate circuits</td><td>Split into three COs — one verb each</td></tr>
+              <tr><td>Topic statement</td><td>Unit 3: Fluid Mechanics</td><td>Apply Bernoulli's equation to solve problems in pipe flow</td></tr>
+              <tr><td>Unmeasurable</td><td>Appreciate the importance of ethics</td><td>Apply ethical frameworks to resolve professional dilemmas</td></tr>
+              <tr><td>Too many COs</td><td>15 COs for a 3-credit course</td><td>5–8 COs; one per 5–8 contact hours</td></tr>
+            </table>
+
+            <h3>2.3 CO–PO Mapping Strength Scale</h3>
+            <table class="data-table">
+              <tr><th>Strength</th><th>Meaning</th><th>When to use</th></tr>
+              <tr><td><strong>3</strong></td><td>Substantial</td><td>The CO directly and substantially addresses the PO — primary alignment</td></tr>
+              <tr><td><strong>2</strong></td><td>Moderate</td><td>The PO is partially addressed as part of achieving the CO</td></tr>
+              <tr><td><strong>1</strong></td><td>Slight</td><td>Indirect or minor relevance; marginal connection</td></tr>
+              <tr><td>—</td><td>None</td><td>No meaningful relationship — leave cell blank</td></tr>
+            </table>
+            <div class="callout amber"><strong>Mapping guidance:</strong> A typical course addresses 6–9 POs meaningfully. Each CO should have 3–6 non-blank mappings. Do not try to map every CO to every PO — this inflates the matrix and makes it meaningless.</div>
+
+            <h3>2.4 CO Approval Workflow</h3>
+            <ul>
+              <li>Faculty writes draft COs using the template</li>
+              <li>Department CO-PO Review Committee (HOD + 2 senior faculty) reviews for Bloom's alignment</li>
+              <li>IQAC checks for programme-level consistency and NBA/NAAC compliance</li>
+              <li>Approved COs are entered into the course file and LMS</li>
+              <li>Any mid-semester revision requires written IQAC approval</li>
+            </ul>
+          </div>
+          <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="markComplete(2)">✓ Mark as Complete</button>
+            <button class="btn btn-outline" onclick="innerTab(2,'quiz',document.querySelectorAll('#body-2 .inner-tab')[1])">Take Quiz →</button>
+          </div>
+        </div>
+        <div class="content-panel" id="panel-2-quiz"><div id="quiz-2"></div></div>
+      </div>
+    </div>
+
+    <!-- MODULE 3 -->
+    <div class="module-card" id="card-3">
+      <div class="module-header" onclick="toggleModule(3)">
+        <div class="module-num" style="background:#DEEAF1;color:#0D2B4E;">3</div>
+        <div class="module-meta">
+          <div class="module-title">CO-PO Mapping &amp; Attainment</div>
+          <div class="module-desc">Matrix building · Direct/indirect attainment · Formula · Gap analysis · 3-year trend</div>
+        </div>
+        <div class="module-right">
+          <div class="module-time">60 min · 15 Qs</div>
+          <div class="module-status" id="status-3">Not started</div>
+        </div>
+        <span class="chevron" id="chev-3">▾</span>
+      </div>
+      <div class="module-body" id="body-3">
+        <div class="inner-tabs">
+          <button class="inner-tab active" onclick="innerTab(3,'learn',this)">Learn</button>
+          <button class="inner-tab" onclick="innerTab(3,'quiz',this)">Quiz</button>
+          <button class="inner-tab" onclick="innerTab(3,'tool',this)">Matrix Tool</button>
+        </div>
+        <div class="content-panel active" id="panel-3-learn">
+          <div class="prose">
+            <h3>3.1 The CO-PO Matrix</h3>
+            <p>Rows = Course Outcomes; Columns = PO1–PO12 + PSO1–PSO2. Each cell holds the strength (1/2/3) of the CO–PO relationship. The average row at the bottom shows how strongly this course addresses each PO.</p>
+            <div class="matrix-wrap">
+              <table class="matrix-table">
+                <thead><tr><th>CO</th><th>PO1</th><th>PO2</th><th>PO3</th><th>PO4</th><th>PO5</th><th>PO6</th><th>PO7</th><th>PO10</th><th>PSO1</th></tr></thead>
+                <tbody>
+                  <tr><td>CO1</td><td class="cell-s3">3</td><td class="cell-s2">2</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s2">2</td></tr>
+                  <tr><td>CO2</td><td class="cell-s2">2</td><td class="cell-s3">3</td><td class="cell-s0">—</td><td class="cell-s2">2</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s3">3</td></tr>
+                  <tr><td>CO3</td><td class="cell-s2">2</td><td class="cell-s2">2</td><td class="cell-s3">3</td><td class="cell-s0">—</td><td class="cell-s1">1</td><td class="cell-s0">—</td><td class="cell-s2">2</td><td class="cell-s0">—</td><td class="cell-s2">2</td></tr>
+                  <tr><td>CO4</td><td class="cell-s1">1</td><td class="cell-s3">3</td><td class="cell-s2">2</td><td class="cell-s3">3</td><td class="cell-s2">2</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s1">1</td><td class="cell-s3">3</td></tr>
+                  <tr><td>CO5</td><td class="cell-s1">1</td><td class="cell-s2">2</td><td class="cell-s2">2</td><td class="cell-s0">—</td><td class="cell-s0">—</td><td class="cell-s2">2</td><td class="cell-s1">1</td><td class="cell-s3">3</td><td class="cell-s1">1</td></tr>
+                  <tr><td class="matrix-avg">Avg</td><td class="matrix-avg">1.8</td><td class="matrix-avg">2.4</td><td class="matrix-avg">2.3</td><td class="matrix-avg">2.5</td><td class="matrix-avg">1.5</td><td class="matrix-avg">2.0</td><td class="matrix-avg">1.5</td><td class="matrix-avg">2.0</td><td class="matrix-avg">2.2</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>3.2 CO Attainment Formula</h3>
+            <div class="callout"><strong>CO Attainment = (Direct Attainment × 0.80) + (Indirect Attainment × 0.20)</strong><br><br>
+            <strong>Direct attainment</strong> = % of students scoring ≥ threshold marks in CO-mapped assessments<br>
+            <strong>Indirect attainment</strong> = Average score from course-end student feedback survey (CO-wise)<br>
+            <strong>Typical threshold</strong>: ≥ 50% of CO-mapped marks<br>
+            <strong>Typical target</strong>: ≥ 60% of students should attain each CO</div>
+
+            <h3>3.3 Worked Example</h3>
+            <table class="data-table">
+              <tr><th>Step</th><th>Calculation</th></tr>
+              <tr><td>CO-mapped marks (3 CIE questions)</td><td>5 + 5 + 10 = 20 marks</td></tr>
+              <tr><td>Threshold (50%)</td><td>≥ 10 marks</td></tr>
+              <tr><td>Students scoring ≥ 10</td><td>52 out of 70</td></tr>
+              <tr><td>Direct attainment</td><td>(52/70) × 100 = 74.3%</td></tr>
+              <tr><td>Indirect attainment (survey)</td><td>68%</td></tr>
+              <tr><td><strong>CO2 Attainment</strong></td><td><strong>(74.3 × 0.80) + (68 × 0.20) = 73.0% → ATTAINED ✓</strong></td></tr>
+            </table>
+
+            <h3>3.4 NBA 3-Year Trend Requirement</h3>
+            <table class="data-table">
+              <tr><th>Term</th><th>Meaning</th></tr>
+              <tr><td>CAY</td><td>Current Academic Year (year of SAR submission)</td></tr>
+              <tr><td>CAYP</td><td>Current Academic Year Previous (one year before)</td></tr>
+              <tr><td>CAYPD</td><td>Current Academic Year Previous to Previous (two years before)</td></tr>
+            </table>
+            <div class="callout amber"><strong>NBA Scoring:</strong> Three years of data with ≥60% attainment earns maximum marks in Criterion 2. One year of data earns partial marks only.</div>
+          </div>
+          <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="markComplete(3)">✓ Mark as Complete</button>
+            <button class="btn btn-outline" onclick="innerTab(3,'quiz',document.querySelectorAll('#body-3 .inner-tab')[1])">Take Quiz →</button>
+          </div>
+        </div>
+        <div class="content-panel" id="panel-3-quiz"><div id="quiz-3"></div></div>
+        <div class="content-panel" id="panel-3-tool">
+          <div class="tool-intro">Use this interactive matrix to map your own COs to POs. Click any cell to cycle 0 → 1 → 2 → 3. Edit CO names in the fields below the matrix.</div>
+          <div id="matrix-tool-embed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4 -->
+    <div class="module-card" id="card-4">
+      <div class="module-header" onclick="toggleModule(4)">
+        <div class="module-num" style="background:#FEF9E7;color:#B7770D;">4</div>
+        <div class="module-meta">
+          <div class="module-title">Assessment Design &amp; Question Mapping</div>
+          <div class="module-desc">Constructive alignment · CIE/SEE question tagging · Rubric design · Corrective actions</div>
+        </div>
+        <div class="module-right">
+          <div class="module-time">55 min · 12 Qs</div>
+          <div class="module-status" id="status-4">Not started</div>
+        </div>
+        <span class="chevron" id="chev-4">▾</span>
+      </div>
+      <div class="module-body" id="body-4">
+        <div class="inner-tabs">
+          <button class="inner-tab active" onclick="innerTab(4,'learn',this)">Learn</button>
+          <button class="inner-tab" onclick="innerTab(4,'quiz',this)">Quiz</button>
+        </div>
+        <div class="content-panel active" id="panel-4-learn">
+          <div class="prose">
+            <h3>4.1 Constructive Alignment</h3>
+            <p>Every CIE/SEE question must be aligned to the CO it tests, AND the cognitive demand of the question must match the Bloom's level of that CO. Misalignment — writing a CO at Level 5 but testing only Level 1 — invalidates the entire OBE process.</p>
+            <div class="callout"><strong>The rule:</strong> If your CO says "Design…" (Level 6), your assessment question must ask the student to actually design something — not describe or recall what design means.</div>
+
+            <h3>4.2 CIE Question Tagging Format (NBA Required)</h3>
+            <div class="callout green" style="font-family:monospace;font-size:13px;line-height:1.8">
+              Q1. [CO1 – BL2] Describe the stress–strain relationship in ductile materials. (5 marks)<br>
+              Q2. [CO2 – BL3] Calculate the bending stress in a beam carrying 10 kN/m UDL over 4m span. (10 marks)<br>
+              Q3. [CO3 – BL4] Compare failure modes of ductile and brittle materials under tensile loading. (10 marks)
+            </div>
+
+            <h3>4.3 Rubric Design for CO Attainment</h3>
+            <table class="data-table">
+              <tr><th>Level</th><th>Score</th><th>Descriptor</th></tr>
+              <tr><td>Excellent</td><td>4</td><td>Fully demonstrates the CO; exceeds expected standard with no significant errors</td></tr>
+              <tr><td>Good</td><td>3</td><td>Demonstrates the CO with minor errors; meets expected standard</td></tr>
+              <tr><td>Satisfactory</td><td>2</td><td>Partially demonstrates the CO; some significant gaps</td></tr>
+              <tr><td>Needs Improvement</td><td>1</td><td>Attempts the CO but with major errors or misunderstanding</td></tr>
+              <tr><td>Not Demonstrated</td><td>0</td><td>No evidence of CO achievement</td></tr>
+            </table>
+
+            <h3>4.4 Corrective Action by Attainment Level</h3>
+            <table class="data-table">
+              <tr><th>Attainment</th><th>Action</th></tr>
+              <tr><td>≥ Target (e.g., ≥60%)</td><td>Document "CO attained" in course file — no action needed</td></tr>
+              <tr><td>50–59%</td><td>Conduct one additional tutorial/problem-solving session; re-assess informally</td></tr>
+              <tr><td>40–49%</td><td>Formal remedial class; revised teaching strategy for next offering</td></tr>
+              <tr><td>&lt;40%</td><td>Mandatory gap analysis; CO review; escalate to HOD; present at IQAC meeting</td></tr>
+            </table>
+          </div>
+          <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="markComplete(4)">✓ Mark as Complete</button>
+            <button class="btn btn-outline" onclick="innerTab(4,'quiz',document.querySelectorAll('#body-4 .inner-tab')[1])">Take Quiz →</button>
+          </div>
+        </div>
+        <div class="content-panel" id="panel-4-quiz"><div id="quiz-4"></div></div>
+      </div>
+    </div>
+
+    <!-- MODULE 5 -->
+    <div class="module-card" id="card-5">
+      <div class="module-header" onclick="toggleModule(5)">
+        <div class="module-num" style="background:#FDEDEC;color:#A93226;">5</div>
+        <div class="module-meta">
+          <div class="module-title">Reporting &amp; Continuous Improvement</div>
+          <div class="module-desc">CO/PO attainment reports · NBA SAR · NAAC SSR · CQI loop · IQAC audit trail</div>
+        </div>
+        <div class="module-right">
+          <div class="module-time">45 min · 10 Qs</div>
+          <div class="module-status" id="status-5">Not started</div>
+        </div>
+        <span class="chevron" id="chev-5">▾</span>
+      </div>
+      <div class="module-body" id="body-5">
+        <div class="inner-tabs">
+          <button class="inner-tab active" onclick="innerTab(5,'learn',this)">Learn</button>
+          <button class="inner-tab" onclick="innerTab(5,'quiz',this)">Quiz</button>
+        </div>
+        <div class="content-panel active" id="panel-5-learn">
+          <div class="prose">
+            <h3>5.1 CO Attainment Report — Required Sections</h3>
+            <ol style="padding-left:18px;font-size:14px;color:#2C3E50;line-height:2">
+              <li>Course details (name, code, credits, semester, faculty, year)</li>
+              <li>Course Outcomes with Bloom's level</li>
+              <li>CO-PO/PSO mapping matrix</li>
+              <li>Assessment plan — CO-wise marks allocation</li>
+              <li>Mark entry summary (CO-wise per student)</li>
+              <li>Direct attainment calculation with threshold</li>
+              <li>Indirect attainment (course-end survey results)</li>
+              <li>Overall CO attainment and verdict (attained / not attained)</li>
+              <li>Gap analysis and corrective actions</li>
+              <li>Faculty signature + HOD countersignature</li>
+            </ol>
+
+            <h3>5.2 NAAC SSR — OBE Evidence by Sub-criterion</h3>
+            <table class="data-table">
+              <tr><th>NAAC Sub-criterion</th><th>OBE Evidence Required</th></tr>
+              <tr><td>1.1 — Curriculum design</td><td>CO statements in syllabi; BoS minutes showing CO review</td></tr>
+              <tr><td>1.2 — Academic flexibility</td><td>Curriculum updates driven by CO attainment gap analysis</td></tr>
+              <tr><td>2.6 — Student performance</td><td>CO and PO attainment data; CO-mapped assessment samples</td></tr>
+              <tr><td>6.5 — Quality assurance</td><td>IQAC minutes; OBE policy; faculty training records</td></tr>
+            </table>
+
+            <h3>5.3 CQI — Closing the Loop</h3>
+            <ol style="padding-left:18px;font-size:14px;color:#2C3E50;line-height:2">
+              <li>Identify COs consistently not attained (2+ years)</li>
+              <li>Root cause: poorly written CO? wrong teaching method? misaligned assessment?</li>
+              <li>Implement change: revise CO, change teaching, redesign assessment</li>
+              <li>Present improvement plan to Board of Studies</li>
+              <li>Document explicitly — which CO attainment data triggered the change</li>
+              <li>Monitor in the next offering — verify improvement</li>
+            </ol>
+            <div class="callout purple"><strong>The accreditation mantra:</strong> Accreditors do not just want high numbers. They want evidence that you <em>act on the data</em>. A course with 55% attainment that has documented corrective action and shows improvement next year is more compelling than one claiming 90% with no supporting evidence.</div>
+          </div>
+          <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="markComplete(5)">✓ Mark as Complete</button>
+            <button class="btn btn-outline" onclick="innerTab(5,'quiz',document.querySelectorAll('#body-5 .inner-tab')[1])">Take Quiz →</button>
+          </div>
+        </div>
+        <div class="content-panel" id="panel-5-quiz"><div id="quiz-5"></div></div>
+      </div>
+    </div>
+
+  </div><!-- /view-modules -->
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  VIEW: OVERVIEW                            -->
+  <!-- ══════════════════════════════════════════ -->
+  <div id="view-overview" style="display:none">
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:32px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:8px">Programme Guide</h2>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:28px">Who this portal is for, how to use it, and what you will achieve.</p>
+      <table class="data-table">
+        <tr><th>Audience</th><th>Recommended modules</th><th>Focus</th></tr>
+        <tr><td>Faculty (course designers)</td><td>All 5 modules</td><td>CO writing, mapping, assessment, reporting</td></tr>
+        <tr><td>HODs / Programme coordinators</td><td>Modules 1, 3, 5</td><td>PO attainment, CQI, SAR/SSR data</td></tr>
+        <tr><td>IQAC administrators</td><td>Modules 1, 5</td><td>Compliance, audit trail, documentation</td></tr>
+        <tr><td>External reviewers</td><td>Modules 3, 5</td><td>Attainment computation, trend data</td></tr>
+      </table>
+      <div style="margin-top:24px" class="callout">
+        <strong>Certificate criteria:</strong> Complete all 5 modules and score ≥ 60% in each quiz. The certificate counts as faculty development activity for IQAC records and NBA SAR (Criterion 6).
+      </div>
+      <div style="margin-top:20px">
+        <h3 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px">Accreditation coverage</h3>
+        <table class="data-table">
+          <tr><th>Module</th><th>NBA Criterion</th><th>NAAC Criterion</th></tr>
+          <tr><td>1 — OBE Foundations</td><td>Criterion 2.1</td><td>1.1</td></tr>
+          <tr><td>2 — Writing COs</td><td>Criterion 2.2</td><td>1.2</td></tr>
+          <tr><td>3 — CO-PO Mapping</td><td>Criteria 2.3, 2.4</td><td>1.3</td></tr>
+          <tr><td>4 — Assessment Design</td><td>Criterion 3.1</td><td>2.6</td></tr>
+          <tr><td>5 — Reporting &amp; CQI</td><td>Criteria 2.5, 9</td><td>1.4, 6.5</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  VIEW: CO-PO MATRIX TOOL                   -->
+  <!-- ══════════════════════════════════════════ -->
+  <div id="view-matrix-tool" style="display:none">
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:28px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:6px">CO-PO Mapping Matrix Tool</h2>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Click any cell to cycle 0 → 1 → 2 → 3. Averages update in real time.</p>
+      <div id="main-matrix-tool"></div>
+      <div style="margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:600;color:var(--muted)">Strength:</span>
+        <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#E8F8F0;color:#1A7A4A;border:1px solid #82E0AA;font-weight:600">1 — Slight</span>
+        <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EBF5FB;color:#1A5276;border:1px solid #85C1E9;font-weight:600">2 — Moderate</span>
+        <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EDE7F6;color:#4A235A;border:1px solid #BB8FCE;font-weight:600">3 — Substantial</span>
+        <button class="btn btn-outline" onclick="addCORow()" style="margin-left:auto">+ Add CO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  VIEW: ATTAINMENT CALCULATOR               -->
+  <!-- ══════════════════════════════════════════ -->
+  <div id="view-attainment-tool" style="display:none">
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:28px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:6px">CO Attainment Calculator</h2>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Enter values for each CO to compute attainment. Direct (80%) + Indirect (20%).</p>
+      <div id="att-calc-rows"></div>
+      <button class="btn btn-outline" onclick="addAttRow()" style="margin-top:10px">+ Add CO</button>
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+        <h3 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:14px">Attainment Summary</h3>
+        <div id="att-summary-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="portal-footer" style="margin-top:0">
+    Developed by <a href="https://isiva.in" target="_blank">Dr. I. Siva</a> · Professor of Mechanical Engineering · Director IQAC<br>
+    Available at <a href="https://isiva.in/obe-portal" target="_blank">isiva.in/obe-portal</a> · NBA + NAAC OBE Training
+  </div>
+
+</div><!-- /portal-wrap -->
+
+</div></div><!-- /portal-main -->
+<script>
+// ── QUIZ DATA ──────────────────────────────────────────────────────────
+const QUIZZES = {
+  1: [
+    { q:"What does OBE primarily focus on?", opts:["What the teacher delivers","What the student can demonstrate","Number of contact hours","Textbook coverage"], ans:1, exp:"OBE shifts focus from what is taught to what students can actually demonstrate." },
+    { q:"Which Bloom's level uses the verb 'Design'?", opts:["Level 2 — Understand","Level 3 — Apply","Level 5 — Evaluate","Level 6 — Create"], ans:3, exp:"'Design' is a Level 6 (Create) verb in Bloom's revised taxonomy." },
+    { q:"How many Programme Outcomes (POs) does NBA mandate for UG engineering?", opts:["8","10","12","15"], ans:2, exp:"NBA mandates exactly 12 Programme Outcomes for all UG engineering programmes." },
+    { q:"Which verb is appropriate for a Level 3 (Apply) CO?", opts:["List","Describe","Calculate","Critique"], ans:2, exp:"'Calculate' is an Apply-level verb. List and Describe are lower levels; Critique is Evaluate." },
+    { q:"PEOs describe graduate accomplishments how many years after graduation?", opts:["1 year","3–5 years","10 years","During the programme"], ans:1, exp:"PEOs describe career and professional accomplishments 3–5 years after graduation." },
+    { q:"What is the NBA's primary accreditation document?", opts:["Self-Study Report (SSR)","Annual Quality Assurance Report","Self-Assessment Report (SAR)","Academic Performance Indicator"], ans:2, exp:"NBA uses the Self-Assessment Report (SAR). NAAC uses the Self-Study Report (SSR)." },
+    { q:"PSOs are:", opts:["Same as POs for all programmes","Unique outcomes for a specific engineering programme","Set by NBA centrally","Applicable only to PG programmes"], ans:1, exp:"PSOs (Programme Specific Outcomes) are 2–3 outcomes unique to each engineering programme." },
+    { q:"NAAC evaluates institutions at what level?", opts:["Course level","Department level","Institution level","Programme level"], ans:2, exp:"NAAC is institution-level accreditation. NBA is programme-level." },
+    { q:"Which Bloom's level is 'Evaluate'?", opts:["Level 3","Level 4","Level 5","Level 6"], ans:2, exp:"Evaluate is Level 5. Create is Level 6, Analyse is Level 4, Apply is Level 3." },
+    { q:"'Design down, deliver up' means:", opts:["Start teaching from basics","Design curriculum starting from exit outcomes and teach upward","Design the timetable first","Create detailed question papers first"], ans:1, exp:"Design down means you start from what graduates must achieve at the end, then design backward." }
+  ],
+  2: [
+    { q:"How many elements must a well-written CO contain?", opts:["One — just an action verb","Two — verb and content","Three — verb, knowledge/skill, and context","Four — verb, content, method, and standard"], ans:2, exp:"A well-written CO has: action verb (Bloom's level) + observable knowledge/skill + context/standard." },
+    { q:"Which of these is a poorly-written CO?", opts:["Apply Newton's laws to solve dynamics problems","Design a heat exchanger using IS standards","Know about material properties","Evaluate circuit efficiency using modern simulation tools"], ans:2, exp:"'Know about material properties' uses a vague verb ('know') and lacks measurability." },
+    { q:"A 3-credit theory course should have how many COs?", opts:["2–3","5–8","10–12","15–20"], ans:1, exp:"NBA recommends 5–8 COs for a 3-credit course (each CO covers ~5–8 contact hours)." },
+    { q:"What does mapping strength '3' mean?", opts:["Slight relevance","Moderate relevance","Substantial direct alignment","No relationship"], ans:2, exp:"Strength 3 (Substantial) means the CO directly and substantially addresses the PO." },
+    { q:"Which of these is a multi-verb CO error?", opts:["Design a bridge for given load conditions","Analyse and design and evaluate circuit performance","Apply thermodynamic laws to engine cycles","Evaluate the safety of a mechanical component"], ans:1, exp:"A CO should have exactly ONE action verb. 'Analyse and design and evaluate' is three COs merged into one." },
+    { q:"Strength '1' in CO-PO mapping means:", opts:["Strong alignment","Moderate alignment","Slight or indirect relevance","No relationship"], ans:2, exp:"Strength 1 means the CO slightly or indirectly addresses the PO — marginal connection." },
+    { q:"What typically happens to a CO requiring HOD review?", opts:["Only IQAC reviews it","Faculty can self-approve","HOD + 2 senior faculty review for Bloom's alignment","Vice-Chancellor approves all COs"], ans:2, exp:"The department CO-PO Review Committee (HOD + 2 senior faculty) reviews each CO before IQAC sign-off." },
+    { q:"CO-PO mapping should aim to address how many POs per course?", opts:["All 12 POs","Only PO1 and PO2","6–9 POs meaningfully","Exactly 3 POs"], ans:2, exp:"A typical course meaningfully addresses 6–9 POs. Mapping to all 12 inflates the matrix artificially." },
+    { q:"'Appreciate the importance of engineering ethics' is problematic because:", opts:["It uses too many words","It is not measurable or observable","It does not mention POs","It covers too many topics"], ans:1, exp:"'Appreciate' is vague and unmeasurable. Use 'Apply ethical frameworks to resolve professional dilemmas' instead." },
+    { q:"PSOs are written for:", opts:["Individual course level","Institution level","Specific engineering programme level","Department level"], ans:2, exp:"PSOs capture what is unique about a specific programme, going beyond the 12 generic NBA POs." },
+    { q:"What is the purpose of the context/standard element in a CO?", opts:["To name the textbook used","To specify the conditions or performance level expected","To list the assessment type","To indicate the teaching method"], ans:1, exp:"The context/standard element specifies under what conditions or to what standard the student performs the outcome." },
+    { q:"If a CO uses the verb 'Explain', it is at Bloom's level:", opts:["Level 1 — Remember","Level 2 — Understand","Level 3 — Apply","Level 4 — Analyse"], ans:1, exp:"'Explain' is a Level 2 (Understand) verb in Bloom's taxonomy." }
+  ],
+  3: [
+    { q:"In a CO-PO matrix, what do the rows represent?", opts:["Programme Outcomes","Course Outcomes","Assessment methods","Bloom's levels"], ans:1, exp:"Rows = Course Outcomes (COs). Columns = Programme Outcomes (POs and PSOs)." },
+    { q:"What is the standard direct-to-indirect attainment ratio?", opts:["50:50","60:40","80:20","70:30"], ans:2, exp:"The most widely accepted NBA ratio is 80% direct + 20% indirect, though some institutions use 70:30 (with Academic Council approval)." },
+    { q:"'Direct attainment' is computed from:", opts:["Student satisfaction surveys","Alumni feedback","Actual student performance in CIE/SEE","Faculty self-assessment"], ans:2, exp:"Direct attainment is based on actual student performance data from formal assessments (CIE, SEE, assignments, labs)." },
+    { q:"What does CAY stand for in NBA terminology?", opts:["Course Attainment Year","Current Academic Year","Curriculum Assessment Year","Calculated Attainment Yield"], ans:1, exp:"CAY = Current Academic Year (the year for which the SAR is being submitted)." },
+    { q:"The typical CO attainment threshold is:", opts:["Students scoring ≥30% in CO-mapped questions","Students scoring ≥40% in CO-mapped questions","Students scoring ≥50% in CO-mapped questions","Students scoring ≥70% in CO-mapped questions"], ans:2, exp:"The standard threshold is ≥50% of CO-mapped marks. The target is that ≥60% of students should meet this threshold." },
+    { q:"Indirect attainment is typically collected through:", opts:["CIE question marks","SEE scores","Course-end student feedback survey","Lab record evaluation"], ans:2, exp:"Indirect attainment uses student self-assessment through course-end feedback surveys (CO-wise Likert scale ratings)." },
+    { q:"To attain CO2, what percentage of students must meet the threshold?", opts:["30%","At least 50%","At least 60% (typical target)","100%"], ans:2, exp:"The typical NBA target is that ≥60% of enrolled students should score ≥threshold marks in CO-mapped questions." },
+    { q:"NBA requires PO attainment data for:", opts:["Current year only","Current + previous year (2 years)","3 years (CAY, CAYP, CAYPD)","5 years"], ans:2, exp:"NBA requires 3 years of PO attainment trend data: CAY, CAYP (previous), and CAYPD (2 years previous)." },
+    { q:"PO attainment is computed by:", opts:["Simple average of all CO attainments","Weighted average of CO attainments using CO-PO mapping strength","Only using indirect survey data","Faculty-assigned scores"], ans:1, exp:"PO attainment = Sum of (CO attainment × mapping strength) / Sum of mapping strengths, for all COs mapping to that PO." },
+    { q:"A CO with attainment < target requires:", opts:["No action","A formal gap analysis and documented corrective action","Immediate CO deletion","Automatic programme disqualification"], ans:1, exp:"Any unattained CO requires a formal gap analysis and corrective action plan documented in the course file and IQAC register." },
+    { q:"Which of these is a direct attainment method?", opts:["Exit survey","Employer feedback","Alumni survey","Lab record with rubric evaluation"], ans:3, exp:"Lab records evaluated with rubrics are a direct method (based on actual performance). Alumni and employer surveys are indirect." },
+    { q:"The CO-PO matrix average row shows:", opts:["Total marks per CO","How strongly each PO is addressed by this course","Student attendance rates","Number of direct methods used"], ans:1, exp:"The average row shows the average mapping strength across all COs for each PO — indicating how strongly the course addresses each PO." },
+    { q:"What happens when a CO attainment drops below target for 2+ consecutive years?", opts:["Ignore it — normal variation","Increase threshold to make attainment look better","Trigger formal CQI: root cause analysis, curriculum revision, BoS discussion","Report only to university, not IQAC"], ans:2, exp:"Persistent non-attainment triggers the CQI loop: root cause, improvement action, BoS discussion, and documented monitoring in the following year." },
+    { q:"CAYPD means:", opts:["Current Academic Year Programme Design","Two years before the current SAR year","Current Academic Year Programme Data","One year before the current SAR year"], ans:1, exp:"CAYPD = Current Academic Year Previous to Previous — two years before the current SAR year." },
+    { q:"Mapping strength '0' (blank) in the CO-PO matrix means:", opts:["The CO slightly addresses the PO","The CO substantially addresses the PO","No meaningful relationship between that CO and PO","Data not yet collected"], ans:2, exp:"A blank (0) cell means no meaningful relationship. Forcing a 1 where there is no real connection inflates the matrix." }
+  ],
+  4: [
+    { q:"Constructive alignment means:", opts:["Aligning teaching schedules to the academic calendar","COs, teaching methods, and assessments must all be aligned","Using only MCQ-type questions","Aligning marks to Bloom's levels only"], ans:1, exp:"Constructive alignment (Biggs) requires that COs, teaching/learning activities, and assessments are all coherently aligned." },
+    { q:"In a CIE question paper, the tag [CO3 – BL4] means:", opts:["3rd question, Bloom's Level 4","Course Outcome 3 tested at Bloom's Level 4 (Analyse)","CO3 with 4 marks","Criterion 3, Benchmark Level 4"], ans:1, exp:"The tag format is [CO number – Bloom's Level], so [CO3–BL4] means Course Outcome 3 tested at Level 4 (Analyse)." },
+    { q:"SEE question-to-CO mapping is done:", opts:["Before the semester starts","At the time of question paper setting","Retrospectively after the question paper is released","Only if the university requests it"], ans:2, exp:"Since SEE papers are set externally, faculty map questions to COs retrospectively after the paper is released." },
+    { q:"A rubric criterion should correspond to:", opts:["One complete module","One Course Outcome","The entire syllabus","One assessment event"], ans:1, exp:"Each rubric criterion should correspond to exactly one CO so that rubric scores can be used to compute CO-specific attainment." },
+    { q:"What is the recommended corrective action when attainment is 40–49%?", opts:["No action needed","Certificate upgrade","Formal remedial class + revised strategy for next offering","Automatic supplementary exam"], ans:2, exp:"40–49% attainment triggers a formal remedial class and a documented revision of the teaching strategy for the next course offering." },
+    { q:"If CO5 is written at Bloom's Level 6 (Create), the assessment must:", opts:["Only test recall of the topic","Test at Level 2 for fairness","Require the student to actually create/design something","Test at Level 3 (Apply) as a compromise"], ans:2, exp:"The assessment must match or exceed the CO's Bloom's level. A Level 6 CO requires a design/creation task — not recall or description." },
+    { q:"An 'Excellent' score in a rubric (score 4) means:", opts:["Student attempted the CO with major errors","Student partially met the CO","Student met the CO with minor errors","Student fully demonstrated the CO, exceeding the standard"], ans:3, exp:"Score 4 (Excellent) = fully demonstrates the CO with no significant errors; exceeds expected standard." },
+    { q:"CIE stands for:", opts:["Course Improvement Exercise","Continuous Internal Evaluation","Criterion-based Integrated Examination","Curriculum Implementation Evidence"], ans:1, exp:"CIE = Continuous Internal Evaluation — the internal assessments conducted during the semester by the faculty." },
+    { q:"If a question does not map to any CO during SEE mapping, it should be:", opts:["Force-mapped to the nearest CO","Excluded and marked as 'unmapped'","Assigned to PO1 by default","Counted as indirect attainment"], ans:1, exp:"If a question cannot be meaningfully mapped to a CO, note it as 'unmapped'. Do not force-fit — it distorts attainment data." },
+    { q:"Attainment below 40% requires:", opts:["Only faculty awareness","No documentation needed until below 30%","Mandatory gap analysis, HOD escalation, and IQAC presentation","Automatic supplementary exam for students"], ans:2, exp:"Below 40% is a serious concern requiring mandatory gap analysis, HOD escalation, and presentation at the IQAC meeting." },
+    { q:"Which is an example of constructive misalignment?", opts:["CO says 'Analyse' and CIE asks an analysis question","CO says 'Design' but exam only asks to 'Define'","CO says 'Apply' and lab tests application skill","CO says 'Evaluate' and rubric tests evaluation"], ans:1, exp:"CO says 'Design' (Level 6) but the exam only asks to 'Define' (Level 1) — classic constructive misalignment." },
+    { q:"The purpose of tagging CIE questions to COs is:", opts:["To make question papers look more professional","To enable CO-wise mark analysis and attainment computation","To reduce the number of questions needed","To satisfy university formatting requirements only"], ans:1, exp:"Tagging enables CO-wise mark extraction so that attainment for each CO can be computed from student performance data." }
+  ],
+  5: [
+    { q:"How many sections should a CO Attainment Report contain?", opts:["3","5","10","15"], ans:2, exp:"A complete CO Attainment Report has 10 mandatory sections from course details through faculty/HOD signatures." },
+    { q:"NBA Criterion 2 in the SAR relates to:", opts:["Infrastructure","Faculty qualifications","Teaching-Learning and Evaluation (CO/PO attainment)","Governance"], ans:2, exp:"NBA Criterion 2 covers Teaching-Learning and Evaluation, which includes all CO/PO attainment data and calculations." },
+    { q:"NAAC sub-criterion 2.6 requires evidence of:", opts:["Hostel facilities","Student performance and learning outcomes (CO attainment data)","Library books","Sports infrastructure"], ans:1, exp:"NAAC 2.6 covers Student Performance and Learning Outcomes — requires CO and PO attainment data with mapped assessments." },
+    { q:"'Closing the loop' in CQI means:", opts:["Ending the semester properly","Using attainment data to trigger curriculum and teaching improvements","Closing the course file after submission","Completing all assessment paperwork"], ans:1, exp:"Closing the loop means attainment data is actually used to drive improvements — not just collected and filed." },
+    { q:"Who is responsible for computing PO attainment?", opts:["Individual faculty for their own courses","Programme Coordinator or HOD","NBA peer team during inspection","The university examinations department"], ans:1, exp:"The Programme Coordinator or HOD aggregates CO attainment across all courses in the programme to compute PO attainment." },
+    { q:"IQAC documentation must include:", opts:["Only the principal's signature","Meeting minutes, OBE policy, training records, and gap analysis registers","Student mark sheets only","Timetable and syllabus copies"], ans:1, exp:"IQAC must maintain: IQAC meeting minutes with OBE agenda, OBE policy, faculty training records, gap analysis registers, and 3-year PO trend data." },
+    { q:"What makes an institution score well on NBA Criterion 2?", opts:["Only one year of high attainment data","Three years of data with ≥60% PO attainment and documented gap analysis","Very large student-to-faculty ratio","High SEE scores only"], ans:1, exp:"Maximum marks require: 3 years of data (CAY/CAYP/CAYPD), ≥60% PO attainment, AND documented gap analysis with corrective actions." },
+    { q:"Which NAAC criterion covers the OBE policy and faculty training?", opts:["1.1","2.6","6.5","3.2"], ans:2, exp:"NAAC Criterion 6.5 covers Institutional Quality Assurance — including IQAC activities, OBE policy, and faculty development/training." },
+    { q:"If CO attainment has been below target for 3 consecutive years, the best action is:", opts:["Lower the target","Ignore as long as no peer team visit is scheduled","Formal CQI: revise CO or teaching approach, document in BoS minutes, monitor next year","Delete the CO from the course"], ans:2, exp:"Persistent non-attainment requires formal CQI action documented in BoS minutes, with explicit monitoring in the subsequent year." },
+    { q:"The phrase 'act on the data' in OBE context means:", opts:["Increase student marks to show improvement","Report high numbers without supporting evidence","Use attainment results to drive real curriculum and teaching improvements","Submit data to the university annually"], ans:2, exp:"Accreditors value demonstrated improvement driven by data — not just high numbers. Evidence of action on low attainment is what closes the loop." }
+  ]
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────
+const completed = { 1: false, 2: false, 3: false, 4: false, 5: false };
+const quizScores = {};
+
+// ── VIEW SWITCHING ─────────────────────────────────────────────────────
+function showView(name, btn) {
+  ['modules','overview','matrix-tool','attainment-tool'].forEach(v => {
+    document.getElementById('view-' + v).style.display = v === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (name === 'attainment-tool' && document.getElementById('att-calc-rows').children.length === 0) initAttCalc();
+  if (name === 'matrix-tool' && document.getElementById('main-matrix-tool').innerHTML === '') initMainMatrix();
+}
+
+// ── MODULE TOGGLE ──────────────────────────────────────────────────────
+function toggleModule(n) {
+  const body = document.getElementById('body-' + n);
+  const chev = document.getElementById('chev-' + n);
+  const card = document.getElementById('card-' + n);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  card.classList.toggle('active', !isOpen);
+  if (!isOpen && !document.getElementById('quiz-' + n).innerHTML) buildQuiz(n);
+}
+
+// ── INNER TABS ─────────────────────────────────────────────────────────
+function innerTab(mod, tab, btn) {
+  ['learn','quiz','tool'].forEach(t => {
+    const p = document.getElementById('panel-' + mod + '-' + t);
+    if (p) p.classList.toggle('active', t === tab);
+  });
+  const allBtns = document.querySelectorAll('#body-' + mod + ' .inner-tab');
+  allBtns.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'quiz' && !document.getElementById('quiz-' + mod).innerHTML) buildQuiz(mod);
+  if (tab === 'tool' && mod === 3 && !document.getElementById('matrix-tool-embed').innerHTML) initEmbedMatrix();
+}
+
+// ── MARK COMPLETE ──────────────────────────────────────────────────────
+function markComplete(n) {
+  completed[n] = true;
+  const s = document.getElementById('status-' + n);
+  s.textContent = '✓ Complete';
+  s.classList.add('done');
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = Object.values(completed).filter(Boolean).length;
+  const pct = Math.round(done / 5 * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  if (pct === 100) document.getElementById('cert-badge').style.display = 'inline-flex';
+}
+
+// ── QUIZ ENGINE ────────────────────────────────────────────────────────
+function buildQuiz(mod) {
+  const qs = QUIZZES[mod];
+  const container = document.getElementById('quiz-' + mod);
+  let html = '';
+  qs.forEach((q, i) => {
+    html += `<div class="quiz-q" id="q-${mod}-${i}">
+      <div class="quiz-q-num">Question ${i+1} of ${qs.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-options">`;
+    q.opts.forEach((o, j) => {
+      html += `<label class="quiz-option" id="opt-${mod}-${i}-${j}">
+        <input type="radio" name="q${mod}-${i}" value="${j}" onchange="selectOpt(${mod},${i},${j})">
+        <span>${o}</span>
+      </label>`;
+    });
+    html += `</div>
+      <button class="quiz-submit-btn" onclick="checkAnswer(${mod},${i})">Check answer</button>
+      <div class="quiz-feedback" id="fb-${mod}-${i}"></div>
+    </div>`;
+  });
+  html += `<div class="quiz-result" id="result-${mod}">
+    <div class="quiz-result-score" id="rscore-${mod}"></div>
+    <div class="quiz-result-msg" id="rmsg-${mod}"></div>
+    <button class="quiz-restart" onclick="restartQuiz(${mod})">Retake Quiz</button>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function selectOpt(mod, qi, oi) {
+  for (let j = 0; j < QUIZZES[mod][qi].opts.length; j++) {
+    document.getElementById(`opt-${mod}-${qi}-${j}`).classList.remove('selected');
+  }
+  document.getElementById(`opt-${mod}-${qi}-${oi}`).classList.add('selected');
+}
+
+function checkAnswer(mod, qi) {
+  const q = QUIZZES[mod][qi];
+  const selected = document.querySelector(`input[name="q${mod}-${qi}"]:checked`);
+  if (!selected) return;
+  const val = parseInt(selected.value);
+  const fb = document.getElementById(`fb-${mod}-${qi}`);
+  for (let j = 0; j < q.opts.length; j++) {
+    const el = document.getElementById(`opt-${mod}-${qi}-${j}`);
+    el.classList.remove('selected','correct','wrong');
+    if (j === q.ans) el.classList.add('correct');
+    else if (j === val && val !== q.ans) el.classList.add('wrong');
+    el.querySelector('input').disabled = true;
+  }
+  fb.textContent = (val === q.ans ? '✓ Correct! ' : '✗ Incorrect. ') + q.exp;
+  fb.className = 'quiz-feedback show ' + (val === q.ans ? 'ok' : 'no');
+  document.querySelector(`#q-${mod}-${qi} .quiz-submit-btn`).style.display = 'none';
+  // check if all answered
+  checkAllAnswered(mod);
+}
+
+function checkAllAnswered(mod) {
+  const qs = QUIZZES[mod];
+  let correct = 0;
+  for (let i = 0; i < qs.length; i++) {
+    const inp = document.querySelector(`input[name="q${mod}-${i}"]:checked`);
+    if (!inp) return;
+    if (parseInt(inp.value) === qs[i].ans) correct++;
+  }
+  const pct = Math.round(correct / qs.length * 100);
+  quizScores[mod] = pct;
+  const res = document.getElementById('result-' + mod);
+  const sc = document.getElementById('rscore-' + mod);
+  const msg = document.getElementById('rmsg-' + mod);
+  sc.textContent = correct + '/' + qs.length + ' (' + pct + '%)';
+  if (pct >= 60) {
+    res.style.background = 'var(--green-bg)';
+    res.style.border = '1px solid #A9DFBF';
+    res.style.borderRadius = 'var(--r)';
+    sc.style.color = 'var(--green)';
+    msg.textContent = 'Passed! You have demonstrated understanding of this module.';
+    msg.style.color = 'var(--green)';
+    document.querySelector(`#result-${mod} .quiz-restart`).style.color = 'var(--green)';
+    document.querySelector(`#result-${mod} .quiz-restart`).style.borderColor = 'var(--green)';
+    markComplete(mod);
+  } else {
+    res.style.background = 'var(--coral-bg)';
+    res.style.border = '1px solid #F5A797';
+    res.style.borderRadius = 'var(--r)';
+    sc.style.color = 'var(--coral)';
+    msg.textContent = 'Score below 60%. Review the lesson content and retake to earn your completion.';
+    msg.style.color = 'var(--coral)';
+    document.querySelector(`#result-${mod} .quiz-restart`).style.color = 'var(--coral)';
+    document.querySelector(`#result-${mod} .quiz-restart`).style.borderColor = 'var(--coral)';
+  }
+  res.classList.add('show');
+  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function restartQuiz(mod) {
+  document.getElementById('quiz-' + mod).innerHTML = '';
+  buildQuiz(mod);
+}
+
+// ── CO-PO MATRIX (shared logic) ────────────────────────────────────────
+const POS = ['PO1','PO2','PO3','PO4','PO5','PO6','PO7','PO8','PO9','PO10','PO11','PO12','PSO1','PSO2'];
+let matrixData = {
+  embed: { cos: ['CO1','CO2','CO3','CO4','CO5'], mapping: {} },
+  main:  { cos: ['CO1','CO2','CO3','CO4','CO5'], mapping: {} }
+};
+
+function getM(id, co, po) { return (matrixData[id].mapping[co+':'+po]) || 0; }
+function setM(id, co, po) {
+  const k = co+':'+po;
+  const v = ((matrixData[id].mapping[k]||0)+1)%4;
+  if (v===0) delete matrixData[id].mapping[k];
+  else matrixData[id].mapping[k] = v;
+  renderMatrix(id);
+}
+
+function renderMatrix(id) {
+  const el = document.getElementById(id === 'embed' ? 'matrix-tool-embed' : 'main-matrix-tool');
+  const {cos, mapping} = matrixData[id];
+  let h = '<div style="overflow-x:auto"><table class="ipo-table"><thead><tr><th>Course Outcome</th>';
+  POS.forEach(p => h += `<th>${p}</th>`);
+  h += '<th>Avg</th></tr></thead><tbody>';
+  cos.forEach((co, ci) => {
+    let s=0,c=0;
+    POS.forEach(p => { const v=getM(id,ci,p); if(v>0){s+=v;c++;} });
+    const avg = c>0?(s/c).toFixed(1):'—';
+    h += `<tr><td><span class="ipo-co-label">CO${ci+1}</span><span class="ipo-co-text">${co}</span></td>`;
+    POS.forEach(p => {
+      const v=getM(id,ci,p);
+      const cls = v===1?'s1':v===2?'s2':v===3?'s3':'';
+      h += `<td><button class="ipo-cell-btn ${cls}" onclick="setM('${id}',${ci},'${p}')">${v||'—'}</button></td>`;
+    });
+    h += `<td class="ipo-avg">${avg}</td></tr>`;
+  });
+  // avg row
+  h += '<tr><td style="font-weight:700;color:var(--mid);font-size:12px">PO average</td>';
+  POS.forEach(p => {
+    let s=0,c=0;
+    cos.forEach((_,ci) => { const v=getM(id,ci,p); if(v>0){s+=v;c++;} });
+    const avg = c>0?(s/c).toFixed(1):'—';
+    const bg = c>0?(s/c)>=2.5?'#EDE7F6':(s/c)>=1.5?'#EBF5FB':'#E8F8F0':'';
+    const col = c>0?(s/c)>=2.5?'#4A235A':(s/c)>=1.5?'#1A5276':'#1A7A4A':'var(--muted)';
+    h += `<td style="text-align:center;background:${bg||'var(--pale)'};font-weight:700;color:${col};font-size:12px;padding:7px 4px">${avg}</td>`;
+  });
+  h += '<td></td></tr>';
+  h += '</tbody></table></div>';
+  // editable CO names
+  h += '<div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
+  cos.forEach((co,ci) => {
+    h += `<div style="display:flex;align-items:center;gap:6px">
+      <span style="font-size:11px;font-weight:700;color:var(--mid);min-width:28px">CO${ci+1}</span>
+      <input type="text" value="${co}" onchange="updateCOName('${id}',${ci},this.value)" style="flex:1;font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--pale)">
+    </div>`;
+  });
+  h += '</div>';
+  el.innerHTML = h;
+}
+
+function updateCOName(id, ci, val) {
+  matrixData[id].cos[ci] = val;
+  renderMatrix(id);
+}
+
+function addCORow() {
+  const n = matrixData.main.cos.length + 1;
+  matrixData.main.cos.push(`CO${n} — describe outcome here`);
+  renderMatrix('main');
+}
+
+function initEmbedMatrix() { renderMatrix('embed'); }
+function initMainMatrix() { renderMatrix('main'); }
+
+// ── ATTAINMENT CALCULATOR ──────────────────────────────────────────────
+let attRows = [];
+function initAttCalc() {
+  ['CO1','CO2','CO3','CO4','CO5'].forEach((c,i) => addAttRow(c));
+}
+function addAttRow(label) {
+  const id = Date.now() + Math.random();
+  attRows.push({ id, label: label || `CO${attRows.length+1}`, direct: '', indirect: '', target: 60 });
+  renderAttCalc();
+}
+function renderAttCalc() {
+  const wrap = document.getElementById('att-calc-rows');
+  let h = `<div style="overflow-x:auto"><table class="data-table" style="min-width:560px">
+    <tr><th>CO</th><th>Direct attainment (%)</th><th>Indirect attainment (%)</th><th>Target (%)</th><th>Result</th><th></th></tr>`;
+  attRows.forEach((r, i) => {
+    const d = parseFloat(r.direct)||0;
+    const ind = parseFloat(r.indirect)||0;
+    const att = d*0.8 + ind*0.2;
+    const attStr = (r.direct !== '' || r.indirect !== '') ? att.toFixed(1)+'%' : '—';
+    const pass = att >= r.target && r.direct !== '';
+    const resultStyle = r.direct !== '' ? (pass ? 'color:var(--green);font-weight:700' : 'color:var(--coral);font-weight:700') : 'color:var(--muted)';
+    const resultText = r.direct !== '' ? (pass ? '✓ Attained' : '✗ Not attained') : '—';
+    h += `<tr>
+      <td><input type="text" value="${r.label}" onchange="updateAttRow(${i},'label',this.value)" style="width:90px;font-size:12px;padding:3px 6px;border:1px solid var(--border);border-radius:4px"></td>
+      <td><input type="number" min="0" max="100" placeholder="e.g. 74.3" value="${r.direct}" onchange="updateAttRow(${i},'direct',this.value)" style="width:100px;font-size:12px;padding:3px 6px;border:1px solid var(--border);border-radius:4px"></td>
+      <td><input type="number" min="0" max="100" placeholder="e.g. 68" value="${r.indirect}" onchange="updateAttRow(${i},'indirect',this.value)" style="width:100px;font-size:12px;padding:3px 6px;border:1px solid var(--border);border-radius:4px"></td>
+      <td><input type="number" min="0" max="100" value="${r.target}" onchange="updateAttRow(${i},'target',this.value)" style="width:70px;font-size:12px;padding:3px 6px;border:1px solid var(--border);border-radius:4px"></td>
+      <td style="${resultStyle}">${attStr} — ${resultText}</td>
+      <td><button onclick="removeAttRow(${i})" style="border:none;background:none;cursor:pointer;color:var(--coral);font-size:16px">×</button></td>
+    </tr>`;
+  });
+  h += '</table></div>';
+  wrap.innerHTML = h;
+  renderAttSummary();
+}
+function updateAttRow(i, key, val) {
+  attRows[i][key] = val;
+  renderAttCalc();
+}
+function removeAttRow(i) {
+  attRows.splice(i,1);
+  renderAttCalc();
+}
+function renderAttSummary() {
+  const filled = attRows.filter(r => r.direct !== '');
+  if (!filled.length) { document.getElementById('att-summary-out').innerHTML = '<p style="font-size:13px;color:var(--muted)">Enter values above to see summary.</p>'; return; }
+  const attained = filled.filter(r => (parseFloat(r.direct)*0.8 + parseFloat(r.indirect||0)*0.2) >= r.target);
+  const avg = filled.reduce((s,r)=>(s + parseFloat(r.direct)*0.8 + parseFloat(r.indirect||0)*0.2),0)/filled.length;
+  document.getElementById('att-summary-out').innerHTML = `
+    <div class="att-summary">
+      <div class="att-card"><div class="att-card-n" style="color:var(--navy)">${filled.length}</div><div class="att-card-l">COs evaluated</div></div>
+      <div class="att-card"><div class="att-card-n" style="color:var(--green)">${attained.length}</div><div class="att-card-l">COs attained</div></div>
+      <div class="att-card"><div class="att-card-n" style="color:var(--mid)">${avg.toFixed(1)}%</div><div class="att-card-l">Average attainment</div></div>
+    </div>
+    <div class="callout ${avg>=60?'green':'amber'}" style="margin-top:0">
+      <strong>${avg>=60?'Programme on track:':'Action required:'}</strong> ${attained.length} of ${filled.length} COs attained.
+      ${filled.length - attained.length > 0 ? `${filled.length-attained.length} CO(s) require gap analysis and corrective action documentation.` : 'All evaluated COs meet their targets.'}
+    </div>`;
+}
+
+// ══ PYRAMID ══
+const PDATA = {
+  1:{name:'Remember',color:'#993C1D',bg:'#FAECE7',border:'#F5C4B3',desc:'Retrieve relevant knowledge from long-term memory — recall facts, basic concepts, and answers.',verbs:['Define','List','Name','Recall','State','Identify','Label','Recognise','Outline','Match'],active:['Define','List','Name','Recall'],co:'CO1: Define the fundamental laws of thermodynamics and state their significance in engineering systems.',nba:'Most appropriate for first-year foundation courses. Avoid as sole cognitive level for core engineering COs.'},
+  2:{name:'Understand',color:'#854F0B',bg:'#FAEEDA',border:'#FAC775',desc:'Construct meaning from instructional messages. Students explain ideas or concepts in their own words.',verbs:['Explain','Describe','Summarise','Classify','Interpret','Paraphrase','Compare','Discuss','Illustrate','Predict'],active:['Explain','Describe','Summarise','Classify'],co:'CO2: Explain the mechanisms of heat transfer by conduction, convection, and radiation with engineering examples.',nba:'Suitable for Level 1–2 courses. For 2nd year and above, pair with at least one higher-level CO.'},
+  3:{name:'Apply',color:'#0F6E56',bg:'#E1F5EE',border:'#5DCAA5',desc:'Carry out or use a procedure in a given situation. Students solve problems in new contexts.',verbs:['Solve','Calculate','Demonstrate','Implement','Compute','Apply','Simulate','Operate','Perform','Construct'],active:['Solve','Calculate','Implement','Demonstrate'],co:'CO3: Calculate bending stress and shear force in beams subjected to various loading conditions.',nba:'Primary level for most UG engineering core COs (NBA recommendation). Labs reinforce Apply-level COs.'},
+  4:{name:'Analyse',color:'#085041',bg:'#D4EDE6',border:'#1D9E75',desc:'Break material into parts and determine how they relate to one another and to an overall structure.',verbs:['Compare','Differentiate','Examine','Analyse','Investigate','Organise','Categorise','Relate','Prioritise','Distinguish'],active:['Compare','Analyse','Differentiate','Examine'],co:'CO4: Analyse failure modes of mechanical components under fatigue loading and differentiate ductile vs brittle failure.',nba:'Essential for design and analysis courses. Every 3rd/4th year core course should have ≥2 Level 4 COs.'},
+  5:{name:'Evaluate',color:'#534AB7',bg:'#EEEDFE',border:'#AFA9EC',desc:'Make judgements based on criteria and standards. Students critique, assess, and select based on reasoned argument.',verbs:['Evaluate','Justify','Recommend','Assess','Judge','Critique','Defend','Select','Appraise','Conclude'],active:['Evaluate','Justify','Recommend','Assess'],co:'CO5: Evaluate and recommend an optimal material for a structural application, justifying against IS standards.',nba:'Required for design project and elective courses. Capstone courses must include COs at Level 5–6.'},
+  6:{name:'Create',color:'#3C3489',bg:'#E5E3FC',border:'#7F77DD',desc:'Put elements together to form a new whole or produce an original product. Highest cognitive level.',verbs:['Design','Develop','Formulate','Construct','Generate','Plan','Produce','Devise','Propose','Synthesise'],active:['Design','Develop','Formulate','Construct'],co:'CO6: Design a sustainable heat exchanger for given thermal specifications, incorporating material, cost, and environmental constraints.',nba:'Mandatory for capstone design courses (NBA Criterion 3). PG programmes should have majority COs at Levels 5–6.'}
+};
+let pyrSel=null;
+function pselect(n){
+  if(pyrSel===n){pyrSel=null;document.getElementById('pyr-default').style.display='';document.getElementById('pyr-level-card').style.display='none';return;}
+  pyrSel=n;const L=PDATA[n];
+  document.getElementById('pyr-default').style.display='none';
+  const card=document.getElementById('pyr-level-card');
+  card.style.display='block';card.style.borderColor=L.color;card.style.background=L.bg;
+  document.getElementById('pyr-badge').style.cssText=`background:${L.color};color:${L.bg};display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:8px`;
+  document.getElementById('pyr-badge').textContent=`Level ${n} — ${L.name}`;
+  document.getElementById('pyr-ltitle').textContent=L.name;
+  document.getElementById('pyr-ldesc').textContent=L.desc;
+  document.getElementById('pyr-verbs').innerHTML=L.verbs.map(v=>`<span style="font-size:11px;padding:3px 8px;border-radius:20px;border:0.5px solid ${L.border};background:${L.active.includes(v)?L.color:'#fff'};color:${L.active.includes(v)?L.bg:L.color};cursor:default">${v}</span>`).join('');
+  document.getElementById('pyr-co').style.cssText=`font-size:12px;border-left:2px solid ${L.color};padding:6px 10px;border-radius:0 6px 6px 0;background:#fff;line-height:1.55;margin-bottom:8px`;
+  document.getElementById('pyr-co').innerHTML=`<strong>CO example:</strong> "${L.co}"`;
+  document.getElementById('pyr-nba').style.cssText=`font-size:11px;color:#555;padding:6px 10px;border-radius:6px;line-height:1.5;background:#fff`;
+  document.getElementById('pyr-nba').textContent=L.nba;
+}
+
+// ══ HIERARCHY ══
+function htog(id){
+  const b=document.getElementById('hb-'+id);
+  const c=document.getElementById('hc-'+id);
+  const open=b.style.display==='block';
+  b.style.display=open?'none':'block';
+  c.style.transform=open?'':'rotate(180deg)';
+}
+
+// ══ CO ANATOMY BUILDER ══
+const CPRESET=['Calculate the bending stress and deflection in simply supported beams subjected to various loading conditions using standard formulae.','Evaluate and recommend an optimal material for a structural application, justifying the selection based on mechanical properties and IS standards.','Understand the principles of fluid mechanics and know about pipe flow.','Analyse and design and evaluate the performance of heat exchangers.','Unit 4: Refrigeration and Air Conditioning systems.'];
+const CBLOOMS={1:{name:'Remember',color:'#993C1D',verbs:['define','list','name','recall','state','identify','label','recognise','reproduce','memorise','match','outline']},2:{name:'Understand',color:'#854F0B',verbs:['explain','describe','summarise','classify','interpret','paraphrase','compare','discuss','illustrate','predict','translate','infer']},3:{name:'Apply',color:'#0F6E56',verbs:['solve','use','demonstrate','compute','implement','execute','calculate','apply','operate','perform','produce','construct','simulate','model','employ']},4:{name:'Analyse',color:'#085041',verbs:['compare','differentiate','examine','break','relate','organise','distinguish','attribute','deconstruct','infer','prioritise','investigate','analyse','analyze','separate','categorise']},5:{name:'Evaluate',color:'#534AB7',verbs:['judge','justify','critique','assess','recommend','defend','select','evaluate','prioritise','appraise','argue','conclude','rate','validate','review']},6:{name:'Create',color:'#3C3489',verbs:['design','develop','formulate','construct','produce','plan','generate','compose','invent','build','devise','synthesise','synthesize','create','propose','draft']}};
+const CVAGUE=['understand','know','aware','familiar','appreciate','learn','study','grasp','realise','realize'];
+function cabPreset(i){document.getElementById('cab-input').value=CPRESET[i];cabAnalyse();}
+function cabAnalyse(){
+  const raw=document.getElementById('cab-input').value.trim();
+  if(!raw){cabReset();return;}
+  const lower=raw.toLowerCase();const words=lower.split(/\s+/);const fw=words[0].replace(/[^a-z]/g,'');
+  let dl=0,dv='',dc='',db='';
+  for(let l=6;l>=1;l--){for(const v of CBLOOMS[l].verbs){if(fw===v){dl=l;dv=v;dc=CBLOOMS[l].color;db=l===1?'#FAECE7':l===2?'#FAEEDA':l===3?'#E1F5EE':l===4?'#D4EDE6':l===5?'#EEEDFE':'#E5E3FC';break;}}if(dv)break;}
+  const isVague=CVAGUE.includes(fw);const hasMulti=[' and design',' and evaluate',' and analyse',' and calculate',' and solve',' and develop'].some(c=>lower.includes(c));
+  const hasCtx=raw.includes(' using ')||raw.includes(' with ')||raw.includes(' for ')||raw.includes(' based on')||raw.includes(' standards');
+  const rest=raw.slice(raw.indexOf(' ')+1);
+  const ctxIdx=rest.toLowerCase().search(/ using | with | based on| considering| following/);
+  // Verb card
+  const vc=document.getElementById('cab-verb-card');const vel=document.getElementById('cab-verb');const vsub=document.getElementById('cab-verb-sub');
+  if(dv&&!isVague){vel.textContent=dv.charAt(0).toUpperCase()+dv.slice(1);vel.style.color=dc;vc.style.borderColor=dc;vc.style.background=db;vsub.textContent=`Bloom's Level ${dl} — ${CBLOOMS[dl].name}`;}
+  else if(isVague){vel.textContent=words[0].charAt(0).toUpperCase()+words[0].slice(1)+' ⚠';vel.style.color='#B7770D';vc.style.borderColor='#EF9F27';vc.style.background='#FAEEDA';vsub.textContent='Vague — replace with measurable verb';}
+  else{vel.textContent=words[0]||'—';vel.style.color='#888';vc.style.borderColor='#ddd';vc.style.background='#f5f5f5';vsub.textContent='Not in Bloom\'s verb bank';}
+  // Skill/context cards
+  const sk=document.getElementById('cab-skill');const sksub=document.getElementById('cab-skill-sub');const skc=document.getElementById('cab-skill-card');
+  const cx=document.getElementById('cab-ctx');const cxsub=document.getElementById('cab-ctx-sub');const cxc=document.getElementById('cab-ctx-card');
+  if(ctxIdx>0){const skill=rest.slice(0,ctxIdx).trim();const ctx=rest.slice(ctxIdx).trim();sk.textContent=skill.length>38?skill.slice(0,38)+'…':skill;sk.style.color='#0F6E56';skc.style.borderColor='#5DCAA5';skc.style.background='#E1F5EE';sksub.textContent='Content identified ✓';cx.textContent=ctx.length>38?ctx.slice(0,38)+'…':ctx;cx.style.color='#0F6E56';cxc.style.borderColor='#5DCAA5';cxc.style.background='#E1F5EE';cxsub.textContent='Context identified ✓';}
+  else{sk.textContent=rest.length>38?rest.slice(0,38)+'…':rest;sk.style.color='#333';skc.style.borderColor='#ddd';skc.style.background='#f9f9f9';sksub.textContent='Add "using…" to separate context';cx.textContent='—';cx.style.color='#aaa';cxc.style.borderColor='#ddd';cxc.style.background='#f9f9f9';cxsub.textContent='Not detected';}
+  // Bloom band
+  for(let l=1;l<=6;l++){const c=document.getElementById('cbl'+l);c.style.background='#f0f0f0';c.style.color='#aaa';c.style.borderColor='#ddd';}
+  if(dl>0&&!isVague){const c=document.getElementById('cbl'+dl);c.style.background=dc;c.style.color='#fff';c.style.borderColor=dc;document.getElementById('cab-bloom-label').textContent=`Level ${dl} — ${CBLOOMS[dl].name}`;document.getElementById('cab-bloom-label').style.color=dc;}
+  else{document.getElementById('cab-bloom-label').textContent='—';document.getElementById('cab-bloom-label').style.color='#aaa';}
+  // Feedback
+  const fb=[];
+  if(isVague)fb.push({t:'err',m:`"${words[0]}" is vague and unmeasurable. Replace with: Explain, Apply, Analyse, Design, or Evaluate.`});
+  if(hasMulti)fb.push({t:'err',m:'Multiple action verbs detected. Split into separate COs — one verb per CO.'});
+  if(!isVague&&!dv&&raw.split(' ').length<4)fb.push({t:'err',m:'This looks like a topic title. Start with a Bloom\'s action verb.'});
+  if(!hasCtx&&raw.split(' ').length>=6&&!isVague)fb.push({t:'warn',m:'No context detected. Add "using [method/standard]" or "for [condition]".'});
+  if(dl>=3&&!isVague&&hasCtx&&!hasMulti&&raw.split(' ').length>=8)fb.push({t:'ok',m:`Level ${dl} (${CBLOOMS[dl].name}) — well-structured CO with verb, content, and context. ${dl>=5?'Suitable for design/capstone courses.':'Good for UG engineering core courses.'}`});
+  document.getElementById('cab-feedback').innerHTML=fb.map(f=>`<div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;padding:8px 10px;border-radius:6px;background:${f.t==='ok'?'#E1F5EE':f.t==='warn'?'#FAEEDA':'#FAECE7'};color:${f.t==='ok'?'#0F6E56':f.t==='warn'?'#854F0B':'#993C1D'};line-height:1.5"><span style="flex-shrink:0">${f.t==='ok'?'✓':f.t==='warn'?'⚠':'✗'}</span><span>${f.m}</span></div>`).join('');
+}
+function cabReset(){['verb','skill','ctx'].forEach(k=>{document.getElementById('cab-'+k).textContent='—';document.getElementById('cab-'+k).style.color='#aaa';document.getElementById('cab-'+k+'-sub').textContent='';document.getElementById('cab-'+k+'-card').style.borderColor='#ddd';document.getElementById('cab-'+k+'-card').style.background='#f9f9f9';});for(let l=1;l<=6;l++){const c=document.getElementById('cbl'+l);c.style.background='#f0f0f0';c.style.color='#aaa';}document.getElementById('cab-bloom-label').textContent='—';document.getElementById('cab-bloom-label').style.color='#aaa';document.getElementById('cab-feedback').innerHTML='';}
+
+// ══ VERB WHEEL ══
+const VWDATA=[
+  {n:1,name:'Remember',color:'#993C1D',bg:'#FAECE7',border:'#F5C4B3',nba:false,verbs:[{v:'Define',f:['all','theory']},{v:'List',f:['all','theory','lab']},{v:'Name',f:['all','theory']},{v:'Recall',f:['all','theory']},{v:'State',f:['all','theory']},{v:'Identify',f:['all','theory','lab']},{v:'Label',f:['all','theory','lab']},{v:'Recognise',f:['all','theory']},{v:'Outline',f:['all','theory']},{v:'Match',f:['all','theory']}]},
+  {n:2,name:'Understand',color:'#854F0B',bg:'#FAEEDA',border:'#FAC775',nba:false,verbs:[{v:'Explain',f:['all','theory']},{v:'Describe',f:['all','theory','lab']},{v:'Summarise',f:['all','theory']},{v:'Classify',f:['all','theory']},{v:'Interpret',f:['all','theory','pg']},{v:'Paraphrase',f:['all','theory']},{v:'Compare',f:['all','theory','pg']},{v:'Discuss',f:['all','theory']},{v:'Illustrate',f:['all','theory','design']},{v:'Predict',f:['all','theory','pg']}]},
+  {n:3,name:'Apply',color:'#0F6E56',bg:'#E1F5EE',border:'#5DCAA5',nba:true,verbs:[{v:'Solve',f:['all','theory','lab']},{v:'Calculate',f:['all','theory','lab']},{v:'Demonstrate',f:['all','lab','design']},{v:'Implement',f:['all','lab','design','pg']},{v:'Compute',f:['all','theory','lab','pg']},{v:'Apply',f:['all','theory','lab']},{v:'Simulate',f:['all','lab','design','pg']},{v:'Operate',f:['all','lab']},{v:'Perform',f:['all','lab']},{v:'Construct',f:['all','lab','design']},{v:'Model',f:['all','lab','design','pg']}]},
+  {n:4,name:'Analyse',color:'#085041',bg:'#D4EDE6',border:'#1D9E75',nba:true,verbs:[{v:'Compare',f:['all','theory','pg']},{v:'Differentiate',f:['all','theory','pg']},{v:'Examine',f:['all','theory','lab','pg']},{v:'Analyse',f:['all','theory','lab','design','pg']},{v:'Investigate',f:['all','lab','design','pg']},{v:'Organise',f:['all','design']},{v:'Categorise',f:['all','theory','pg']},{v:'Relate',f:['all','theory','pg']},{v:'Prioritise',f:['all','design','pg']},{v:'Distinguish',f:['all','theory']}]},
+  {n:5,name:'Evaluate',color:'#534AB7',bg:'#EEEDFE',border:'#AFA9EC',nba:false,verbs:[{v:'Evaluate',f:['all','design','pg']},{v:'Justify',f:['all','design','pg']},{v:'Recommend',f:['all','design','pg']},{v:'Assess',f:['all','design','pg']},{v:'Judge',f:['all','pg']},{v:'Critique',f:['all','pg']},{v:'Defend',f:['all','pg']},{v:'Select',f:['all','design']},{v:'Conclude',f:['all','design','pg']},{v:'Validate',f:['all','lab','design','pg']}]},
+  {n:6,name:'Create',color:'#3C3489',bg:'#E5E3FC',border:'#7F77DD',nba:false,verbs:[{v:'Design',f:['all','design','pg']},{v:'Develop',f:['all','design','pg']},{v:'Formulate',f:['all','design','pg']},{v:'Construct',f:['all','lab','design']},{v:'Generate',f:['all','design','pg']},{v:'Plan',f:['all','design']},{v:'Produce',f:['all','design']},{v:'Devise',f:['all','design','pg']},{v:'Propose',f:['all','design','pg']},{v:'Synthesise',f:['all','pg']}]}
+];
+let vwFilt='all';let vwOpen=new Set([3,4]);
+const VW_FC={all:'#444',theory:'#185FA5',lab:'#0F6E56',design:'#854F0B',pg:'#534AB7'};
+function vwFilter(f,btn){
+  vwFilt=f;
+  document.querySelectorAll('.vw-filt').forEach(b=>{b.style.background='#f5f5f5';b.style.color='#888';b.style.borderColor='#ddd';});
+  btn.style.background=VW_FC[f];btn.style.color='#fff';btn.style.borderColor=VW_FC[f];
+  vwBuild();
+}
+function vwBuild(){
+  const wrap=document.getElementById('vw-levels');if(!wrap)return;wrap.innerHTML='';
+  VWDATA.forEach(L=>{
+    const visible=L.verbs.filter(v=>v.f.includes(vwFilt));if(!visible.length)return;
+    const isOpen=vwOpen.has(L.n);
+    const div=document.createElement('div');div.style.cssText='border:0.5px solid var(--border);border-radius:9px;margin-bottom:8px;overflow:hidden';
+    div.innerHTML=`<div onclick="vwToggle(${L.n})" style="display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;background:var(--pale)"><div style="width:10px;height:10px;border-radius:50%;background:${L.color};flex-shrink:0"></div><span style="font-size:12px;font-weight:500;color:var(--ink);flex:1">Level ${L.n} — ${L.name}${L.nba?` <span style="font-size:10px;font-weight:700;background:${L.bg};color:${L.color};padding:1px 6px;border-radius:8px;border:0.5px solid ${L.border}">NBA core</span>`:''}</span><span style="font-size:11px;color:var(--muted);margin-right:4px">${visible.length} verbs</span><span id="vwc-${L.n}" style="font-size:13px;color:var(--muted);transition:transform .2s;display:inline-block;${isOpen?'transform:rotate(180deg)':''}">▾</span></div><div id="vwa-${L.n}" style="padding:${isOpen?'0 12px 10px':'0 12px 0'};max-height:${isOpen?'200px':'0'};overflow:hidden;transition:max-height .25s,padding .2s"><div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">${L.verbs.map(v=>`<span onclick="vwCopy('${v.v}')" style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid ${L.border};background:${L.bg};color:${L.color};cursor:pointer;opacity:${v.f.includes(vwFilt)?'1':'0.25'}">${v.v}</span>`).join('')}</div></div>`;
+    wrap.appendChild(div);
+  });
+}
+function vwToggle(n){const open=vwOpen.has(n);if(open)vwOpen.delete(n);else vwOpen.add(n);const a=document.getElementById('vwa-'+n);const c=document.getElementById('vwc-'+n);if(a){a.style.maxHeight=open?'0':'200px';a.style.padding=open?'0 12px 0':'0 12px 10px';}if(c)c.style.transform=open?'':'rotate(180deg)';}
+function vwCopy(v){try{navigator.clipboard.writeText(v);}catch(e){}const el=document.getElementById('vw-copied');if(el){el.style.display='inline';setTimeout(()=>el.style.display='none',1500);}}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.vw-filt').forEach(b=>{b.style.background='#f5f5f5';b.style.color='#888';});
+  const ab=document.querySelector('[data-vf="all"]');if(ab){ab.style.background='#444';ab.style.color='#fff';}
+  vwBuild();
+});
+if(document.readyState!=='loading')vwBuild();
+
+// ══ CO GOVERNANCE ══
+const GTIPS={ind:'Industry experts provide: skill gaps in fresh graduates, current tools and technologies, emerging job roles and competencies, industry-specific standards and safety norms.',acad:'Academic experts provide: Bloom\'s alignment, comparison with national/international curricula, emerging research topics, prerequisite mapping, appropriate cognitive levels.',prof:'Professional societies provide: Washington Accord attributes, IEI/ASME/IEEE competency frameworks, BIS and IS/ISO standards, codes of professional ethics.'};
+const GTIPS2={class:'Student feedback: perceived CO relevance, difficulty vs time, clarity of CO statements, whether assessments matched COs, practical application suggestions.',teacher:'Teacher self-review: CO attainment data, contact hour adequacy, teaching method effectiveness, assessment alignment, suggestions for CO revision.',ext:'External examiner: whether SEE questions reflect CO levels, Bloom\'s appropriateness, comparison with peer institutions, currency of content.',ind2:'Industry: new tools/technologies to incorporate, obsolete content to drop, emerging roles requiring new competencies, employer feedback on graduate readiness.',acad2:'Academic experts: new curriculum guidelines, emerging research areas, updated references, appropriate level for programme year.',prof2:'Professional societies: revised competency frameworks, updated IS/ISO standards, changes to Washington Accord attributes, new professional ethics guidelines.'};
+const GESC={cc:{color:'#854F0B',text:'Consolidates all feedback from 6 sources. Prepares CO revision proposal with rationale and attainment data. Presents at Course Committee Meeting and escalates approved minutes to Module Coordinator.'},mc:{color:'#0F6E56',text:'Reviews revision proposals from all courses in the module. Checks inter-course consistency, avoids CO duplication, ensures module-level PO coverage is maintained. Escalates to Programme Coordinator.'},pc:{color:'#185FA5',text:'Compiles programme-wide CO revision summary. Checks overall PO attainment impact, ensures Bloom\'s distribution is appropriate, and prepares BoS agenda item.'},bos2:{color:'#534AB7',text:'Formally deliberates on proposed revisions. BoS meeting minutes with revised CO list are primary evidence for NBA SAR Criterion 2 and NAAC SSR Criterion 1.1.'},ac:{color:'#993C1D',text:'Highest academic body. Ratifies significant curriculum changes including CO revisions affecting programme structure, credit distribution, or PEO alignment. Decisions are final and binding.'}};
+let govOpenStages=new Set();
+function govTab(name,btn){
+  document.getElementById('gov-construct').style.display=name==='construct'?'block':'none';
+  document.getElementById('gov-revise').style.display=name==='revise'?'block':'none';
+  document.querySelectorAll('.gov-tab').forEach(b=>{b.style.background='transparent';b.style.color='var(--muted)';b.style.border='none';});
+  btn.style.background='var(--white)';btn.style.color='var(--navy)';btn.style.border='0.5px solid var(--border)';
+}
+function govTip(id){const box=document.getElementById('gov-tip-box');const open=box.style.display==='block'&&box.dataset.id===id;box.style.display=open?'none':'block';box.dataset.id=id;box.textContent=GTIPS[id]||'';}
+function govTip2(id){const box=document.getElementById('gov-tip2-box');const open=box.style.display==='block'&&box.dataset.id===id;box.style.display=open?'none':'block';box.dataset.id=id;box.textContent=GTIPS2[id]||'';}
+function govStage(id){const el=document.getElementById('govs-'+id);if(!el)return;const open=el.style.display==='block';el.style.display=open?'none':'block';}
+function govEsc(id){const info=GESC[id];const box=document.getElementById('gov-esc-box');box.style.display='block';box.style.borderLeftColor=info.color;box.style.background=id==='cc'?'#FAEEDA':id==='mc'?'#E1F5EE':id==='pc'?'#DEEAF1':id==='bos2'?'#EDE7F6':'#FAECE7';box.innerHTML=`<strong style="color:${info.color}">${['cc','Course coordinator','mc','Module coordinator','pc','Programme coordinator','bos2','Board of Studies','ac','Academic Council'].filter((_,i,a)=>a[i-1]===id)[0]||Object.keys(GESC).map(k=>k===id?k:'').filter(Boolean)[0]}</strong><br><span style="font-size:12px;color:#2C3E50;line-height:1.6">${info.text}</span>`;}
+
+
+
+// ══ REGISTRATION & SESSION MANAGEMENT ══════════════════════════════════
+
+const EMAILJS_SERVICE  = 'service_e8m44al';   // replace after EmailJS setup
+const EMAILJS_TEMPLATE = 'template_l4zyg6i';  // replace after EmailJS setup
+const EMAILJS_KEY      = 'XiIqPBh9qXU9V4qI6';   // replace after EmailJS setup
+const GFORM_URL        = 'https://docs.google.com/forms/d/e/1FAIpQLSeapO_HkakIUG-1j1pn_2nhy4h6KqRipnsdZ8Ra1bcObgPu6Q/formResponse'; // replace after Google Form setup
+// Google Form field entry IDs (replace with yours):
+const GF = {
+  name:    'entry.1986181708',
+  desig:   'entry.146752952',
+  inst:    'entry.2088064361',
+  role:    'entry.1514423760',
+  dept:    'entry.990422574',
+  email:   'entry.1791603539',
+  phone:   'entry.1980050354',
+  token:   'entry.629944431',
+  date:    'entry.406134361'
+};
+
+let generatedOTP = null;
+let otpVerified  = false;
+let otpTimer     = null;
+
+// ── Session check on page load ──────────────────────────────────────────
+(function checkSession() {
+  const user = getUser();
+  if (user) {
+    // Check for magic link token in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken  = urlParams.get('token');
+    if (urlToken && urlToken !== user.token) {
+      // Token mismatch — might be a different user's link
+      showGate(); return;
+    }
+    // Valid session
+    showPortal(user);
+  } else {
+    // Check URL token (magic link from email)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken  = urlParams.get('token');
+    if (urlToken) {
+      // Try to restore session from URL token
+      // In a real implementation, this would verify against the DB
+      // For now, ask for quick re-registration or show a minimal restore form
+      showGate();
+    } else {
+      showGate();
+    }
+  }
+})();
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem('obe_portal_user')); }
+  catch(e) { return null; }
+}
+
+function saveUser(userData) {
+  localStorage.setItem('obe_portal_user', JSON.stringify(userData));
+}
+
+function showGate() {
+  document.getElementById('reg-gate').style.display   = 'flex';
+  document.getElementById('portal-main').style.display = 'none';
+  document.getElementById('welcome-bar').classList.remove('show');
+}
+
+function showPortal(user) {
+  document.getElementById('reg-gate').style.display    = 'none';
+  document.getElementById('portal-main').style.display = 'block';
+  // Show welcome bar
+  const wb = document.getElementById('welcome-bar');
+  wb.classList.add('show');
+  document.getElementById('wb-name').textContent = user.name.split(' ').slice(0,2).join(' ');
+  document.getElementById('wb-inst').textContent = user.institution;
+}
+
+function openPortal() {
+  const user = getUser();
+  if (user) showPortal(user);
+}
+
+function portalLogout() {
+  if (confirm('Sign out? You will need to register again on this device (or use your welcome email link).')) {
+    localStorage.removeItem('obe_portal_user');
+    window.location.reload();
+  }
+}
+
+// ── OTP Logic ──────────────────────────────────────────────────────────
+function sendOTP() {
+  const email = document.getElementById('rf-email').value.trim();
+  const phone = document.getElementById('rf-phone').value.trim();
+
+  if (!email || !validateEmail(email)) {
+    showErr('err-email', 'Please enter a valid email address first');
+    document.getElementById('rf-email').focus(); return;
+  }
+
+  // Generate 6-digit OTP
+  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
+
+  // Send OTP via EmailJS
+  if (typeof emailjs !== 'undefined') {
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      to_email:  email,
+      to_name:   document.getElementById('rf-name').value || 'Participant',
+      otp_code:  generatedOTP,
+      subject:   'Your OBE Training Portal OTP'
+    }, EMAILJS_KEY).catch(e => console.warn('EmailJS:', e));
+  }
+
+  // Show OTP box
+  document.getElementById('otp-box').style.display = 'block';
+  document.getElementById('od1').focus();
+
+  // Start countdown timer (5 min)
+  let seconds = 300;
+  clearInterval(otpTimer);
+  const timerEl = document.getElementById('otp-timer');
+  otpTimer = setInterval(() => {
+    seconds--;
+    const m = Math.floor(seconds/60), s = seconds%60;
+    timerEl.textContent = `OTP valid for ${m}:${s.toString().padStart(2,'0')}`;
+    if (seconds <= 0) {
+      clearInterval(otpTimer);
+      timerEl.textContent = 'OTP expired. Click Send OTP to resend.';
+      generatedOTP = null;
+    }
+  }, 1000);
+
+  const btn = document.getElementById('otp-send-btn');
+  btn.disabled = true; btn.textContent = 'Resend in 60s';
+  let cooldown = 60;
+  const cdTimer = setInterval(() => {
+    cooldown--;
+    btn.textContent = `Resend in ${cooldown}s`;
+    if (cooldown <= 0) {
+      clearInterval(cdTimer);
+      btn.disabled = false; btn.textContent = 'Resend OTP';
+    }
+  }, 1000);
+}
+
+function otpMove(el, nextId) {
+  if (el.value && nextId) document.getElementById(nextId).focus();
+}
+function otpBack(e, el, prevId) {
+  if (e.key === 'Backspace' && !el.value && prevId)
+    document.getElementById(prevId).focus();
+}
+
+function verifyOTP() {
+  const entered = ['od1','od2','od3','od4','od5','od6']
+    .map(id => document.getElementById(id).value).join('');
+
+  if (!generatedOTP) {
+    document.getElementById('err-otp').textContent = 'OTP expired. Click Send OTP to get a new one.';
+    document.getElementById('err-otp').style.display = 'block'; return;
+  }
+
+  if (entered === generatedOTP) {
+    otpVerified = true;
+    document.getElementById('otp-box').style.display = 'none';
+    document.getElementById('otp-verified-msg').style.display = 'block';
+    document.getElementById('otp-send-btn').textContent = '✓ Verified';
+    document.getElementById('otp-send-btn').style.cssText = 'background:#0F6E56;color:#fff;border-color:#0F6E56';
+    document.getElementById('otp-send-btn').disabled = true;
+    clearInterval(otpTimer);
+  } else {
+    document.getElementById('err-otp').textContent = 'Incorrect OTP. Please try again.';
+    document.getElementById('err-otp').style.display = 'block';
+    ['od1','od2','od3','od4','od5','od6'].forEach(id => {
+      document.getElementById(id).value = '';
+      document.getElementById(id).style.borderColor = '#993C1D';
+    });
+    document.getElementById('od1').focus();
+  }
+}
+
+// ── Form validation helpers ─────────────────────────────────────────────
+function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+function validatePhone(p) { return /^[+]?[0-9]{10,13}$/.test(p.replace(/\s/g,'')); }
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+function clearErr(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+// ── Main submission ─────────────────────────────────────────────────────
+function submitRegistration() {
+  let valid = true;
+  ['name','desig','inst','role','email','phone'].forEach(f => clearErr('err-'+f));
+  clearErr('err-consent');
+
+  const name  = document.getElementById('rf-name').value.trim();
+  const desig = document.getElementById('rf-desig').value.trim();
+  const inst  = document.getElementById('rf-inst').value.trim();
+  const role  = document.getElementById('rf-role').value;
+  const dept  = document.getElementById('rf-dept').value.trim();
+  const email = document.getElementById('rf-email').value.trim();
+  const phone = document.getElementById('rf-phone').value.trim();
+  const consent = document.getElementById('rf-consent').checked;
+
+  if (!name)  { showErr('err-name','Please enter your full name'); valid=false; }
+  if (!desig) { showErr('err-desig','Please enter your designation'); valid=false; }
+  if (!inst)  { showErr('err-inst','Please enter your institution name'); valid=false; }
+  if (!role)  { showErr('err-role','Please select your role'); valid=false; }
+  if (!email || !validateEmail(email)) { showErr('err-email','Please enter a valid email address'); valid=false; }
+  if (!phone || !validatePhone(phone)) { showErr('err-phone','Please enter a valid mobile number'); valid=false; }
+  if (!consent) { showErr('err-consent','Please accept the privacy notice to continue'); valid=false; }
+
+  if (!otpVerified) {
+    showErr('err-phone', 'Please verify your email with OTP before submitting');
+    if (!document.getElementById('otp-box').style.display || document.getElementById('otp-box').style.display === 'none') {
+      sendOTP();
+    }
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const btn = document.getElementById('reg-submit-btn');
+  btn.disabled = true; btn.textContent = 'Registering…';
+
+  // Generate unique token
+  const token = btoa(email + '_' + Date.now()).replace(/=/g,'').slice(0,24);
+  const userData = { name, desig, inst, role, dept, email, phone, token, date: new Date().toISOString() };
+
+  // Save to localStorage
+  saveUser(userData);
+
+  // Submit to Google Form (no-cors, fire and forget)
+  const formData = new FormData();
+  formData.append(GF.name,  name);
+  formData.append(GF.desig, desig);
+  formData.append(GF.inst,  inst);
+  formData.append(GF.role,  role);
+  formData.append(GF.dept,  dept);
+  formData.append(GF.email, email);
+  formData.append(GF.phone, phone);
+  formData.append(GF.token, token);
+  formData.append(GF.date,  userData.date);
+  fetch(GFORM_URL, { method:'POST', mode:'no-cors', body: formData }).catch(()=>{});
+
+  // Send welcome email with magic link via EmailJS
+  const magicLink = `https://isiva.in/obe-portal.html?token=${token}`;
+  if (typeof emailjs !== 'undefined') {
+    emailjs.send(EMAILJS_SERVICE, 'obe_welcome_template', {
+      to_email:     email,
+      to_name:      name,
+      institution:  inst,
+      role:         role,
+      magic_link:   magicLink,
+      portal_url:   'https://isiva.in/obe-portal.html',
+      subject:      'Welcome to OBE Training Portal — Your Access Link'
+    }, EMAILJS_KEY).catch(e => console.warn('EmailJS welcome:', e));
+  }
+
+  // Show success
+  document.getElementById('reg-form-wrap').style.display = 'none';
+  document.getElementById('reg-success').style.display   = 'block';
+  document.getElementById('reg-success-msg').innerHTML   =
+    `Thank you, <strong>${name}</strong>! You are now registered as <em>${role}</em> from <strong>${inst}</strong>.<br><br>
+     A welcome email has been sent to <strong>${email}</strong> with your personal return link. Please check your inbox (including spam).`;
+}
+
+
+function isivaMobileNav(){
+  const n=document.getElementById('isiva-mobile-nav');
+  n.classList.toggle('open');
+}
+
+</script>
+</body>
+</html>
