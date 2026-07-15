@@ -2222,7 +2222,8 @@ function sendOTP() {
       to_email:  email,           // registrant's email — NOT hardcoded
       to_name:   document.getElementById('rf-name').value.trim() || 'Participant',
       otp_code:  generatedOTP,
-      }, EMAILJS_KEY)
+      reply_to:    
+    }, EMAILJS_KEY)
     .then(() => {
       console.log('OTP sent to', email);
     })
