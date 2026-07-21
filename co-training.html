@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO Design Training — Dr. I. Siva | isiva.in</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2B4E;--blue:#1A5276;--mid:#2E86C1;--sky:#AED6F1;--ink:#0D1B2A;--muted:#5D6D7E;--pale:#F0F4F8;--white:#fff;--border:#D6E4F0;--green:#1A7A4A;--green-bg:#E8F8F0;--amber:#B7770D;--amber-bg:#FEF9E7;--coral:#A93226;--coral-bg:#FDEDEC;--purple:#534AB7;--purple-bg:#EEEDFE;--r:8px}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--pale);color:var(--ink);font-size:15px;line-height:1.65}
+.nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(13,43,78,.2)}
+.nav-inner{max-width:1000px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:52px;gap:0}
+.nav-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff;text-decoration:none;margin-right:28px;white-space:nowrap;flex-shrink:0}
+.nav-brand span{font-size:11px;font-weight:400;color:var(--sky);margin-left:4px;font-family:'Inter',sans-serif}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;padding:6px 11px;border-radius:6px;transition:background .15s,color .15s;white-space:nowrap}
+.nav-link:hover{background:rgba(255,255,255,.1);color:#fff}
+.nav-link.active{background:rgba(174,214,241,.18);color:var(--sky);font-weight:500;border-bottom:2px solid var(--sky);border-radius:6px 6px 0 0}
+.nav-more{position:relative}
+.nav-more-btn{font:inherit;font-size:13px;color:rgba(255,255,255,.72);background:none;border:none;cursor:pointer;padding:6px 11px;border-radius:6px;transition:background .15s,color .15s;white-space:nowrap;font-family:'Inter',sans-serif}
+.nav-more-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.nav-more-btn.active{background:rgba(174,214,241,.18);color:var(--sky);font-weight:500}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--navy);border:1px solid rgba(255,255,255,.12);border-radius:8px;box-shadow:0 8px 24px -8px rgba(0,0,0,.4);min-width:190px;padding:6px 0;z-index:200}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:rgba(255,255,255,.8);text-decoration:none;white-space:nowrap}
+.nav-dropdown a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-dropdown a.active{color:var(--sky)}
+.nav-more:hover .nav-dropdown{display:block}
+@media(max-width:680px){.nav-links{display:none}}
+.hero{background:var(--navy);padding:44px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(46,134,193,.12)}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-bottom:10px;position:relative;z-index:1}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,36px);color:#fff;margin-bottom:12px;line-height:1.2;position:relative;z-index:1}
+.hero-title span{color:var(--sky)}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.7);max-width:560px;margin:0 auto 24px;position:relative;z-index:1;line-height:1.7}
+.hero-tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;position:relative;z-index:1}
+.hero-tab{font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.hero-tab.active{background:#fff;color:var(--navy)}
+.hero-tab:not(.active){background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2)}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 80px}
+.sc{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden}
+.sh{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none}
+.si{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.st{font-size:15px;font-weight:600;color:var(--navy);flex:1}
+.ss{font-size:12px;color:var(--muted);margin-top:2px}
+.sv{font-size:18px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.sv.open{transform:rotate(180deg)}
+.sb{display:none;border-top:1px solid var(--border);padding:24px}
+.sb.open{display:block}
+.prose h3{font-size:14px;font-weight:600;color:var(--navy);margin:18px 0 6px}
+.prose p{font-size:13px;color:#2C3E50;line-height:1.7;margin-bottom:10px}
+.prose ul{padding-left:18px;margin-bottom:10px}
+.prose ul li{font-size:13px;color:#2C3E50;margin-bottom:4px}
+.callout{border-left:3px solid var(--mid);background:#EBF5FB;padding:12px 16px;border-radius:0 var(--r) var(--r) 0;margin:12px 0;font-size:13px;color:var(--ink);line-height:1.6}
+.callout.green{border-color:var(--green);background:var(--green-bg)}
+.callout.amber{border-color:var(--amber);background:var(--amber-bg)}
+.dtable{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0 16px}
+.dtable th{background:var(--navy);color:#fff;padding:9px 12px;text-align:left;font-weight:500}
+.dtable td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.dtable tr:nth-child(even) td{background:var(--pale)}
+.pyr-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.pyr-detail{background:var(--pale);border-radius:10px;padding:16px;min-height:200px}
+@media(max-width:600px){.pyr-wrap{grid-template-columns:1fr}}
+.co-ta{width:100%;font-size:14px;padding:12px 14px;border-radius:10px;border:1.5px solid var(--mid);background:var(--pale);color:var(--ink);resize:none;outline:none;font-family:'Inter',sans-serif;line-height:1.6}
+.co-ta:focus{box-shadow:0 0 0 3px rgba(46,134,193,.12)}
+.ag{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+.ac{border-radius:8px;border:1px solid var(--border);padding:10px 12px;background:var(--pale);transition:all .2s}
+.al{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin-bottom:4px;text-transform:uppercase}
+.av{font-size:13px;font-weight:500;color:var(--muted);min-height:18px}
+.asub{font-size:11px;color:var(--muted);margin-top:2px}
+.bb{background:var(--pale);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:10px 0}
+.bc{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:6px}
+.blc{text-align:center;padding:6px 2px;border-radius:5px;font-size:10px;font-weight:500;background:#eee;color:#aaa;border:1px solid #ddd;transition:all .2s}
+.blc.active{color:#fff}
+.fb{display:flex;align-items:flex-start;gap:7px;font-size:12px;padding:8px 10px;border-radius:6px;line-height:1.5;margin-top:6px}
+.pb{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.pb:hover{border-color:var(--mid);color:var(--mid)}
+.tc{font-size:11px;padding:3px 10px;border-radius:20px;background:#EBF5FB;color:#185FA5;border:1px solid #85C1E9;display:inline-block;margin:3px}
+.sugg{border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative}
+.sugg:hover{border-color:var(--mid);box-shadow:0 2px 12px rgba(46,134,193,.12)}
+.sugg.chosen{border-color:var(--green);background:var(--green-bg)}
+.sugg-lv{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px}
+.sugg-txt{font-size:13px;color:var(--ink);line-height:1.6;margin-bottom:6px;font-weight:500}
+.sugg-why{font-size:11px;color:var(--muted);line-height:1.5}
+.sugg-btn{position:absolute;top:12px;right:12px;font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--mid);background:transparent;color:var(--mid);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.sugg-btn:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.sugg.chosen .sugg-btn{background:var(--green);color:#fff;border-color:var(--green)}
+.itnav{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.itnav button{font-size:13px;font-weight:500;padding:10px 16px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Inter',sans-serif}
+.itnav button.active{color:var(--mid);border-bottom-color:var(--mid)}
+.wsi{width:100%;font-size:12px;padding:7px 9px;border:1px solid var(--border);border-radius:6px;background:var(--pale);color:var(--ink);font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+.wsi:focus{border-color:var(--mid);background:#fff}
+.wst{width:100%;border-collapse:collapse;font-size:13px}
+.wst th{background:var(--navy);color:#fff;padding:10px 12px;text-align:left;font-weight:500;font-size:12px}
+.wst td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top}
+.wsel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230D2B4E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer}
+.wss{font-size:11px;font-weight:600;padding:3px 8px;border-radius:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:1px solid;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-p{background:var(--navy);color:#fff;border-color:var(--navy)}.btn-p:hover{background:var(--blue)}
+.btn-o{background:transparent;color:var(--navy);border-color:var(--border)}.btn-o:hover{background:var(--pale);border-color:var(--mid)}
+.btn-g{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.vwf{font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.vlb{border:1px solid var(--border);border-radius:9px;margin-bottom:8px;overflow:hidden}
+.vlh{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;background:var(--pale)}
+.vld{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.vln{font-size:12px;font-weight:500;color:var(--ink);flex:1}
+.vlc2{font-size:11px;color:var(--muted)}
+.vlch{font-size:13px;color:var(--muted);transition:transform .2s}
+.vlch.open{transform:rotate(180deg)}
+.vlbody{max-height:0;overflow:hidden;transition:max-height .25s,padding .2s;padding:0 12px}
+.vlbody.open{max-height:200px;padding:0 12px 10px}
+.vc{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid;cursor:pointer;display:inline-block;margin:3px;transition:opacity .15s}
+.vc.dim{opacity:.25}
+.mx-wrap{overflow-x:auto;margin:12px 0}
+.mtrx{border-collapse:collapse;font-size:12px;width:100%}
+.mtrx th{background:var(--navy);color:#fff;padding:7px 8px;text-align:center;font-weight:500;white-space:nowrap;border:1px solid rgba(255,255,255,.1)}
+.mtrx th:first-child{text-align:left;min-width:180px}
+.mtrx td{border:1px solid var(--border);padding:5px;text-align:center;vertical-align:middle}
+.mtrx td:first-child{text-align:left;background:#F7FBFF;font-size:12px}
+.con{font-size:11px;font-weight:700;color:var(--mid);display:block}
+.cot{font-size:11px;color:var(--muted)}
+.cb{width:32px;height:26px;border-radius:5px;border:1px solid var(--border);background:var(--pale);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;display:block;margin:auto;transition:all .1s}
+.cb.s1{background:#E8F8F0;color:#1A7A4A;border-color:#82E0AA}
+.cb.s2{background:#EBF5FB;color:#1A5276;border-color:#85C1E9}
+.cb.s3{background:#EEEDFE;color:#534AB7;border-color:#AFA9EC}
+.ma{font-size:12px;font-weight:700;text-align:center;padding:6px 4px}
+.ar{margin-bottom:8px}
+.al2{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.at{height:6px;background:var(--pale);border-radius:3px;overflow:hidden}
+.af{height:100%;border-radius:3px;transition:width .4s}
+.dmc{border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.dch{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.dci{font-size:20px;flex-shrink:0}
+.dct{font-size:13px;font-weight:600;color:var(--navy)}
+.dtag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:auto;flex-shrink:0}
+.dd{font-size:12px;color:#444;line-height:1.65;margin-bottom:8px}
+.tg{border:1px solid var(--border);border-radius:10px;overflow:hidden;flex:1}
+.tgh{padding:10px 14px;font-size:13px;font-weight:600;color:#fff}
+.tgb{padding:14px}
+.tgrp{margin-bottom:12px}
+.tgt{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase}
+.tc2{display:inline-block;font-size:12px;padding:4px 10px;border-radius:20px;background:var(--pale);border:1px solid var(--border);color:var(--ink);margin:3px;font-weight:500}
+.footer{text-align:center;padding:28px 20px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}
+.footer a{color:var(--mid);text-decoration:none}
+@media(max-width:500px){.ag{grid-template-columns:1fr}.bc{grid-template-columns:repeat(3,1fr)}}
+.dm-lb{font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--pale);color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.dm-lb:hover{border-color:var(--border);background:#e0e0e0;color:var(--ink)}
+.dm-lb.active{font-weight:600}
+
+.visitor-bar{background:var(--navy);color:#fff;padding:7px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px}
+.visitor-bar a{color:var(--sky);text-decoration:none}
+.vc-item{display:flex;align-items:center;gap:6px;opacity:.85}
+.vc-num{font-weight:600;color:#fff;font-size:13px;opacity:1}
+.fb-strip{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:0}
+.fb-strip-left{display:flex;align-items:center;gap:12px}
+.fb-avg{font-size:22px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif}
+.fb-stars-disp{display:flex;gap:2px}
+.fb-star-d{font-size:18px;color:#F0C040}
+.fb-star-e{font-size:18px;color:#ddd}
+.fb-count{font-size:12px;color:var(--muted);margin-left:4px}
+.fb-open-btn{font-size:12px;font-weight:500;padding:7px 16px;border-radius:20px;border:1.5px solid var(--mid);background:transparent;color:var(--mid);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.fb-open-btn:hover{background:var(--mid);color:#fff}
+.fb-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center}
+.fb-modal-bg.open{display:flex}
+.fb-modal{background:#fff;border-radius:14px;padding:28px 28px 24px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;max-height:90vh;overflow-y:auto}
+.fb-modal h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy);margin-bottom:4px}
+.fb-modal p{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.stars-wrap{display:flex;gap:6px;margin-bottom:18px}
+.star-btn{font-size:32px;color:#ddd;cursor:pointer;border:none;background:none;padding:2px;transition:color .1s;line-height:1}
+.star-btn.lit{color:#F0C040}
+.star-btn:hover{color:#F0C040}
+.fb-field{margin-bottom:12px}
+.fb-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:4px}
+.fb-field input,.fb-field textarea,.fb-field select{width:100%;font-size:13px;padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;background:var(--pale);color:var(--ink);font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+.fb-field input:focus,.fb-field textarea:focus{border-color:var(--mid);background:#fff}
+.fb-field textarea{resize:vertical;min-height:72px}
+.fb-submit{width:100%;padding:11px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;font-family:'Playfair Display',serif;cursor:pointer;margin-top:6px;transition:background .15s}
+.fb-submit:hover{background:var(--blue)}
+.fb-close{position:absolute;top:14px;right:16px;font-size:20px;color:var(--muted);border:none;background:none;cursor:pointer;line-height:1}
+.fb-success{display:none;text-align:center;padding:20px 0}
+.fb-success-icon{font-size:42px;margin-bottom:10px}
+.fb-success h4{font-family:'Playfair Display',serif;font-size:17px;color:var(--navy);margin-bottom:6px}
+.fb-success p{font-size:13px;color:var(--muted)}
+
+@media print{.nav,.hero-tabs,.pb,.btn,.sv,.hero-tab,.visitor-bar,.fb-strip,.fb-modal-bg,.fb-open-btn{display:none!important}.sb{display:block!important}.wrap{padding:0}}
+</style>
+</head>
+<body>
+
+<!-- VISITOR COUNTER BAR -->
+<div class="visitor-bar">
+  <div class="vc-item">
+    👁 CO Training page visits: <span class="vc-num" id="vc-co">...</span>
+  </div>
+  <div class="vc-item">
+    🌐 isiva.in total visits: <span class="vc-num" id="vc-site">...</span>
+  </div>
+  <div class="vc-item" style="margin-left:auto">
+    <a href="https://isiva.in" style="font-size:11px;color:rgba(255,255,255,.6)">← isiva.in</a>
+  </div>
+</div>
+
+<!-- FEEDBACK STRIP -->
+<div class="fb-strip">
+  <div class="fb-strip-left">
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:3px">PAGE RATING</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="fb-avg" id="fb-avg-disp">—</span>
+        <div class="fb-stars-disp" id="fb-stars-disp"></div>
+        <span class="fb-count" id="fb-rating-count"></span>
+      </div>
+    </div>
+  </div>
+  <button class="fb-open-btn" onclick="openFeedback()">⭐ Rate this page</button>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div class="fb-modal-bg" id="fb-modal-bg" onclick="closeFbIfBg(event)">
+  <div class="fb-modal">
+    <button class="fb-close" onclick="closeFeedback()">✕</button>
+    <!-- Form view -->
+    <div id="fb-form-view">
+      <h3>Rate this page</h3>
+      <p>Your feedback helps improve this CO training resource for faculty across institutions.</p>
+      <!-- Stars -->
+      <div class="stars-wrap" id="stars-wrap">
+        <button class="star-btn" data-v="1" onclick="setStar(1)">★</button>
+        <button class="star-btn" data-v="2" onclick="setStar(2)">★</button>
+        <button class="star-btn" data-v="3" onclick="setStar(3)">★</button>
+        <button class="star-btn" data-v="4" onclick="setStar(4)">★</button>
+        <button class="star-btn" data-v="5" onclick="setStar(5)">★</button>
+      </div>
+      <div id="fb-star-label" style="font-size:12px;color:var(--muted);margin-bottom:16px;min-height:18px"></div>
+      <!-- Fields -->
+      <div class="fb-field">
+        <label>YOUR NAME <span style="color:#993C1D">*</span></label>
+        <input type="text" id="fb-name" placeholder="Dr. / Prof. / Mr. / Ms. Your Name">
+      </div>
+      <div class="fb-field">
+        <label>INSTITUTION / AFFILIATION <span style="color:#993C1D">*</span></label>
+        <input type="text" id="fb-affil" placeholder="College / University name">
+      </div>
+      <div class="fb-field">
+        <label>EMAIL ADDRESS <span style="color:#993C1D">*</span></label>
+        <input type="email" id="fb-email" placeholder="your@institution.ac.in">
+      </div>
+      <div class="fb-field">
+        <label>WHAT DID YOU FIND MOST USEFUL?</label>
+        <select id="fb-section">
+          <option value="">Select a section...</option>
+          <option>1 · What is a Course Outcome</option>
+          <option>2 · CO Check and Suggest</option>
+          <option>3 · Bloom's Verb Bank</option>
+          <option>4 · My CO Worksheet</option>
+          <option>5 · CO-PO Mapping Matrix</option>
+          <option>6 · Content Delivery and Activity Plan</option>
+          <option>Overall portal experience</option>
+        </select>
+      </div>
+      <div class="fb-field">
+        <label>COMMENTS / SUGGESTIONS</label>
+        <textarea id="fb-comment" placeholder="Any suggestions for improvement, topics to add, or general comments..."></textarea>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5;padding:8px 10px;background:var(--pale);border-radius:6px;border-left:2px solid var(--border)">
+        Your details are collected solely for feedback analysis and improving this training resource. Not shared with third parties. (DPDP Act 2023)
+      </div>
+      <div id="fb-err" style="font-size:12px;color:#993C1D;margin-bottom:8px;display:none"></div>
+      <button class="fb-submit" onclick="submitFeedback()">Submit feedback</button>
+    </div>
+    <!-- Success view -->
+    <div class="fb-success" id="fb-success-view">
+      <div class="fb-success-icon">🙏</div>
+      <h4>Thank you for your feedback!</h4>
+      <p>Your rating and comments help improve this CO training resource for faculty across India.</p>
+      <button onclick="closeFeedback()" style="margin-top:14px;font-size:13px;padding:8px 20px;border-radius:20px;border:1px solid var(--mid);background:transparent;color:var(--mid);cursor:pointer;font-family:inherit">Close</button>
+    </div>
+  </div>
+</div>
+
+<nav class="nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="https://isiva.in" class="nav-brand">Dr. I. Siva <span>ME · PhD</span></a>
+    <div class="nav-links">
+      <a href="https://isiva.in/index.html" class="nav-link">Home</a>
+      <div class="nav-more">
+        <button class="nav-more-btn">Research ▾</button>
+        <div class="nav-dropdown">
+          <a href="https://isiva.in/research.html">Overview</a>
+          <a href="https://isiva.in/cv.html">My Self</a>
+          <a href="https://isiva.in/publications.html">Publications</a>
+          <a href="https://isiva.in/highlights.html">Highlights</a>
+          <a href="https://isiva.in/research-direction.html">Pathway</a>
+        </div>
+      </div>
+      <div class="nav-more">
+        <button class="nav-more-btn">Teaching ▾</button>
+        <div class="nav-dropdown">
+          <a href="https://isiva.in/classroom.html">Classroom</a>
+          <a href="https://isiva.in/entrepreneurship.html">Entrepreneurship</a>
+          <a href="https://isiva.in/events.html">Events</a>
+        </div>
+      </div>
+      <div class="nav-more">
+        <button class="nav-more-btn active">Societal ▾</button>
+        <div class="nav-dropdown">
+          <a href="https://isiva.in/obe-portal.html">OBE Training</a>
+          <a href="#" class="active">CO-Training</a>
+          <a href="https://isiva.in/course-plan.html">Course Plan Generation</a>
+        </div>
+      </div>
+      <a href="https://isiva.in/contact.html" class="nav-link">Contact me</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Interactive Faculty Workshop · Open Access</div>
+  <h1 class="hero-title">Course Outcome <span>Design &amp; Review</span></h1>
+  <p class="hero-sub">Learn to write, evaluate, and map measurable Course Outcomes aligned to Bloom's taxonomy — then work on your own COs live using the interactive tools below.</p>
+  <div class="hero-tabs">
+    <button class="hero-tab active" onclick="goSec('s1')">1 · Foundations</button>
+    <button class="hero-tab" onclick="goSec('s2')">2 · CO Check &amp; Suggest</button>
+    <button class="hero-tab" onclick="goSec('s3')">3 · Verb Bank</button>
+    <button class="hero-tab" onclick="goSec('s4')">4 · My COs</button>
+    <button class="hero-tab" onclick="goSec('s5')">5 · CO-PO Map</button>
+    <button class="hero-tab" onclick="goSec('s6')">6 · Delivery Plan</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- S1: FOUNDATIONS -->
+<div class="sc" id="s1">
+  <div class="sh" onclick="tog('s1')">
+    <div class="si" style="background:#DEEAF1">📐</div>
+    <div><div class="st">1 · What is a Course Outcome?</div><div class="ss">Definition · Bloom's pyramid · NBA guidelines</div></div>
+    <span class="sv open" id="sv-s1">▾</span>
+  </div>
+  <div class="sb open" id="sb-s1">
+    <div class="itnav">
+      <button class="active" onclick="itab('s1','def',this)">Definition</button>
+      <button onclick="itab('s1','bloom',this)">Bloom's Pyramid</button>
+      <button onclick="itab('s1','nba',this)">NBA Guidelines</button>
+    </div>
+    <div id="s1-def" class="prose">
+      <p>A <strong>Course Outcome (CO)</strong> is a specific, observable, and measurable statement of what a student will be able to <em>do</em> at the end of a course. Written in terms of <strong>student performance</strong>, not teacher activity.</p>
+      <div class="callout green"><strong>The test:</strong> Can you assess whether a student has achieved this? If yes — it is a good CO.</div>
+      <h3>Every CO must have three parts</h3>
+      <table class="dtable">
+        <tr><th>Element</th><th>Meaning</th><th>Example</th></tr>
+        <tr><td><strong>Action verb</strong></td><td>Single Bloom's verb — observable and measurable</td><td>Design</td></tr>
+        <tr><td><strong>Knowledge / skill</strong></td><td>Specific content the student demonstrates</td><td>a heat exchanger for given thermal specifications</td></tr>
+        <tr><td><strong>Context / standard</strong></td><td>Conditions or performance standard</td><td>using IS standards and sustainability considerations</td></tr>
+      </table>
+      <div class="callout green"><strong>Complete CO:</strong> "Design a heat exchanger for given thermal specifications using IS standards and sustainability considerations." [Level 5 → PO1, PO3, PO7]</div>
+      <h3>Common mistakes</h3>
+      <table class="dtable">
+        <tr><th>Mistake</th><th>Wrong</th><th>Correct</th></tr>
+        <tr><td>Vague verb</td><td>Understand thermodynamics</td><td>Explain the laws of thermodynamics and their engineering applications</td></tr>
+        <tr><td>Multi-verb</td><td>Analyse and design and evaluate circuits</td><td>Split into three separate COs</td></tr>
+        <tr><td>Topic statement</td><td>Unit 3: Fluid Mechanics</td><td>Apply Bernoulli's equation to solve pipe flow problems</td></tr>
+        <tr><td>Unmeasurable</td><td>Appreciate the importance of ethics</td><td>Apply ethical frameworks to resolve professional dilemmas</td></tr>
+        <tr><td>Too many COs</td><td>15 COs for a 3-credit course</td><td>5–8 COs; one per 5–8 contact hours</td></tr>
+      </table>
+    </div>
+    <div id="s1-bloom" style="display:none">
+      <div class="pyr-wrap">
+        <div>
+          <svg width="100%" viewBox="0 0 300 400" role="img">
+            <g onclick="pyrSel(6)" style="cursor:pointer"><polygon points="150,16 206,72 94,72" fill="#534AB7"/><text x="150" y="46" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="#EEEDFE">Create</text><text x="150" y="61" text-anchor="middle" font-size="9" fill="#AFA9EC">Level 6</text></g>
+            <g onclick="pyrSel(5)" style="cursor:pointer"><polygon points="94,76 206,76 228,122 72,122" fill="#7F77DD"/><text x="150" y="96" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="#EEEDFE">Evaluate</text><text x="150" y="111" text-anchor="middle" font-size="9" fill="#CECBF6">Level 5</text></g>
+            <g onclick="pyrSel(4)" style="cursor:pointer"><polygon points="72,126 228,126 250,178 50,178" fill="#0F6E56"/><text x="150" y="149" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="#E1F5EE">Analyse</text><text x="150" y="164" text-anchor="middle" font-size="9" fill="#9FE1CB">Level 4</text></g>
+            <g onclick="pyrSel(3)" style="cursor:pointer"><polygon points="50,182 250,182 272,240 28,240" fill="#1D9E75"/><text x="150" y="207" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="#E1F5EE">Apply</text><text x="150" y="222" text-anchor="middle" font-size="9" fill="#9FE1CB">Level 3</text></g>
+            <g onclick="pyrSel(2)" style="cursor:pointer"><polygon points="28,244 272,244 288,296 12,296" fill="#BA7517"/><text x="150" y="267" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="#FAEEDA">Understand</text><text x="150" y="282" text-anchor="middle" font-size="9" fill="#FAC775">Level 2</text></g>
+            <g onclick="pyrSel(1)" style="cursor:pointer"><polygon points="12,300 288,300 288,368 12,368" fill="#993C1D"/><text x="150" y="330" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="#FAECE7">Remember</text><text x="150" y="347" text-anchor="middle" font-size="9" fill="#F5C4B3">Level 1</text></g>
+            <text x="150" y="390" text-anchor="middle" font-size="9" fill="#888">Click any level to explore</text>
+          </svg>
+        </div>
+        <div class="pyr-detail" id="pyr-detail">
+          <p style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px">Bloom's Revised Taxonomy</p>
+          <p style="font-size:12px;color:#444;line-height:1.65">Six cognitive levels from basic recall at the base to complex creation at the apex. Every CO must be anchored to one level using an action verb from that tier.</p>
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;margin-top:10px">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:10px;height:10px;border-radius:2px;background:#534AB7;flex-shrink:0"></span>Create / Evaluate — higher-order</div>
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:10px;height:10px;border-radius:2px;background:#0F6E56;flex-shrink:0"></span><strong>Analyse / Apply — NBA core for UG</strong></div>
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:10px;height:10px;border-radius:2px;background:#993C1D;flex-shrink:0"></span>Understand / Remember — foundational</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="s1-nba" style="display:none" class="prose">
+      <h3>NBA CO guidelines by course type</h3>
+      <table class="dtable">
+        <tr><th>Course type</th><th>Recommended Bloom's level</th><th>No. of COs</th></tr>
+        <tr><td>1st year foundation</td><td>Level 1–2, some Level 3</td><td>5–6</td></tr>
+        <tr><td>Core theory (2nd–3rd year)</td><td>Level 3 predominantly; Level 4 for analysis</td><td>5–7</td></tr>
+        <tr><td>Lab / practical</td><td>Level 3; Level 4 for data interpretation</td><td>5–6</td></tr>
+        <tr><td>Design / project</td><td>Level 5–6; at least 2 COs at these levels</td><td>5–8</td></tr>
+        <tr><td>PG courses</td><td>Level 4–6 throughout</td><td>5–8</td></tr>
+      </table>
+      <div class="callout amber"><strong>NBA Criterion 2.2:</strong> Every course must have 5–8 COs. Each CO must map to at least one of the 12 NBA Programme Outcomes (POs) with a strength of 1, 2, or 3.</div>
+      <h3>CO-PO mapping strength</h3>
+      <table class="dtable">
+        <tr><th>Strength</th><th>Meaning</th><th>When to assign</th></tr>
+        <tr><td><strong>3</strong></td><td>Substantial</td><td>The CO directly and substantially addresses this PO</td></tr>
+        <tr><td><strong>2</strong></td><td>Moderate</td><td>The PO is partially addressed as part of the CO</td></tr>
+        <tr><td><strong>1</strong></td><td>Slight</td><td>Indirect or minor connection</td></tr>
+        <tr><td>—</td><td>None</td><td>No meaningful relationship — leave blank</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- S2: CO CHECK AND SUGGEST -->
+<div class="sc" id="s2">
+  <div class="sh" onclick="tog('s2')">
+    <div class="si" style="background:#E2EFDA">✏️</div>
+    <div><div class="st">2 · CO Check &amp; Suggest</div><div class="ss">Enter unit topics → paste your CO → get analysis + 3 improved suggestions</div></div>
+    <span class="sv" id="sv-s2">▾</span>
+  </div>
+  <div class="sb" id="sb-s2">
+    <!-- Step 1 -->
+    <div style="margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <span style="font-size:13px;font-weight:600;color:var(--navy)">Enter your unit topics / content covered</span>
+      </div>
+      <textarea class="co-ta" id="unit-topics" rows="3" placeholder="e.g. Stress and strain, Types of loads, Bending moment, Shear force diagrams, Deflection of beams, Euler theory" oninput="topicsUpdate()" style="border-color:var(--border)"></textarea>
+      <div id="topics-chips" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px"></div>
+    </div>
+    <!-- Step 2 -->
+    <div style="margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <span style="font-size:13px;font-weight:600;color:var(--navy)">Type or paste your existing Course Outcome</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        <span style="font-size:11px;color:var(--muted);align-self:center">Try:</span>
+        <button class="pb" onclick="cabSet(0)">Good CO (L3)</button>
+        <button class="pb" onclick="cabSet(1)">Good CO (L5)</button>
+        <button class="pb" onclick="cabSet(2)">Good CO (L6)</button>
+        <button class="pb" onclick="cabSet(3)">⚠ Vague verb</button>
+        <button class="pb" onclick="cabSet(4)">⚠ Multi-verb</button>
+        <button class="pb" onclick="cabSet(5)">⚠ Topic only</button>
+      </div>
+      <textarea class="co-ta" id="cab-in" rows="3" placeholder="Paste or type your existing CO here" oninput="cabRun()"></textarea>
+    </div>
+    <!-- Step 3 analysis -->
+    <div id="s2-analysis" style="display:none;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <span style="font-size:13px;font-weight:600;color:var(--navy)">CO analysis</span>
+      </div>
+      <div class="ag">
+        <div class="ac" id="ac-verb"><div class="al">Action verb</div><div class="av" id="av-verb">—</div><div class="asub" id="as-verb"></div></div>
+        <div class="ac" id="ac-skill"><div class="al">Knowledge / skill</div><div class="av" id="av-skill">—</div><div class="asub" id="as-skill"></div></div>
+        <div class="ac" id="ac-ctx"><div class="al">Context / standard</div><div class="av" id="av-ctx">—</div><div class="asub" id="as-ctx"></div></div>
+      </div>
+      <div class="bb">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:12px;font-weight:500;color:var(--navy)">Bloom's level detected</span>
+          <span id="bl-label" style="font-size:12px;color:var(--muted)">—</span>
+        </div>
+        <div class="bc">
+          <div class="blc" id="bl1">Remember</div><div class="blc" id="bl2">Understand</div><div class="blc" id="bl3">Apply</div>
+          <div class="blc" id="bl4">Analyse</div><div class="blc" id="bl5">Evaluate</div><div class="blc" id="bl6">Create</div>
+        </div>
+      </div>
+      <div id="cab-fb"></div>
+    </div>
+    <!-- Step 4 suggestions -->
+    <div id="s2-sugg" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+        <span style="font-size:13px;font-weight:600;color:var(--navy)">Suggested COs — choose one to use</span>
+      </div>
+      <div id="sugg-list"></div>
+      <div id="sugg-chosen" style="display:none;margin-top:12px;padding:12px 16px;background:var(--green-bg);border:1px solid #5DCAA5;border-radius:8px">
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">✓ CO SELECTED — added to your worksheet (Section 4)</div>
+        <div id="sugg-chosen-text" style="font-size:13px;color:#04342C;font-weight:500"></div>
+        <button onclick="clearChosen()" style="margin-top:8px;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid #5DCAA5;background:transparent;color:var(--green);cursor:pointer;font-family:inherit">Choose a different one</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S3: VERB BANK -->
+<div class="sc" id="s3">
+  <div class="sh" onclick="tog('s3')">
+    <div class="si" style="background:#FAEEDA">📚</div>
+    <div><div class="st">3 · Bloom's Action Verb Bank</div><div class="ss">Filter by course type · Click any verb to copy</div></div>
+    <span class="sv" id="sv-s3">▾</span>
+  </div>
+  <div class="sb" id="sb-s3">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+      <button class="vwf" id="vf-all" onclick="vwFilter('all',this)" style="background:#444;color:#fff;border-color:#444">All</button>
+      <button class="vwf" id="vf-theory" onclick="vwFilter('theory',this)">Theory</button>
+      <button class="vwf" id="vf-lab" onclick="vwFilter('lab',this)">Lab / Practical</button>
+      <button class="vwf" id="vf-design" onclick="vwFilter('design',this)">Design / Project</button>
+      <button class="vwf" id="vf-pg" onclick="vwFilter('pg',this)">PG / Research</button>
+    </div>
+    <div id="vw-out"></div>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px">Click any verb to copy · <span id="vw-copied" style="display:none;color:var(--green);font-weight:600">✓ Copied</span></p>
+  </div>
+</div>
+
+<!-- S4: WORKSHEET -->
+<div class="sc" id="s4">
+  <div class="sh" onclick="tog('s4')">
+    <div class="si" style="background:#E8F8F0">📋</div>
+    <div><div class="st">4 · My Course Outcomes Worksheet</div><div class="ss">Enter your course details and write your COs — live validation as you type</div></div>
+    <span class="sv" id="sv-s4">▾</span>
+  </div>
+  <div class="sb" id="sb-s4">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px">COURSE NAME</label><input class="wsi" id="ws-cname" placeholder="e.g. Fluid Mechanics" oninput="wsUpdate()"></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px">COURSE CODE</label><input class="wsi" id="ws-code" placeholder="e.g. ME3401"></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px">CREDITS</label><select class="wsi wsel" id="ws-credits"><option>3</option><option>4</option><option>2</option><option>1</option><option>5</option></select></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="wst"><thead><tr><th style="width:40px">#</th><th style="min-width:320px">Course Outcome statement</th><th style="width:110px">Bloom's level</th><th style="width:90px">Status</th><th style="width:40px"></th></tr></thead>
+      <tbody id="ws-tbody"></tbody></table>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-o btn-sm" onclick="wsAdd()">+ Add CO</button>
+      <button class="btn btn-o btn-sm" onclick="wsClear()">Clear all</button>
+      <button class="btn btn-g btn-sm" onclick="wsPrint()">🖨 Print / Save PDF</button>
+    </div>
+    <div id="ws-summary" style="margin-top:14px;display:none"></div>
+  </div>
+</div>
+
+<!-- S5: CO-PO MATRIX -->
+<div class="sc" id="s5">
+  <div class="sh" onclick="tog('s5')">
+    <div class="si" style="background:#EEEDFE">🗺</div>
+    <div><div class="st">5 · CO-PO Mapping Matrix</div><div class="ss">Map your COs to 12 NBA POs · Click cells for strength (1/2/3) · Live average</div></div>
+    <span class="sv" id="sv-s5">▾</span>
+  </div>
+  <div class="sb" id="sb-s5">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">COs from Section 4 appear here automatically. Click any cell to cycle 0 → 1 → 2 → 3.</p>
+    <div class="mx-wrap" id="mx-wrap"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center">
+      <span style="font-size:12px;color:var(--muted)">Strength:</span>
+      <span style="font-size:11px;padding:2px 9px;border-radius:20px;background:#E8F8F0;color:#1A7A4A;border:1px solid #82E0AA;font-weight:600">1 — Slight</span>
+      <span style="font-size:11px;padding:2px 9px;border-radius:20px;background:#EBF5FB;color:#1A5276;border:1px solid #85C1E9;font-weight:600">2 — Moderate</span>
+      <span style="font-size:11px;padding:2px 9px;border-radius:20px;background:#EEEDFE;color:#534AB7;border:1px solid #AFA9EC;font-weight:600">3 — Substantial</span>
+    </div>
+    <div id="att-bars"></div>
+  </div>
+</div>
+
+<!-- S6: DELIVERY PLAN -->
+<div class="sc" id="s6">
+  <div class="sh" onclick="tog('s6')">
+    <div class="si" style="background:#FAECE7">🎯</div>
+    <div><div class="st">6 · Content Delivery &amp; Activity Plan</div><div class="ss">Delivery methods, conventional &amp; modern tools — aligned to your COs Bloom's levels</div></div>
+    <span class="sv" id="sv-s6">▾</span>
+  </div>
+  <div class="sb" id="sb-s6">
+    <div class="itnav">
+      <button class="active" onclick="itab('s6','methods',this)">Delivery Methods</button>
+      <button onclick="itab('s6','tools',this)">Tools &amp; Resources</button>
+      <button onclick="itab('s6','plan',this)">My Activity Plan</button>
+    </div>
+    <div id="s6-methods">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Select a Bloom's level to filter methods by cognitive demand.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px" id="dm-level-btns">
+        <button class="dm-lb" data-l="0" onclick="dmFilt(0,this)">All levels</button>
+        <button class="dm-lb" data-l="1" onclick="dmFilt(1,this)">L1 Remember</button>
+        <button class="dm-lb" data-l="2" onclick="dmFilt(2,this)">L2 Understand</button>
+        <button class="dm-lb" data-l="3" onclick="dmFilt(3,this)">L3 Apply</button>
+        <button class="dm-lb" data-l="4" onclick="dmFilt(4,this)">L4 Analyse</button>
+        <button class="dm-lb" data-l="5" onclick="dmFilt(5,this)">L5 Evaluate</button>
+        <button class="dm-lb" data-l="6" onclick="dmFilt(6,this)">L6 Create</button>
+      </div>
+      <div id="dm-out"></div>
+    </div>
+    <div id="s6-tools" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="tg"><div class="tgh" style="background:#0D2B4E">📖 Conventional tools</div><div class="tgb" id="conv-tools"></div></div>
+        <div class="tg"><div class="tgh" style="background:#0F6E56">💻 Modern / digital tools</div><div class="tgb" id="mod-tools"></div></div>
+      </div>
+      <div class="callout" style="margin-top:14px">Tools are named for reference — choose based on institutional infrastructure and course type.</div>
+    </div>
+    <div id="s6-plan" style="display:none">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Build a session-wise activity plan. COs from Section 4 appear in the dropdown.</p>
+      <div style="overflow-x:auto">
+        <table class="wst" id="ap-table">
+          <thead><tr>
+            <th style="width:70px">Session</th>
+            <th style="min-width:140px">Topic / content</th>
+            <th style="width:90px">CO covered</th>
+            <th style="width:150px">Delivery method</th>
+            <th style="width:110px">Bloom's level</th>
+            <th style="min-width:140px">Tools used</th>
+            <th style="width:40px"></th>
+          </tr></thead>
+          <tbody id="ap-tbody"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-o btn-sm" onclick="apAdd()">+ Add session</button>
+        <button class="btn btn-g btn-sm" onclick="apPrint()">🖨 Print plan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Developed by <a href="https://isiva.in" target="_blank">Dr. I. Siva</a> · Professor of Mechanical Engineering · Director IQAC · Mahendra Engineering College<br>
+  Part of the <a href="https://isiva.in/obe-portal.html">OBE Faculty Training Portal</a> · NBA + NAAC Aligned
+</div>
+</div>
+
+<script>
+// ═══ UTILITY ══════════════════════════════════════════════════════════
+function tog(id) {
+  var b = document.getElementById('sb-' + id);
+  var v = document.getElementById('sv-' + id);
+  var open = b.classList.contains('open');
+  b.classList.toggle('open', !open);
+  v.classList.toggle('open', !open);
+}
+function goSec(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var b = document.getElementById('sb-' + id);
+  if (b && !b.classList.contains('open')) tog(id);
+  setTimeout(function() { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+}
+function itab(sec, tab, btn) {
+  var tabs = { s1: ['def','bloom','nba'], s6: ['methods','tools','plan'] };
+  var list = tabs[sec] || [];
+  list.forEach(function(t) {
+    var el = document.getElementById(sec + '-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+  var nav = btn.closest('.itnav');
+  if (nav) nav.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+// ═══ BLOOM DATA ═══════════════════════════════════════════════════════
+var BL = {
+  1: { name: 'Remember', color: '#993C1D', bg: '#FAECE7',
+       verbs: ['define','list','name','recall','state','identify','label','recognise','outline','match','reproduce','memorise'] },
+  2: { name: 'Understand', color: '#854F0B', bg: '#FAEEDA',
+       verbs: ['explain','describe','summarise','classify','interpret','paraphrase','compare','discuss','illustrate','predict','translate','infer'] },
+  3: { name: 'Apply', color: '#0F6E56', bg: '#E1F5EE',
+       verbs: ['solve','use','demonstrate','compute','implement','execute','calculate','apply','operate','perform','produce','construct','simulate','model','employ','utilise'] },
+  4: { name: 'Analyse', color: '#085041', bg: '#D4EDE6',
+       verbs: ['compare','differentiate','examine','break','relate','organise','distinguish','attribute','deconstruct','infer','prioritise','investigate','analyse','analyze','separate','categorise'] },
+  5: { name: 'Evaluate', color: '#534AB7', bg: '#EEEDFE',
+       verbs: ['judge','justify','critique','assess','recommend','defend','select','evaluate','prioritise','appraise','argue','conclude','rate','validate','review','measure'] },
+  6: { name: 'Create', color: '#3C3489', bg: '#E5E3FC',
+       verbs: ['design','develop','formulate','construct','produce','plan','generate','compose','invent','build','devise','synthesise','synthesize','create','propose','draft'] }
+};
+var VAGUE = ['understand','know','aware','familiar','appreciate','learn','study','grasp'];
+
+function getLevel(text) {
+  var fw = text.toLowerCase().split(' ')[0].replace(/[^a-z]/g, '');
+  for (var l = 6; l >= 1; l--) {
+    if (BL[l].verbs.indexOf(fw) >= 0) return l;
+  }
+  return 0;
+}
+
+// ═══ BLOOM PYRAMID ════════════════════════════════════════════════════
+var PYR = {
+  1: { name:'Remember', color:'#993C1D', bg:'#FAECE7', desc:'Retrieve relevant knowledge from memory.',
+       verbs:'Define, List, Name, Recall, State, Identify, Label, Recognise',
+       co:'Define the fundamental laws of thermodynamics and state their engineering significance.',
+       nba:'Appropriate for 1st year courses. Avoid as sole level for core engineering courses.' },
+  2: { name:'Understand', color:'#854F0B', bg:'#FAEEDA', desc:'Construct meaning — explain ideas in own words.',
+       verbs:'Explain, Describe, Summarise, Classify, Interpret, Compare, Discuss, Illustrate',
+       co:'Explain the mechanisms of heat transfer by conduction, convection, and radiation with examples.',
+       nba:'Suitable for Level 1-2 courses. Pair with higher-level COs from 2nd year onwards.' },
+  3: { name:'Apply', color:'#0F6E56', bg:'#E1F5EE', desc:'Carry out a procedure in a given situation.',
+       verbs:'Solve, Calculate, Demonstrate, Implement, Compute, Apply, Simulate, Operate, Perform',
+       co:'Calculate bending stress and shear force in beams subjected to various loading conditions.',
+       nba:'Primary level for most UG engineering COs (NBA recommendation). Labs reinforce Apply-level COs.' },
+  4: { name:'Analyse', color:'#085041', bg:'#D4EDE6', desc:'Break material into parts and determine relationships.',
+       verbs:'Compare, Differentiate, Examine, Analyse, Investigate, Categorise, Relate, Distinguish',
+       co:'Analyse failure modes of mechanical components under fatigue loading and differentiate ductile vs brittle failure.',
+       nba:'Essential for design courses. Every 3rd or 4th year course should have at least 2 Level 4 COs.' },
+  5: { name:'Evaluate', color:'#534AB7', bg:'#EEEDFE', desc:'Make judgements based on criteria and standards.',
+       verbs:'Evaluate, Justify, Recommend, Assess, Judge, Critique, Defend, Select, Validate',
+       co:'Evaluate and recommend an optimal material for a structural application justifying against IS standards.',
+       nba:'Required for design project and elective courses. Capstone must include COs at Level 5-6.' },
+  6: { name:'Create', color:'#3C3489', bg:'#E5E3FC', desc:'Put elements together to form a new whole.',
+       verbs:'Design, Develop, Formulate, Construct, Generate, Plan, Devise, Propose, Synthesise',
+       co:'Design a sustainable heat exchanger for given thermal specifications incorporating material, cost, and environmental constraints.',
+       nba:'Mandatory for capstone design courses (NBA Criterion 3). PG programmes should have majority COs at Levels 5-6.' }
+};
+function pyrSel(n) {
+  var L = PYR[n];
+  document.getElementById('pyr-detail').innerHTML =
+    '<div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:' + L.color + ';color:' + L.bg + ';margin-bottom:10px">Level ' + n + ' - ' + L.name + '</div>' +
+    '<div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px">' + L.name + '</div>' +
+    '<div style="font-size:12px;color:#444;line-height:1.6;margin-bottom:8px">' + L.desc + '</div>' +
+    '<div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px">ACTION VERBS</div>' +
+    '<div style="font-size:12px;color:' + L.color + ';font-weight:500;margin-bottom:8px">' + L.verbs + '</div>' +
+    '<div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px">EXAMPLE CO</div>' +
+    '<div style="font-size:11px;border-left:2px solid ' + L.color + ';padding:6px 10px;border-radius:0 6px 6px 0;background:' + L.bg + ';color:#333;line-height:1.55;margin-bottom:8px">"' + L.co + '"</div>' +
+    '<div style="font-size:11px;color:#555;background:#f9f9f9;padding:6px 10px;border-radius:6px;line-height:1.5">' + L.nba + '</div>';
+}
+
+// ═══ CO ANATOMY BUILDER ═══════════════════════════════════════════════
+var CAB_PRESETS = [
+  'Calculate the bending stress and deflection in simply supported beams subjected to various loading conditions using standard formulae.',
+  'Evaluate and recommend an optimal material for a structural application justifying the selection based on mechanical properties and IS standards.',
+  'Design a low-cost water pump for rural irrigation using locally available materials and sustainable manufacturing processes.',
+  'Understand the principles of fluid mechanics and know about pipe flow.',
+  'Analyse and design and evaluate the performance of heat exchangers.',
+  'Unit 4: Refrigeration and Air Conditioning systems.'
+];
+var _suggestions = [];
+var _unitTopics = [];
+
+function cabSet(i) {
+  document.getElementById('cab-in').value = CAB_PRESETS[i];
+  cabRun();
+}
+
+function topicsUpdate() {
+  var raw = document.getElementById('unit-topics').value;
+  _unitTopics = raw.split(/[,;\n\r]+/).map(function(t) { return t.trim(); }).filter(function(t) { return t.length > 2; });
+  var chips = document.getElementById('topics-chips');
+  chips.innerHTML = _unitTopics.map(function(t) { return '<span class="tc">' + t + '</span>'; }).join('');
+  if (document.getElementById('cab-in').value.trim()) cabRun();
+}
+
+function cabRun() {
+  var raw = document.getElementById('cab-in').value.trim();
+  var anaWrap = document.getElementById('s2-analysis');
+  var suggWrap = document.getElementById('s2-sugg');
+  if (!raw) { anaWrap.style.display = 'none'; suggWrap.style.display = 'none'; return; }
+  anaWrap.style.display = 'block';
+
+  var lower = raw.toLowerCase();
+  var words = lower.split(' ');
+  var fw = words[0].replace(/[^a-z]/g, '');
+  var dl = 0, dv = '', dc = '', db = '';
+  for (var l = 6; l >= 1; l--) {
+    if (BL[l].verbs.indexOf(fw) >= 0) { dl = l; dv = fw; dc = BL[l].color; db = BL[l].bg; break; }
+  }
+  var isVague = VAGUE.indexOf(fw) >= 0;
+  var hasMulti = lower.indexOf(' and design') >= 0 || lower.indexOf(' and evaluate') >= 0 ||
+                 lower.indexOf(' and analyse') >= 0 || lower.indexOf(' and calculate') >= 0 ||
+                 lower.indexOf(' and solve') >= 0 || lower.indexOf(' and develop') >= 0;
+  var hasCtx = raw.indexOf(' using ') >= 0 || raw.indexOf(' with ') >= 0 ||
+               raw.indexOf(' for ') >= 0 || raw.indexOf(' based on') >= 0 ||
+               raw.indexOf(' standards') >= 0 || raw.indexOf(' considering') >= 0;
+  var rest = raw.slice(raw.indexOf(' ') + 1);
+  var ctxPats = [' using ', ' with ', ' based on', ' considering', ' following'];
+  var ctxIdx = -1;
+  for (var ci = 0; ci < ctxPats.length; ci++) {
+    var idx = rest.toLowerCase().indexOf(ctxPats[ci]);
+    if (idx >= 0 && (ctxIdx < 0 || idx < ctxIdx)) ctxIdx = idx;
+  }
+
+  // verb card
+  var vc = document.getElementById('ac-verb');
+  var vv = document.getElementById('av-verb');
+  var vs = document.getElementById('as-verb');
+  if (dv && !isVague) {
+    vv.textContent = dv[0].toUpperCase() + dv.slice(1);
+    vv.style.color = dc; vc.style.borderColor = dc; vc.style.background = db;
+    vs.textContent = "Bloom's Level " + dl + " - " + BL[dl].name;
+  } else if (isVague) {
+    vv.textContent = words[0][0].toUpperCase() + words[0].slice(1) + ' ⚠';
+    vv.style.color = '#B7770D'; vc.style.borderColor = '#EF9F27'; vc.style.background = '#FAEEDA';
+    vs.textContent = 'Vague — use a measurable verb';
+  } else {
+    vv.textContent = words[0] || '—';
+    vv.style.color = '#aaa'; vc.style.borderColor = '#ddd'; vc.style.background = '#f9f9f9';
+    vs.textContent = 'Not in Bloom verb bank';
+  }
+
+  // skill / context cards
+  var sv2 = document.getElementById('av-skill'); var ss2 = document.getElementById('as-skill'); var sc2 = document.getElementById('ac-skill');
+  var cv2 = document.getElementById('av-ctx');  var cs2 = document.getElementById('as-ctx');  var cc2 = document.getElementById('ac-ctx');
+  var extractedSkill = rest;
+  if (ctxIdx > 0) {
+    extractedSkill = rest.slice(0, ctxIdx).trim();
+    var ctx = rest.slice(ctxIdx).trim();
+    sv2.textContent = extractedSkill.length > 42 ? extractedSkill.slice(0, 42) + '...' : extractedSkill;
+    sv2.style.color = '#0F6E56'; sc2.style.borderColor = '#5DCAA5'; sc2.style.background = '#E1F5EE'; ss2.textContent = 'Content identified';
+    cv2.textContent = ctx.length > 42 ? ctx.slice(0, 42) + '...' : ctx;
+    cv2.style.color = '#0F6E56'; cc2.style.borderColor = '#5DCAA5'; cc2.style.background = '#E1F5EE'; cs2.textContent = 'Context identified';
+  } else {
+    sv2.textContent = rest.length > 42 ? rest.slice(0, 42) + '...' : rest;
+    sv2.style.color = '#333'; sc2.style.borderColor = '#ddd'; sc2.style.background = '#f9f9f9'; ss2.textContent = 'Add "using..." to separate context';
+    cv2.textContent = '—'; cv2.style.color = '#aaa'; cc2.style.borderColor = '#ddd'; cc2.style.background = '#f9f9f9'; cs2.textContent = 'Not detected';
+  }
+
+  // bloom band
+  for (var n = 1; n <= 6; n++) {
+    var c = document.getElementById('bl' + n);
+    c.style.background = '#eee'; c.style.color = '#aaa'; c.style.borderColor = '#ddd'; c.classList.remove('active');
+  }
+  if (dl > 0 && !isVague) {
+    var bc2 = document.getElementById('bl' + dl);
+    bc2.style.background = dc; bc2.style.color = '#fff'; bc2.style.borderColor = dc; bc2.classList.add('active');
+    document.getElementById('bl-label').textContent = 'Level ' + dl + ' - ' + BL[dl].name;
+    document.getElementById('bl-label').style.color = dc;
+  } else {
+    document.getElementById('bl-label').textContent = '—';
+    document.getElementById('bl-label').style.color = '#aaa';
+  }
+
+  // feedback
+  var fbs = [];
+  if (isVague) fbs.push({ t: 'err', m: '"' + words[0] + '" is vague. Replace with: Explain, Apply, Analyse, Design, or Evaluate.' });
+  if (hasMulti) fbs.push({ t: 'err', m: 'Multiple verbs detected — split into separate COs (one verb each).' });
+  if (!isVague && !dv && words.length < 5) fbs.push({ t: 'err', m: 'This looks like a topic title. Start with a Bloom action verb.' });
+  if (!hasCtx && words.length >= 7 && !isVague) fbs.push({ t: 'warn', m: 'No context detected. Add "using [method/standard]" to complete the CO.' });
+  if (dl >= 3 && !isVague && hasCtx && !hasMulti && words.length >= 8) fbs.push({ t: 'ok', m: 'Level ' + dl + ' (' + BL[dl].name + ') - well-structured CO with verb, content, and context.' });
+  document.getElementById('cab-fb').innerHTML = fbs.map(function(f) {
+    var bg = f.t === 'ok' ? '#E1F5EE' : f.t === 'warn' ? '#FAEEDA' : '#FAECE7';
+    var col = f.t === 'ok' ? '#0F6E56' : f.t === 'warn' ? '#854F0B' : '#993C1D';
+    var icon = f.t === 'ok' ? '✓' : f.t === 'warn' ? '⚠' : '✗';
+    return '<div class="fb" style="background:' + bg + ';color:' + col + '"><span style="flex-shrink:0">' + icon + '</span><span>' + f.m + '</span></div>';
+  }).join('');
+
+  // suggestions
+  _suggestions = buildSuggestions(dl, extractedSkill);
+  suggWrap.style.display = 'block';
+  var chosen = document.getElementById('sugg-chosen');
+  if (chosen.style.display === 'none') renderSuggestions();
+}
+
+function buildSuggestions(detectedLevel, skill) {
+  var topics = _unitTopics.length > 0 ? _unitTopics : [];
+
+  // Build a concise domain phrase from topics — pick the most meaningful 1-2 words
+  // rather than concatenating everything
+  function domainPhrase() {
+    if (topics.length === 0) return 'the given engineering problem';
+    // Use the first topic as the anchor domain — clean it up
+    var t = topics[0].trim();
+    // Remove leading articles
+    t = t.replace(/^(introduction to|basics of|fundamentals of|overview of|study of)\s+/i, '');
+    // If there are 2-3 topics, summarise them as a domain
+    if (topics.length >= 2) {
+      // Create a collective noun from the topic group
+      var second = topics[1].trim().replace(/^(introduction to|basics of|fundamentals of|overview of|study of)\s+/i, '');
+      // Use "... and related concepts" pattern if more than 2
+      if (topics.length > 2) {
+        return t.toLowerCase() + ' and related concepts';
+      }
+      return t.toLowerCase() + ' and ' + second.toLowerCase();
+    }
+    return t.toLowerCase();
+  }
+
+  // Build a concise scope phrase — what the student works with
+  function scopePhrase(level) {
+    if (topics.length === 0) return 'engineering systems';
+    // For higher levels, reference the broader system/application
+    if (level >= 5) return 'engineering applications under given constraints';
+    if (level === 4) return 'engineering systems using relevant analytical methods';
+    if (level === 3) return 'given engineering problems using standard methods';
+    return domainPhrase();
+  }
+
+  var domain = domainPhrase();
+
+  // Level-specific CO templates — natural language, not topic dump
+  var TEMPLATES = {
+    1: function(d) { return 'Define and state the fundamental concepts of ' + d + ' using standard terminology.'; },
+    2: function(d) { return 'Explain the principles of ' + d + ' with relevant engineering examples and diagrams.'; },
+    3: function(d) { return 'Apply the concepts of ' + d + ' to solve given engineering problems using standard methods and formulae.'; },
+    4: function(d) { return 'Analyse engineering systems involving ' + d + ' and differentiate behaviour under varying conditions.'; },
+    5: function(d) { return 'Evaluate and select appropriate ' + d + ' solutions for a given application, justifying choices against engineering standards.'; },
+    6: function(d) { return 'Design an engineering solution incorporating ' + d + ' to meet specified functional, economic, and sustainability requirements.'; }
+  };
+
+  var WHY = {
+    1: 'Foundational level — ensures students can recall and state key terms before applying them.',
+    2: 'Comprehension level — students explain and interpret concepts without yet applying calculations.',
+    3: 'NBA core level — directly testable in CIE/SEE with numerical problems. Most UG engineering COs sit here.',
+    4: 'Higher-order thinking — tests reasoning and systematic analysis beyond recall.',
+    5: 'Evaluation level — requires informed judgements; suitable for design and elective courses.',
+    6: 'Creation level — highest cognitive demand; for capstone, design project, and PG courses.'
+  };
+
+  var base = detectedLevel > 0 ? detectedLevel : 2;
+  var levels = [];
+  levels.push(Math.max(1, base));
+  levels.push(Math.min(6, base + 1));
+  levels.push(Math.min(6, base + 2));
+  var seen = {};
+  levels = levels.filter(function(l) { if (seen[l]) return false; seen[l] = true; return true; });
+  while (levels.length < 3) levels.push(Math.min(6, levels[levels.length - 1] + 1));
+
+  return levels.map(function(l) {
+    return { level: l, text: TEMPLATES[l](domain), why: WHY[l] };
+  });
+}
+
+function renderSuggestions() {
+  var BLG = { 1:'#FAECE7', 2:'#FAEEDA', 3:'#E1F5EE', 4:'#D4EDE6', 5:'#EEEDFE', 6:'#E5E3FC' };
+  var BLC = { 1:'#993C1D', 2:'#854F0B', 3:'#0F6E56', 4:'#085041', 5:'#534AB7', 6:'#3C3489' };
+  document.getElementById('sugg-list').innerHTML = _suggestions.map(function(s, i) {
+    return '<div class="sugg" id="sg' + i + '">' +
+      '<span class="sugg-lv" style="background:' + BLG[s.level] + ';color:' + BLC[s.level] + '">Option ' + (i+1) + ' - Level ' + s.level + ': ' + BL[s.level].name + '</span>' +
+      '<button class="sugg-btn" onclick="useSugg(' + i + ')">Use this CO</button>' +
+      '<div class="sugg-txt">' + s.text + '</div>' +
+      '<div class="sugg-why">💡 ' + s.why + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function useSugg(i) {
+  var s = _suggestions[i];
+  if (!s) return;
+  document.querySelectorAll('.sugg').forEach(function(el) { el.classList.remove('chosen'); });
+  document.getElementById('sg' + i).classList.add('chosen');
+  document.getElementById('sugg-chosen').style.display = 'block';
+  document.getElementById('sugg-chosen-text').textContent = s.text;
+  // add to worksheet
+  var empty = null;
+  for (var r = 0; r < wsRows.length; r++) { if (wsRows[r].status === 'empty') { empty = wsRows[r]; break; } }
+  if (empty) { empty.text = s.text; empty.level = getLevel(s.text); empty.status = wsStatus(s.text); }
+  else { wsRows.push({ id: wsRows.length + 1, text: s.text, level: getLevel(s.text), status: wsStatus(s.text) }); }
+  wsRender();
+}
+
+function clearChosen() {
+  document.getElementById('sugg-chosen').style.display = 'none';
+  document.querySelectorAll('.sugg').forEach(function(el) { el.classList.remove('chosen'); });
+}
+
+// ═══ VERB WHEEL ═══════════════════════════════════════════════════════
+var VWD = [
+  { n:1, name:'Remember', color:'#993C1D', bg:'#FAECE7', border:'#F5C4B3', nba:false,
+    verbs:[{v:'Define',f:['all','theory']},{v:'List',f:['all','theory','lab']},{v:'Name',f:['all','theory']},{v:'Recall',f:['all','theory']},{v:'State',f:['all','theory']},{v:'Identify',f:['all','theory','lab']},{v:'Label',f:['all','theory','lab']},{v:'Recognise',f:['all','theory']},{v:'Outline',f:['all','theory']},{v:'Match',f:['all','theory']}] },
+  { n:2, name:'Understand', color:'#854F0B', bg:'#FAEEDA', border:'#FAC775', nba:false,
+    verbs:[{v:'Explain',f:['all','theory']},{v:'Describe',f:['all','theory','lab']},{v:'Summarise',f:['all','theory']},{v:'Classify',f:['all','theory']},{v:'Interpret',f:['all','theory','pg']},{v:'Compare',f:['all','theory','pg']},{v:'Discuss',f:['all','theory']},{v:'Illustrate',f:['all','theory','design']},{v:'Predict',f:['all','theory','pg']},{v:'Infer',f:['all','theory','pg']}] },
+  { n:3, name:'Apply', color:'#0F6E56', bg:'#E1F5EE', border:'#5DCAA5', nba:true,
+    verbs:[{v:'Solve',f:['all','theory','lab']},{v:'Calculate',f:['all','theory','lab']},{v:'Demonstrate',f:['all','lab','design']},{v:'Implement',f:['all','lab','design','pg']},{v:'Compute',f:['all','theory','lab','pg']},{v:'Apply',f:['all','theory','lab']},{v:'Simulate',f:['all','lab','design','pg']},{v:'Operate',f:['all','lab']},{v:'Perform',f:['all','lab']},{v:'Construct',f:['all','lab','design']},{v:'Model',f:['all','lab','design','pg']}] },
+  { n:4, name:'Analyse', color:'#085041', bg:'#D4EDE6', border:'#1D9E75', nba:true,
+    verbs:[{v:'Compare',f:['all','theory','pg']},{v:'Differentiate',f:['all','theory','pg']},{v:'Examine',f:['all','theory','lab','pg']},{v:'Analyse',f:['all','theory','lab','design','pg']},{v:'Investigate',f:['all','lab','design','pg']},{v:'Categorise',f:['all','theory','pg']},{v:'Relate',f:['all','theory','pg']},{v:'Prioritise',f:['all','design','pg']},{v:'Distinguish',f:['all','theory']},{v:'Deconstruct',f:['all','theory','pg']}] },
+  { n:5, name:'Evaluate', color:'#534AB7', bg:'#EEEDFE', border:'#AFA9EC', nba:false,
+    verbs:[{v:'Evaluate',f:['all','design','pg']},{v:'Justify',f:['all','design','pg']},{v:'Recommend',f:['all','design','pg']},{v:'Assess',f:['all','design','pg']},{v:'Judge',f:['all','pg']},{v:'Critique',f:['all','pg']},{v:'Defend',f:['all','pg']},{v:'Select',f:['all','design']},{v:'Validate',f:['all','lab','design','pg']},{v:'Conclude',f:['all','design','pg']}] },
+  { n:6, name:'Create', color:'#3C3489', bg:'#E5E3FC', border:'#7F77DD', nba:false,
+    verbs:[{v:'Design',f:['all','design','pg']},{v:'Develop',f:['all','design','pg']},{v:'Formulate',f:['all','design','pg']},{v:'Construct',f:['all','lab','design']},{v:'Generate',f:['all','design','pg']},{v:'Plan',f:['all','design']},{v:'Devise',f:['all','design','pg']},{v:'Propose',f:['all','design','pg']},{v:'Synthesise',f:['all','pg']},{v:'Build',f:['all','lab','design']}] }
+];
+var vwCurF = 'all';
+var vwOpen = { 3: true, 4: true };
+var VFC = { all:'#444', theory:'#185FA5', lab:'#0F6E56', design:'#854F0B', pg:'#534AB7' };
+
+function vwFilter(f, btn) {
+  vwCurF = f;
+  document.querySelectorAll('.vwf').forEach(function(b) {
+    b.style.background = 'var(--pale)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--border)';
+  });
+  btn.style.background = VFC[f]; btn.style.color = '#fff'; btn.style.borderColor = VFC[f];
+  vwBuild();
+}
+function vwBuild() {
+  var w = document.getElementById('vw-out'); if (!w) return; w.innerHTML = '';
+  VWD.forEach(function(L) {
+    var vis = L.verbs.filter(function(v) { return v.f.indexOf(vwCurF) >= 0; });
+    var isOpen = !!vwOpen[L.n];
+    var d = document.createElement('div'); d.className = 'vlb';
+    var nbaTag = L.nba ? (' <span style="font-size:10px;font-weight:700;background:' + L.bg + ';color:' + L.color + ';padding:1px 6px;border-radius:8px;border:1px solid ' + L.border + '">NBA core</span>') : '';
+    d.innerHTML =
+      '<div class="vlh" onclick="vwTog(' + L.n + ')">' +
+        '<div class="vld" style="background:' + L.color + '"></div>' +
+        '<span class="vln">Level ' + L.n + ' - ' + L.name + nbaTag + '</span>' +
+        '<span class="vlc2">' + vis.length + ' verbs</span>' +
+        '<span class="vlch' + (isOpen ? ' open' : '') + '" id="vlch' + L.n + '">▾</span>' +
+      '</div>' +
+      '<div class="vlbody' + (isOpen ? ' open' : '') + '" id="vlb' + L.n + '">' +
+        '<div style="display:flex;flex-wrap:wrap;margin-top:8px">' +
+          L.verbs.map(function(v) {
+            var dim = v.f.indexOf(vwCurF) < 0 ? ' dim' : '';
+            return '<span class="vc' + dim + '" style="background:' + L.bg + ';color:' + L.color + ';border-color:' + L.border + '" onclick="vwCopy(\'' + v.v + '\')">' + v.v + '</span>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+    w.appendChild(d);
+  });
+}
+function vwTog(n) {
+  vwOpen[n] = !vwOpen[n];
+  var b = document.getElementById('vlb' + n); var c = document.getElementById('vlch' + n);
+  if (b) b.classList.toggle('open', !!vwOpen[n]);
+  if (c) c.classList.toggle('open', !!vwOpen[n]);
+}
+function vwCopy(v) {
+  try { navigator.clipboard.writeText(v); } catch(e) {}
+  var el = document.getElementById('vw-copied');
+  if (el) { el.style.display = 'inline'; setTimeout(function() { el.style.display = 'none'; }, 1500); }
+}
+
+// ═══ WORKSHEET ════════════════════════════════════════════════════════
+var wsRows = [];
+var SM = {
+  empty:      { label:'—',           bg:'#f0f0f0', col:'#aaa' },
+  good:       { label:'✓ Good',       bg:'#E1F5EE', col:'#0F6E56' },
+  vague:      { label:'⚠ Vague verb', bg:'#FAEEDA', col:'#854F0B' },
+  noVerb:     { label:'⚠ No verb',    bg:'#FAECE7', col:'#993C1D' },
+  multiVerb:  { label:'⚠ Multi-verb', bg:'#FAECE7', col:'#993C1D' },
+  noCtx:      { label:'+ Add context',bg:'#FAEEDA', col:'#854F0B' },
+  short:      { label:'+ More detail',bg:'#FAEEDA', col:'#854F0B' }
+};
+var BLCOL = { 1:'#993C1D',2:'#854F0B',3:'#0F6E56',4:'#085041',5:'#534AB7',6:'#3C3489' };
+var BLBG  = { 1:'#FAECE7',2:'#FAEEDA',3:'#E1F5EE',4:'#D4EDE6',5:'#EEEDFE',6:'#E5E3FC' };
+
+function wsStatus(text) {
+  if (!text.trim()) return 'empty';
+  var fw = text.toLowerCase().split(' ')[0].replace(/[^a-z]/g, '');
+  if (VAGUE.indexOf(fw) >= 0) return 'vague';
+  if (getLevel(text) === 0) return 'noVerb';
+  var lower = text.toLowerCase();
+  if (lower.indexOf(' and design') >= 0 || lower.indexOf(' and evaluate') >= 0 || lower.indexOf(' and analyse') >= 0 || lower.indexOf(' and calculate') >= 0) return 'multiVerb';
+  if (text.indexOf(' using ') < 0 && text.indexOf(' with ') < 0 && text.indexOf(' for ') < 0 && text.indexOf(' based on') < 0) return 'noCtx';
+  if (text.split(' ').length < 8) return 'short';
+  return 'good';
+}
+
+function wsInit() { for (var i = 1; i <= 5; i++) wsRows.push({ id: i, text: '', level: 0, status: 'empty' }); wsRender(); }
+function wsAdd() { var id = wsRows.length + 1; wsRows.push({ id: id, text: '', level: 0, status: 'empty' }); wsRender(); }
+function wsRemove(id) { wsRows = wsRows.filter(function(r) { return r.id !== id; }); wsRender(); mxRender(); }
+function wsUpdate() { wsRender(); }
+
+function wsRowUpdate(id, val) {
+  for (var i = 0; i < wsRows.length; i++) {
+    if (wsRows[i].id === id) { wsRows[i].text = val; wsRows[i].level = getLevel(val); wsRows[i].status = wsStatus(val); break; }
+  }
+  wsRender();
+}
+
+function wsRender() {
+  var tbody = document.getElementById('ws-tbody');
+  tbody.innerHTML = wsRows.map(function(r, i) {
+    var st = SM[r.status]; var lv = r.level;
+    var lvBadge = lv > 0
+      ? '<span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:10px;background:' + BLBG[lv] + ';color:' + BLCOL[lv] + '">L' + lv + ' - ' + BL[lv].name + '</span>'
+      : '<span style="color:#aaa;font-size:12px">—</span>';
+    return '<tr>' +
+      '<td style="font-size:12px;font-weight:700;color:var(--mid);text-align:center">CO' + (i+1) + '</td>' +
+      '<td><input class="wsi" placeholder="Start with a Bloom verb..." value="' + r.text.replace(/"/g, '&quot;') + '" oninput="wsRowUpdate(' + r.id + ',this.value)" style="font-size:13px"></td>' +
+      '<td style="text-align:center">' + lvBadge + '</td>' +
+      '<td><span class="wss" style="background:' + st.bg + ';color:' + st.col + '">' + st.label + '</span></td>' +
+      '<td><button onclick="wsRemove(' + r.id + ')" style="border:none;background:none;cursor:pointer;color:var(--coral);font-size:16px;padding:2px 6px">×</button></td>' +
+      '</tr>';
+  }).join('');
+  wsSummary();
+  mxRender();
+  apRender();
+}
+
+function wsSummary() {
+  var good = 0, total = 0;
+  wsRows.forEach(function(r) { if (r.status !== 'empty') { total++; if (r.status === 'good') good++; } });
+  var sd = document.getElementById('ws-summary');
+  if (total === 0) { sd.style.display = 'none'; return; }
+  sd.style.display = 'block';
+  var pct = total > 0 ? Math.round(good / total * 100) : 0;
+  var col = pct >= 80 ? '#0F6E56' : pct >= 50 ? '#854F0B' : '#993C1D';
+  var bg  = pct >= 80 ? '#E1F5EE' : pct >= 50 ? '#FAEEDA' : '#FAECE7';
+  sd.innerHTML = '<div style="background:' + bg + ';border-radius:8px;padding:12px 16px;font-size:13px;font-weight:500;color:' + col + '">' + good + ' of ' + total + ' COs are well-structured</div>';
+}
+
+function wsClear() {
+  if (confirm('Clear all COs?')) { wsRows = []; for (var i = 1; i <= 5; i++) wsRows.push({ id: i, text: '', level: 0, status: 'empty' }); wsRender(); }
+}
+
+function wsPrint() {
+  var cname = document.getElementById('ws-cname').value || '(Course name)';
+  var code  = document.getElementById('ws-code').value  || '';
+  var creds = document.getElementById('ws-credits').value;
+  var rows  = wsRows.filter(function(r) { return r.status !== 'empty'; });
+  var rowsHtml = rows.map(function(r, i) {
+    return '<tr><td>CO' + (i+1) + '</td><td>' + r.text + '</td>' +
+      '<td>' + (r.level > 0 ? 'Level ' + r.level + ' - ' + BL[r.level].name : '-') + '</td>' +
+      '<td style="font-size:11px;font-weight:600;background:' + SM[r.status].bg + ';color:' + SM[r.status].col + '">' + SM[r.status].label + '</td></tr>';
+  }).join('');
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CO Worksheet</title>' +
+    '<style>body{font-family:Arial,sans-serif;padding:32px;color:#111;font-size:13px}h1{font-size:18px;color:#0D2B4E;margin-bottom:4px}p{color:#555;margin-bottom:16px;font-size:12px}table{width:100%;border-collapse:collapse}th{background:#0D2B4E;color:#fff;padding:8px 10px;text-align:left;font-size:12px}td{padding:8px 10px;border-bottom:1px solid #ddd;vertical-align:top;font-size:12px}tr:nth-child(even) td{background:#f9f9f9}footer{margin-top:20px;font-size:10px;color:#aaa}</style>' +
+    '</head><body><h1>Course Outcome Worksheet</h1>' +
+    '<p><strong>' + cname + '</strong>' + (code ? ' | Code: ' + code : '') + ' | Credits: ' + creds + ' | ' + new Date().toLocaleDateString('en-IN') + '</p>' +
+    '<table><tr><th>#</th><th>Course Outcome</th><th>Level</th><th>Status</th></tr>' + rowsHtml + '</table>' +
+    '<footer>CO Training Tool - Dr. I. Siva | isiva.in/co-training.html</footer></body></html>';
+  var blob = new Blob([html], { type: 'text/html' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
+}
+
+// ═══ CO-PO MATRIX ═════════════════════════════════════════════════════
+var POS = ['PO1','PO2','PO3','PO4','PO5','PO6','PO7','PO8','PO9','PO10','PO11','PO12','PSO1','PSO2'];
+var POLBL = ['Engg Knowledge','Problem Analysis','Design/Dev','Investigation','Modern Tools','Society','Environment','Ethics','Team Work','Communication','Project Mgmt','Life-Long Learning','PSO1','PSO2'];
+var mxData = {};
+
+function mxCycle(ci, po) {
+  var k = ci + ':' + po;
+  var v = ((mxData[k] || 0) + 1) % 4;
+  if (v === 0) delete mxData[k]; else mxData[k] = v;
+  mxRender();
+}
+
+function mxRender() {
+  var wrap = document.getElementById('mx-wrap'); if (!wrap) return;
+  var cos = wsRows.filter(function(r) { return r.status !== 'empty'; });
+  if (!cos.length) {
+    wrap.innerHTML = '<div style="font-size:13px;color:var(--muted);padding:16px;text-align:center">Enter your COs in Section 4 — they appear here automatically.</div>';
+    document.getElementById('att-bars').innerHTML = ''; return;
+  }
+  var h = '<table class="mtrx"><thead><tr><th>Course Outcome</th>';
+  POS.forEach(function(p, i) { h += '<th title="' + POLBL[i] + '">' + p + '</th>'; });
+  h += '<th>Avg</th></tr></thead><tbody>';
+  cos.forEach(function(r, ci) {
+    var rs = 0, rc = 0;
+    POS.forEach(function(p) { var v = mxData[ci + ':' + p] || 0; if (v > 0) { rs += v; rc++; } });
+    var avg = rc > 0 ? (rs / rc).toFixed(1) : '—';
+    h += '<tr><td><span class="con">CO' + (ci+1) + '</span><span class="cot">' + (r.text.length > 50 ? r.text.slice(0,50) + '...' : r.text) + '</span></td>';
+    POS.forEach(function(p) {
+      var v = mxData[ci + ':' + p] || 0;
+      var cls = v === 1 ? 's1' : v === 2 ? 's2' : v === 3 ? 's3' : '';
+      h += '<td><button class="cb ' + cls + '" onclick="mxCycle(' + ci + ',\'' + p + '\')">' + (v || '—') + '</button></td>';
+    });
+    h += '<td class="ma">' + avg + '</td></tr>';
+  });
+  h += '<tr style="background:var(--pale)"><td style="font-size:11px;font-weight:700;color:var(--muted);padding:8px 10px">PO average</td>';
+  var poAvgs = [];
+  POS.forEach(function(p, pi) {
+    var s = 0, c = 0;
+    cos.forEach(function(r, ci) { var v = mxData[ci + ':' + p] || 0; if (v > 0) { s += v; c++; } });
+    var avg = c > 0 ? s / c : 0; poAvgs.push({ p: p, label: POLBL[pi], avg: avg, c: c });
+    var bg  = avg >= 2.5 ? '#EEEDFE' : avg >= 1.5 ? '#EBF5FB' : avg >= 0.5 ? '#E1F5EE' : '';
+    var col = avg >= 2.5 ? '#534AB7' : avg >= 1.5 ? '#185FA5' : avg >= 0.5 ? '#0F6E56' : 'var(--muted)';
+    h += '<td style="text-align:center;background:' + (bg || 'var(--pale)') + ';font-size:12px;font-weight:700;color:' + col + ';padding:7px 4px">' + (avg > 0 ? avg.toFixed(1) : '—') + '</td>';
+  });
+  h += '<td></td></tr></tbody></table>';
+  wrap.innerHTML = h;
+  var addr = poAvgs.filter(function(d) { return d.c > 0; });
+  if (!addr.length) { document.getElementById('att-bars').innerHTML = ''; return; }
+  var bars = '<div style="margin-top:6px"><p style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:10px">PO coverage from this course</p>';
+  addr.forEach(function(d) {
+    var pct = Math.round(d.avg / 3 * 100);
+    var col = d.avg >= 2.5 ? '#534AB7' : d.avg >= 1.5 ? '#2E86C1' : '#1D9E75';
+    bars += '<div class="ar"><div class="al2"><span style="font-size:12px;font-weight:500">' + d.p + ' <span style="font-weight:400;color:var(--muted)">- ' + d.label + '</span></span><span style="font-size:12px;font-weight:600">' + d.avg.toFixed(1) + '/3</span></div><div class="at"><div class="af" style="width:' + pct + '%;background:' + col + '"></div></div></div>';
+  });
+  bars += '</div>';
+  document.getElementById('att-bars').innerHTML = bars;
+}
+
+// ═══ DELIVERY METHODS ═════════════════════════════════════════════════
+var DM = [
+  { icon:'💬', title:'Interactive Lecture', tag:'All levels', tagBg:'#EBF5FB', tagCol:'#185FA5', levels:[1,2,3,4,5,6],
+    desc:'Faculty-led session with planned pauses for questions and brief student responses every 10-15 minutes. Differs from traditional lecture by including structured interaction.',
+    steps:'Pose a question → Pause 60 seconds → Cold-call or pair response → Clarify and continue',
+    suit:'Theory courses, concept introduction, definitions, derivations' },
+  { icon:'👥', title:'Think-Pair-Share', tag:'L2-L4', tagBg:'#E1F5EE', tagCol:'#0F6E56', levels:[2,3,4],
+    desc:'Students think individually on a prompt, discuss with a partner, then share with the class. Promotes active engagement and peer learning.',
+    steps:'Pose problem → Think 2 min → Pair discuss 3 min → Share with class',
+    suit:'Problem solving, concept clarification' },
+  { icon:'🧩', title:'Problem-Based Learning', tag:'L3-L5', tagBg:'#D4EDE6', tagCol:'#085041', levels:[3,4,5],
+    desc:'Students work through real-world engineering problems in groups, driving their own learning by identifying what they need to know.',
+    steps:'Present ill-structured problem → Identify learning gaps → Research → Develop solution → Present',
+    suit:'Core engineering courses, design courses' },
+  { icon:'🔬', title:'Demonstration + Guided Practice', tag:'L2-L3', tagBg:'#FAEEDA', tagCol:'#854F0B', levels:[2,3],
+    desc:'Faculty demonstrates a procedure, then students practice with guided support before independent application.',
+    steps:'Show worked example → Students attempt similar → Faculty circulates → Debrief',
+    suit:'Lab courses, numerical problem courses' },
+  { icon:'🎯', title:'Case Study Analysis', tag:'L4-L5', tagBg:'#EEEDFE', tagCol:'#534AB7', levels:[4,5],
+    desc:'Students analyse real engineering cases — accidents, designs, or industry decisions — to develop higher-order thinking and professional judgement.',
+    steps:'Present case → Students analyse → Discuss findings → Faculty synthesises',
+    suit:'Advanced courses, professional ethics, engineering design' },
+  { icon:'🏗', title:'Project-Based Learning', tag:'L5-L6', tagBg:'#E5E3FC', tagCol:'#3C3489', levels:[5,6],
+    desc:'Students work on extended projects aligned to COs, producing tangible deliverables while developing research, design, and communication skills.',
+    steps:'Define project brief → Plan → Execute → Review milestones → Present and evaluate',
+    suit:'Capstone courses, design courses' },
+  { icon:'🔄', title:'Flipped Classroom', tag:'L2-L4', tagBg:'#E1F5EE', tagCol:'#0F6E56', levels:[2,3,4],
+    desc:'Students access content before class; class time is used for application and problem solving rather than content delivery.',
+    steps:'Assign pre-class content → Entry quiz → In-class application → Faculty facilitates',
+    suit:'Theory-heavy courses with sufficient digital infrastructure' },
+  { icon:'🧪', title:'Inquiry-Based Lab', tag:'L3-L5', tagBg:'#EBF5FB', tagCol:'#185FA5', levels:[3,4,5],
+    desc:'Students design and conduct experiments with minimal step-by-step guidance, developing investigation skills aligned to PO4.',
+    steps:'Pose research question → Students plan experiment → Conduct → Analyse → Report',
+    suit:'Lab courses with PO4 mapping' },
+  { icon:'📊', title:'Seminar / Student Presentation', tag:'L3-L6', tagBg:'#FAECE7', tagCol:'#993C1D', levels:[3,4,5,6],
+    desc:'Students research and present on assigned topics, developing communication (PO10) and deeper understanding through peer teaching.',
+    steps:'Assign topics → Research period → Structured presentation → Peer Q&A → Faculty feedback',
+    suit:'Electives, final year courses, PO10 development' }
+];
+var dmLevel = 0;
+var BL_COLORS = {
+    0: { bg:'var(--pale)', col:'var(--muted)', bdr:'var(--border)' },
+    1: { bg:'#FAECE7', col:'#993C1D', bdr:'#F5C4B3' },
+    2: { bg:'#FAEEDA', col:'#854F0B', bdr:'#FAC775' },
+    3: { bg:'#E1F5EE', col:'#0F6E56', bdr:'#5DCAA5' },
+    4: { bg:'#D4EDE6', col:'#085041', bdr:'#1D9E75' },
+    5: { bg:'#EEEDFE', col:'#534AB7', bdr:'#AFA9EC' },
+    6: { bg:'#E5E3FC', col:'#3C3489', bdr:'#7F77DD' }
+  };
+
+function dmFilt(l, btn) {
+  dmLevel = l;
+  // Reset all buttons to dull
+  document.querySelectorAll('.dm-lb').forEach(function(b) {
+    b.classList.remove('active');
+    b.style.background = 'var(--pale)';
+    b.style.color = 'var(--muted)';
+    b.style.borderColor = 'var(--border)';
+    b.style.fontWeight = '400';
+  });
+  // Highlight only the clicked one
+  btn.classList.add('active');
+  var c = BL_COLORS[l] || BL_COLORS[0];
+  btn.style.background = c.bg;
+  btn.style.color = c.col;
+  btn.style.borderColor = c.bdr;
+  btn.style.fontWeight = '600';
+  dmRender();
+  toolsRender(l);
+}
+function dmRender() {
+  var BLG2 = { 1:'#FAECE7',2:'#FAEEDA',3:'#E1F5EE',4:'#D4EDE6',5:'#EEEDFE',6:'#E5E3FC' };
+  var BLC2 = { 1:'#993C1D',2:'#854F0B',3:'#0F6E56',4:'#085041',5:'#534AB7',6:'#3C3489' };
+  var filtered = dmLevel === 0 ? DM : DM.filter(function(m) { return m.levels.indexOf(dmLevel) >= 0; });
+  document.getElementById('dm-out').innerHTML = filtered.map(function(m) {
+    var lvTags = m.levels.map(function(l) {
+      return '<span style="font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;background:' + BLG2[l] + ';color:' + BLC2[l] + '">L' + l + '</span>';
+    }).join('');
+    return '<div class="dmc">' +
+      '<div class="dch"><span class="dci">' + m.icon + '</span><span class="dct">' + m.title + '</span>' +
+      '<span class="dtag" style="background:' + m.tagBg + ';color:' + m.tagCol + '">' + m.tag + '</span></div>' +
+      '<div class="dd">' + m.desc + '</div>' +
+      '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px">HOW IT WORKS</div>' +
+      '<div style="font-size:12px;color:#444;margin-bottom:8px;line-height:1.6">' + m.steps + '</div>' +
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:6px"><strong style="color:var(--navy)">Best for:</strong> ' + m.suit + '</div>' +
+      '<div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center"><span style="font-size:10px;font-weight:700;color:var(--muted);margin-right:4px">BLOOM:</span>' + lvTags + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+// ═══ TOOLS ════════════════════════════════════════════════════════════
+// Tools indexed by Bloom's level (0 = all)
+var CONV_BY_LEVEL = {
+  0: [
+    { cat:'Presentation', tools:['Blackboard / Whiteboard','Chalk sketches','Physical models','Engineering drawing boards','Printed handouts','Reference textbooks'] },
+    { cat:'Audio-Visual',  tools:['Overhead projector','Engineering charts & posters','Physical lab equipment','Measuring instruments'] },
+    { cat:'Assessment',    tools:['Question banks','Rubric sheets','Lab record books','Viva voce cards'] }
+  ],
+  1: [
+    { cat:'Presentation', tools:['Blackboard / Whiteboard','Printed handouts','Reference textbooks','Flashcards','Wall charts'] },
+    { cat:'Assessment',   tools:['Quiz cards','MCQ question bank','Matching exercises','Fill-in-the-blank sheets'] }
+  ],
+  2: [
+    { cat:'Presentation', tools:['Blackboard','Printed handouts','Engineering diagrams','Illustrated notes','Textbooks'] },
+    { cat:'Audio-Visual', tools:['OHP / Slide projector','Engineering charts','Demonstration models'] },
+    { cat:'Assessment',   tools:['Short answer question bank','Concept maps (paper)','Comparison tables'] }
+  ],
+  3: [
+    { cat:'Presentation',  tools:['Blackboard with worked examples','Printed problem sets','Engineering data tables','IS code handbooks'] },
+    { cat:'Lab equipment', tools:['Physical lab instruments','Measuring devices','Specimen sets','Lab record books'] },
+    { cat:'Assessment',    tools:['Numerical problem sheets','Lab observation tables','Rubric sheets'] }
+  ],
+  4: [
+    { cat:'Presentation', tools:['Blackboard','Case study handouts','Engineering failure reports','Data sets for analysis'] },
+    { cat:'Lab / Field',  tools:['Experimental data sets','Measurement instruments','Engineering specimens'] },
+    { cat:'Assessment',   tools:['Analysis rubric sheets','Case report templates','Viva voce cards'] }
+  ],
+  5: [
+    { cat:'Presentation', tools:['Case study handouts','Industry standards & codes (IS/ISO)','Engineering report samples','Comparison frameworks'] },
+    { cat:'Assessment',   tools:['Evaluation rubric sheets','Peer review forms','Recommendation report templates','Viva voce cards'] }
+  ],
+  6: [
+    { cat:'Presentation', tools:['Design brief sheets','Engineering drawing boards','IS codes & standards','Reference design manuals'] },
+    { cat:'Lab / Workshop',tools:['Prototyping materials','Workshop tools','Physical modelling kits'] },
+    { cat:'Assessment',   tools:['Design rubric sheets','Project report templates','Peer evaluation forms'] }
+  ]
+};
+
+var MODT_BY_LEVEL = {
+  0: [
+    { cat:'Content delivery',         tools:['PowerPoint','Google Slides','NPTEL videos','YouTube (curated)','Moodle / LMS','Canva'] },
+    { cat:'Simulation & modelling',   tools:['MATLAB','ANSYS','SolidWorks','AutoCAD','Scilab','GeoGebra','PhET','Tinkercad'] },
+    { cat:'Collaboration & activity', tools:['Mentimeter','Kahoot','Padlet','Jamboard','Slido','Nearpod'] },
+    { cat:'Assessment & feedback',    tools:['Google Forms','Quizziz','Socrative','Turnitin','Gradescope'] },
+    { cat:'AI & emerging',            tools:['ChatGPT','Claude','Copilot','Wolfram Alpha','ResearchRabbit'] }
+  ],
+  1: [
+    { cat:'Content delivery',      tools:['PowerPoint / Slides','NPTEL video lectures','YouTube (curated)','Moodle / LMS','Canva flashcard decks'] },
+    { cat:'Quiz & recall tools',   tools:['Kahoot','Quizziz','Socrative','Google Forms (MCQ)','Mentimeter (word cloud)'] }
+  ],
+  2: [
+    { cat:'Content delivery',         tools:['PowerPoint / Slides','NPTEL / YouTube lectures','Moodle','Canva','Prezi','Nearpod'] },
+    { cat:'Collaboration',            tools:['Mentimeter (polls)','Padlet (brainstorm)','Slido (Q&A)','Google Jamboard'] },
+    { cat:'Assessment',               tools:['Google Forms','Quizziz','Socrative','Microsoft Forms'] }
+  ],
+  3: [
+    { cat:'Content delivery',       tools:['PowerPoint','NPTEL lectures','Moodle','Worked example videos'] },
+    { cat:'Simulation tools',       tools:['MATLAB / Octave','Scilab','GeoGebra','PhET Simulations','Tinkercad','AutoCAD'] },
+    { cat:'Assessment',             tools:['Google Forms (numerical)','Gradescope','Socrative'] }
+  ],
+  4: [
+    { cat:'Content delivery',       tools:['PowerPoint','Moodle / LMS','Case study PDFs','NPTEL advanced lectures'] },
+    { cat:'Simulation & analysis',  tools:['MATLAB','ANSYS','SolidWorks','AutoCAD','Scilab','GeoGebra'] },
+    { cat:'Collaboration',          tools:['Padlet (analysis board)','Google Jamboard','Slido'] },
+    { cat:'Assessment',             tools:['Turnitin','Gradescope','Google Forms (analytical)','Peer review tools'] }
+  ],
+  5: [
+    { cat:'Content delivery',       tools:['PowerPoint','Moodle','Industry case study videos','IEEE/ASCE resources'] },
+    { cat:'Simulation tools',       tools:['MATLAB','ANSYS','SolidWorks','Simulink'] },
+    { cat:'Collaboration',          tools:['Padlet','Google Jamboard','Slido (debate)','MS Teams'] },
+    { cat:'Assessment',             tools:['Turnitin','Gradescope','Rubric-based Google Forms','Peer review sheets'] },
+    { cat:'AI support',             tools:['ChatGPT (argument review)','Claude (CO evaluation)','Wolfram Alpha'] }
+  ],
+  6: [
+    { cat:'Design & modelling',     tools:['SolidWorks','AutoCAD','ANSYS','Tinkercad','Fusion 360','MATLAB / Simulink'] },
+    { cat:'Content delivery',       tools:['Moodle (project portal)','MS Teams','Google Classroom'] },
+    { cat:'Collaboration',          tools:['Padlet (design board)','Miro','Google Jamboard','Notion'] },
+    { cat:'Assessment',             tools:['Turnitin','Gradescope','Design rubric Google Forms','Peer evaluation'] },
+    { cat:'AI support',             tools:['ChatGPT (design critique)','Claude (CO review)','Copilot','ResearchRabbit'] }
+  ]
+};
+
+function toolsRender(level) {
+  var l = (level !== undefined) ? level : 0;
+  var convData = CONV_BY_LEVEL[l] || CONV_BY_LEVEL[0];
+  var modData  = MODT_BY_LEVEL[l] || MODT_BY_LEVEL[0];
+  document.getElementById('conv-tools').innerHTML = convData.map(function(g) {
+    return '<div class="tgrp"><div class="tgt">' + g.cat + '</div>' + g.tools.map(function(t) { return '<span class="tc2">' + t + '</span>'; }).join('') + '</div>';
+  }).join('');
+  document.getElementById('mod-tools').innerHTML = modData.map(function(g) {
+    return '<div class="tgrp"><div class="tgt">' + g.cat + '</div>' + g.tools.map(function(t) { return '<span class="tc2">' + t + '</span>'; }).join('') + '</div>';
+  }).join('');
+}
+
+// ═══ ACTIVITY PLAN ════════════════════════════════════════════════════
+var apRows = [];
+var AP_METHS = ['Interactive Lecture','Think-Pair-Share','Problem-Based Learning','Demonstration + Practice','Case Study Analysis','Project-Based Learning','Flipped Classroom','Inquiry-Based Lab','Seminar / Presentation','Tutorial','Lab session','Guest lecture','Self-study'];
+var AP_LVLS  = ['L1 Remember','L2 Understand','L3 Apply','L4 Analyse','L5 Evaluate','L6 Create'];
+
+// Flattened tool lists per level for activity plan dropdown
+var AP_TOOLS = {
+  0:  ['Blackboard','PowerPoint','NPTEL Video','YouTube','Moodle','Kahoot','Mentimeter','MATLAB','ANSYS','SolidWorks','AutoCAD','GeoGebra','PhET','Tinkercad','Padlet','Slido','Google Forms','Quizziz','Turnitin','Gradescope','ChatGPT','Claude','Wolfram Alpha'],
+  1:  ['Blackboard','Printed handouts','Flashcards','Reference textbook','Kahoot','Quizziz','Socrative','Google Forms (MCQ)','PowerPoint','NPTEL Video'],
+  2:  ['Blackboard','PowerPoint','Canva','Prezi','OHP','Engineering charts','Moodle','Mentimeter','Padlet','Slido','Google Forms','Quizziz','Nearpod'],
+  3:  ['Blackboard (worked examples)','PowerPoint','NPTEL Video','Problem sets','IS code handbook','MATLAB','Scilab','GeoGebra','PhET','Tinkercad','AutoCAD','Lab instruments','Google Forms','Gradescope'],
+  4:  ['PowerPoint','Case study handouts','MATLAB','ANSYS','SolidWorks','Scilab','Padlet','Jamboard','Slido','Turnitin','Gradescope','Google Forms (analytical)'],
+  5:  ['PowerPoint','Industry case studies','IS/ISO standards','MATLAB','ANSYS','SolidWorks','Simulink','Padlet','Slido','Turnitin','Gradescope','Peer review forms','ChatGPT','Claude'],
+  6:  ['SolidWorks','AutoCAD','ANSYS','MATLAB / Simulink','Tinkercad','Fusion 360','Moodle (project portal)','Padlet','Miro','Jamboard','Turnitin','Gradescope','Design rubric forms','ChatGPT','Claude','Copilot']
+};
+
+function apInit() {
+  for (var i = 1; i <= 4; i++) apRows.push({ id:i, session:'Session '+i, topic:'', co:'CO1', method:'', tools:'', level:'' });
+  apRender();
+}
+function apAdd() {
+  var id = apRows.length + 1;
+  apRows.push({ id:id, session:'Session '+id, topic:'', co:'CO1', method:'', tools:'', level:'' });
+  apRender();
+}
+function apRemove(id) {
+  apRows = apRows.filter(function(r) { return r.id !== id; });
+  apRender();
+}
+function apSet(id, field, val) {
+  for (var i = 0; i < apRows.length; i++) { if (apRows[i].id === id) { apRows[i][field] = val; break; } }
+}
+
+function apToolOpts(rowLevel) {
+  var lvlNum = 0;
+  if (rowLevel) {
+    var dig = rowLevel.replace(/[^0-9]/, '');
+    if (dig) lvlNum = parseInt(dig);
+  }
+  var tools = AP_TOOLS[lvlNum] || AP_TOOLS[0];
+  var out = '<option value="">Select tool...</option>';
+  tools.forEach(function(t) { out += '<option>' + t + '</option>'; });
+  return out;
+}
+
+function apRowHtml(r, coOpts, methBase) {
+  var id = r.id;
+  var lvlOpts = '<option value="">Select level...</option>';
+  AP_LVLS.forEach(function(l) {
+    lvlOpts += '<option' + (r.level === l ? ' selected' : '') + '>' + l + '</option>';
+  });
+  var toolOpts = apToolOpts(r.level);
+  if (r.tools) toolOpts = toolOpts.replace('>' + r.tools + '<', ' selected>' + r.tools + '<');
+  var methSel = methBase.replace('>' + r.method + '<', ' selected>' + r.method + '<');
+  var row = '<tr>';
+  row += '<td><input class="wsi" value="' + r.session + '" oninput="apSet(' + id + ',&quot;session&quot;,this.value)" style="font-size:12px;width:60px"></td>';
+  row += '<td><input class="wsi" placeholder="Topic / subtopic" value="' + r.topic + '" oninput="apSet(' + id + ',&quot;topic&quot;,this.value)" style="font-size:12px"></td>';
+  row += '<td><select class="wsi wsel" onchange="apSet(' + id + ',&quot;co&quot;,this.value)" style="font-size:12px">' + coOpts + '</select></td>';
+  row += '<td><select class="wsi wsel" onchange="apSet(' + id + ',&quot;method&quot;,this.value)" style="font-size:12px">' + methSel + '</select></td>';
+  row += '<td><select class="wsi wsel" onchange="apSetLevel(' + id + ',this.value)" style="font-size:12px">' + lvlOpts + '</select></td>';
+  row += '<td><select class="wsi wsel" onchange="apSet(' + id + ',&quot;tools&quot;,this.value)" style="font-size:12px">' + toolOpts + '</select></td>';
+  row += '<td><button onclick="apRemove(' + id + ')" style="border:none;background:none;cursor:pointer;color:var(--coral);font-size:16px">×</button></td>';
+  row += '</tr>';
+  return row;
+}
+
+function apRender() {
+  var active = wsRows.filter(function(r) { return r.status !== 'empty'; });
+  var coOpts = active.length > 0
+    ? active.map(function(r, i) { return '<option value="CO' + (i+1) + '">CO' + (i+1) + '</option>'; }).join('')
+    : '<option>CO1</option>';
+  var methBase = '<option value="">Choose method...</option>';
+  AP_METHS.forEach(function(m) { methBase += '<option>' + m + '</option>'; });
+  var html = '';
+  apRows.forEach(function(r) { html += apRowHtml(r, coOpts, methBase); });
+  document.getElementById('ap-tbody').innerHTML = html;
+}
+
+function apSetLevel(id, val) {
+  apSet(id, 'level', val);
+  apSet(id, 'tools', '');
+  apRender();
+}
+
+function apPrint() {
+  var cname = document.getElementById('ws-cname').value || 'Course';
+  var code  = document.getElementById('ws-code').value  || '';
+  var rows  = apRows.map(function(r) {
+    return '<tr><td>' + r.session + '</td><td>' + (r.topic || '&mdash;') + '</td><td>' + r.co +
+      '</td><td>' + (r.method || '&mdash;') + '</td><td>' + (r.level || '&mdash;') +
+      '</td><td>' + (r.tools || '&mdash;') + '</td></tr>';
+  }).join('');
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Activity Plan</title>' +
+    '<style>body{font-family:Arial,sans-serif;padding:28px;color:#111;font-size:13px}' +
+    'h1{font-size:17px;color:#0D2B4E;margin-bottom:4px}' +
+    'p{margin-bottom:14px;color:#555;font-size:12px}' +
+    'table{width:100%;border-collapse:collapse}' +
+    'th{background:#0D2B4E;color:#fff;padding:8px 10px;text-align:left;font-size:12px}' +
+    'td{padding:7px 10px;border-bottom:1px solid #ddd;vertical-align:top;font-size:12px}' +
+    'tr:nth-child(even) td{background:#f9f9f9}' +
+    'footer{margin-top:18px;font-size:10px;color:#aaa}' +
+    '@media print{body{padding:0}}' +
+    '</style></head><body>' +
+    '<h1>Content Delivery &amp; Activity Plan</h1>' +
+    '<p><strong>' + cname + '</strong>' + (code ? ' &nbsp;|&nbsp; Code: ' + code : '') +
+    ' &nbsp;|&nbsp; ' + new Date().toLocaleDateString('en-IN') + '</p>' +
+    '<table><tr><th>Session</th><th>Topic / Content</th><th>CO</th>' +
+    '<th>Delivery Method</th><th>Bloom\'s Level</th><th>Tools Used</th></tr>' +
+    rows + '</table>' +
+    '<footer>CO Training Tool &mdash; Dr. I. Siva | isiva.in/co-training.html</footer>' +
+    '</body></html>';
+
+  // Use Blob URL — avoids popup blocker entirely
+  var blob = new Blob([html], { type: 'text/html' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href   = url;
+  a.target = '_blank';
+  a.rel    = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
+}
+
+
+// ═══ VISITOR COUNTER ══════════════════════════════════════════════════
+// Uses countapi.xyz — free, no account needed
+// Namespace: isiva | Keys: co-training and site
+function loadVisitorCounts() {
+  // Using countapi.mileshilliard.com — free replacement for discontinued countapi.xyz
+  // Unique keys to avoid collisions with other users
+  var coKey   = 'isiva-co-training-page-hits-2024';
+  var siteKey = 'isiva-dot-in-site-hits-2024';
+
+  fetch('https://countapi.mileshilliard.com/api/v1/hit/' + coKey)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('vc-co');
+      if (el) el.textContent = Number(d.value).toLocaleString('en-IN');
+    })
+    .catch(function() {
+      var el = document.getElementById('vc-co');
+      if (el) el.textContent = '—';
+    });
+
+  fetch('https://countapi.mileshilliard.com/api/v1/hit/' + siteKey)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('vc-site');
+      if (el) el.textContent = Number(d.value).toLocaleString('en-IN');
+    })
+    .catch(function() {
+      var el = document.getElementById('vc-site');
+      if (el) el.textContent = '—';
+    });
+}
+
+// ═══ FEEDBACK & RATING ════════════════════════════════════════════════
+// Replace these with your Google Form values after setup:
+var FB_FORM_URL   = 'YOUR_GOOGLE_FORM_POST_URL';
+var FB_ENTRY = {
+  rating:   'entry.1000000001',
+  name:     'entry.1000000002',
+  affil:    'entry.1000000003',
+  email:    'entry.1000000004',
+  section:  'entry.1000000005',
+  comment:  'entry.1000000006',
+  page:     'entry.1000000007',
+  date:     'entry.1000000008'
+};
+
+var _starVal = 0;
+var STAR_LABELS = ['', 'Poor — needs significant improvement', 'Fair — some useful content', 'Good — helpful for faculty training', 'Very good — well structured and practical', 'Excellent — highly recommend to colleagues'];
+// Stored ratings for live average display (localStorage)
+var _ratings = [];
+
+function loadStoredRatings() {
+  try {
+    _ratings = JSON.parse(localStorage.getItem('co_ratings') || '[]');
+  } catch(e) { _ratings = []; }
+  displayRating();
+}
+
+function displayRating() {
+  var avgEl  = document.getElementById('fb-avg-disp');
+  var starsEl = document.getElementById('fb-stars-disp');
+  var countEl = document.getElementById('fb-rating-count');
+  if (!_ratings.length) {
+    if (avgEl) avgEl.textContent = '—';
+    if (starsEl) starsEl.innerHTML = '';
+    if (countEl) countEl.textContent = 'No ratings yet — be the first!';
+    return;
+  }
+  var avg = _ratings.reduce(function(s, v) { return s + v; }, 0) / _ratings.length;
+  var rounded = Math.round(avg * 10) / 10;
+  if (avgEl) avgEl.textContent = rounded.toFixed(1);
+  if (starsEl) {
+    var html = '';
+    for (var i = 1; i <= 5; i++) {
+      html += '<span class="' + (i <= Math.round(avg) ? 'fb-star-d' : 'fb-star-e') + '">★</span>';
+    }
+    starsEl.innerHTML = html;
+  }
+  if (countEl) countEl.textContent = '(' + _ratings.length + ' ' + (_ratings.length === 1 ? 'rating' : 'ratings') + ')';
+}
+
+function openFeedback() {
+  document.getElementById('fb-modal-bg').classList.add('open');
+  document.getElementById('fb-form-view').style.display = 'block';
+  document.getElementById('fb-success-view').style.display = 'none';
+  setStar(0);
+}
+
+function closeFeedback() {
+  document.getElementById('fb-modal-bg').classList.remove('open');
+}
+
+function closeFbIfBg(e) {
+  if (e.target === document.getElementById('fb-modal-bg')) closeFeedback();
+}
+
+function setStar(n) {
+  _starVal = n;
+  document.querySelectorAll('.star-btn').forEach(function(b) {
+    var v = parseInt(b.getAttribute('data-v'));
+    b.classList.toggle('lit', v <= n);
+  });
+  var lbl = document.getElementById('fb-star-label');
+  if (lbl) lbl.textContent = STAR_LABELS[n] || '';
+}
+
+function submitFeedback() {
+  var name    = document.getElementById('fb-name').value.trim();
+  var affil   = document.getElementById('fb-affil').value.trim();
+  var email   = document.getElementById('fb-email').value.trim();
+  var section = document.getElementById('fb-section').value;
+  var comment = document.getElementById('fb-comment').value.trim();
+  var errEl   = document.getElementById('fb-err');
+
+  // Validate
+  errEl.style.display = 'none';
+  if (_starVal === 0) { errEl.textContent = 'Please select a star rating.'; errEl.style.display = 'block'; return; }
+  if (!name)  { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
+  if (!affil) { errEl.textContent = 'Please enter your institution / affiliation.'; errEl.style.display = 'block'; return; }
+  if (!email || email.indexOf('@') < 0) { errEl.textContent = 'Please enter a valid email address.'; errEl.style.display = 'block'; return; }
+
+  // Submit to Google Form
+  var params = new URLSearchParams();
+  params.append(FB_ENTRY.rating,  _starVal);
+  params.append(FB_ENTRY.name,    name);
+  params.append(FB_ENTRY.affil,   affil);
+  params.append(FB_ENTRY.email,   email);
+  params.append(FB_ENTRY.section, section);
+  params.append(FB_ENTRY.comment, comment);
+  params.append(FB_ENTRY.page,    'CO Training — isiva.in/co-training.html');
+  params.append(FB_ENTRY.date,    new Date().toISOString());
+
+  fetch(FB_FORM_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString()
+  }).catch(function() {});
+
+  // Store rating locally for live display
+  _ratings.push(_starVal);
+  try { localStorage.setItem('co_ratings', JSON.stringify(_ratings)); } catch(e) {}
+  displayRating();
+
+  // Show success
+  document.getElementById('fb-form-view').style.display = 'none';
+  document.getElementById('fb-success-view').style.display = 'block';
+}
+
+// ═══ INIT ═════════════════════════════════════════════════════════════
+wsInit();
+vwBuild();
+dmRender();
+toolsRender();
+apInit();
+loadVisitorCounts();
+loadStoredRatings();
+</script>
+</body>
+</html>
