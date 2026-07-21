@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Plan Designer | isiva.in</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --navy:#1c2a4a;
+  --navy-deep:#121d33;
+  --parchment:#f7f4ec;
+  --panel:#ffffff;
+  --gold:#b8863b;
+  --gold-light:#e4c584;
+  --sdg:#1a7a5e;
+  --sdg-light:#cdeadf;
+  --ink:#232323;
+  --muted:#6b6f7a;
+  --line:#dfd9c8;
+  --danger:#a4453a;
+  --good:#3f7255;
+  --radius:6px;
+  font-size:15px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  background:var(--parchment);
+  color:var(--ink);
+}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif; margin:0 0 6px;}
+a{color:var(--navy);}
+
+header.app-header{
+  background:linear-gradient(135deg,var(--navy-deep),var(--navy));
+  color:#fff;
+  padding:18px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  border-bottom:3px solid var(--gold);
+}
+header.app-header .brand{display:flex; flex-direction:column;}
+header.app-header .brand small{color:var(--gold-light); letter-spacing:.08em; text-transform:uppercase; font-size:11px;}
+header.app-header .brand h1{font-size:20px; color:#fff;}
+header.app-header .actions{display:flex; gap:10px; flex-wrap:wrap;}
+button, select, input, textarea{font-family:inherit; font-size:14px;}
+.btn{
+  border:1px solid var(--gold);
+  background:transparent;
+  color:#fff;
+  padding:9px 16px;
+  border-radius:var(--radius);
+  cursor:pointer;
+  font-weight:600;
+  transition:.15s;
+}
+.btn:hover{background:var(--gold); color:var(--navy-deep);}
+.btn.primary{background:var(--gold); color:var(--navy-deep);}
+.btn.primary:hover{background:var(--gold-light);}
+.btn.small{padding:5px 10px; font-size:12px;}
+.btn.ghost{border-color:var(--line); color:var(--navy); background:#fff;}
+.btn.ghost:hover{background:var(--parchment);}
+.btn.danger{border-color:var(--danger); color:var(--danger); background:#fff;}
+.btn.danger:hover{background:var(--danger); color:#fff;}
+
+.layout{display:flex; align-items:flex-start; max-width:1440px; margin:0 auto;}
+nav.toc{
+  position:sticky; top:0;
+  width:250px; flex-shrink:0;
+  height:100vh; overflow-y:auto;
+  background:var(--navy-deep);
+  color:#cfd6e6;
+  padding:18px 0 60px;
+}
+nav.toc .grp-label{padding:14px 20px 4px; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold-light); opacity:.8;}
+nav.toc a{
+  display:block; color:#cfd6e6; text-decoration:none;
+  padding:7px 20px; font-size:12.5px; border-left:3px solid transparent;
+}
+nav.toc a:hover, nav.toc a.active{background:rgba(255,255,255,.06); border-left-color:var(--gold); color:#fff;}
+main{flex:1; padding:28px 32px 80px; min-width:0;}
+
+.section{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px 26px;
+  margin-bottom:22px;
+  scroll-margin-top:16px;
+}
+.section.sdg{border-left:4px solid var(--sdg);}
+.section h2{font-size:18px; color:var(--navy); border-bottom:2px solid var(--gold-light); padding-bottom:8px; margin-bottom:16px;}
+.section.sdg h2{border-bottom-color:var(--sdg-light); color:var(--sdg);}
+.section .hint{color:var(--muted); font-size:12.5px; margin:-10px 0 14px;}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px;}
+.field{display:flex; flex-direction:column; gap:5px;}
+.field label{font-size:12.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.03em;}
+.field input, .field select, .field textarea{
+  border:1px solid var(--line); border-radius:4px; padding:8px 10px; background:#fff; color:var(--ink);
+}
+.field textarea{resize:vertical; min-height:56px;}
+.field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--gold-light); border-color:var(--gold);}
+
+table.data{width:100%; border-collapse:collapse; margin-top:10px; font-size:13px;}
+table.data th{background:var(--navy); color:#fff; text-align:left; padding:8px; font-size:12px;}
+.section.sdg table.data th{background:var(--sdg);}
+table.data td{border:1px solid var(--line); padding:6px; vertical-align:top;}
+table.data td input, table.data td select, table.data td textarea{width:100%; border:1px solid transparent; padding:4px 6px; background:#faf8f2;}
+table.data td input:focus, table.data td select:focus, table.data td textarea:focus{border-color:var(--gold); background:#fff;}
+table.data tr:nth-child(even) td{background:#fbfaf6;}
+.row-actions{display:flex; gap:4px; justify-content:center;}
+
+.pill{display:inline-block; background:var(--gold-light); color:var(--navy-deep); font-size:11px; font-weight:700; border-radius:20px; padding:2px 10px; margin-left:8px;}
+.pending-flag{background:#fbe9c6; border:1px solid var(--gold); color:#7a5a1c; padding:8px 12px; border-radius:4px; font-size:12.5px; margin-bottom:12px;}
+.welcome-flag{background:var(--sdg-light); border:1px solid var(--sdg); color:#12503c; padding:8px 12px; border-radius:4px; font-size:12.5px; margin-bottom:12px;}
+.unit-block{border:1px solid var(--line); border-radius:6px; padding:14px; margin-bottom:14px; background:#fdfcf9;}
+.unit-block-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.unit-block-header input{font-weight:700; font-size:14.5px; border:none; background:transparent; color:var(--navy); padding:2px;}
+.unit-block-header input:focus{background:#fff; border:1px solid var(--gold);}
+.toolbar-row{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:900px){
+  nav.toc{display:none;}
+  .two-col{grid-template-columns:1fr;}
+}
+footer.app-footer{text-align:center; padding:26px; color:var(--muted); font-size:12px; line-height:1.7;}
+footer.app-footer b{color:var(--navy);}
+
+#printArea{display:none;}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <small><a href="index.html" style="color:var(--gold-light);text-decoration:none;">&larr; isiva.in</a> &middot; Free for the teaching &amp; learning community</small>
+    <h1>Course Plan Designer</h1>
+  </div>
+  <div class="actions">
+    <button class="btn ghost" id="saveDraftBtn">Save draft</button>
+    <button class="btn ghost" id="loadDraftBtn">Load draft</button>
+    <button class="btn primary" id="downloadPdfBtn">Download PDF</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="tocNav">
+    <a href="#sec-institute">1. Institute &amp; Department</a>
+    <a href="#sec-branding">PDF Header &amp; Branding</a>
+    <a href="#sec-meta">2. Course Details</a>
+    <a href="#sec-vm">3. Vision &amp; Mission</a>
+    <a href="#sec-prereq">4. Pre-requisite &amp; Description</a>
+    <a href="#sec-career">5. Career Opportunities</a>
+    <a href="#sec-co">6. Course Outcomes</a>
+    <a href="#sec-peo">7. PEOs</a>
+    <a href="#sec-po">8. POs &amp; PSOs</a>
+    <a href="#sec-mapping">9. CO&ndash;PO/PSO Mapping</a>
+    <div class="grp-label">Sustainability</div>
+    <a href="#sec-sdg">10. UN SDG Alignment</a>
+    <div class="grp-label">Resources</div>
+    <a href="#sec-books">11. Books</a>
+    <a href="#sec-web">12. Web Resources</a>
+    <a href="#sec-journals">13. Journals/Magazines</a>
+    <a href="#sec-lesson">14. Lesson Plan</a>
+    <a href="#sec-assign">15. Assignments</a>
+    <div class="grp-label">Beyond the Classroom</div>
+    <a href="#sec-outreach">16. Field Visits &amp; Expert Lectures</a>
+    <a href="#sec-outcomes">17. Course-linked Outcomes</a>
+    <div class="grp-label">Assessment</div>
+    <a href="#sec-assess-plan">18. Assessment Plan</a>
+    <a href="#sec-marks">19. Mark Allotment</a>
+    <a href="#sec-weight">20. Weightages</a>
+    <a href="#sec-test">21. Test Portions</a>
+    <div class="grp-label">Continuous Improvement</div>
+    <a href="#sec-improve">22. Previous Offering, Upskilling &amp; Certifications</a>
+    <a href="#sec-sign">23. Signatories</a>
+  </nav>
+
+  <main>
+
+    <!-- 1. Institute & Department -->
+    <section class="section" id="sec-institute">
+      <h2>1. Institute &amp; Department</h2>
+      <p class="hint">Selecting an institute and department auto-fills Vision/Mission, PEOs, POs and PSOs below wherever that data has been configured. You can still edit any auto-filled text. Choose "Other College / Institution" if you're joining from outside Mahendra Educational Institutions &mdash; every field there is yours to fill in.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Institute</label>
+          <select id="instituteSelect"></select>
+        </div>
+        <div class="field" id="customInstituteField" style="display:none;">
+          <label>Your Institute Name</label>
+          <input type="text" id="customInstituteName" placeholder="e.g. ABC College of Engineering">
+        </div>
+        <div class="field">
+          <label>Department</label>
+          <select id="departmentSelect"></select>
+        </div>
+        <div class="field" id="customDeptField" style="display:none;">
+          <label>Your Department Name</label>
+          <input type="text" id="customDeptName" placeholder="e.g. Department of Civil Engineering">
+        </div>
+        <div class="field">
+          <label>Academic Year</label>
+          <input type="text" id="academicYear" placeholder="e.g. 2026-27">
+        </div>
+        <div class="field">
+          <label>Semester Term</label>
+          <select id="semesterTerm">
+            <option>Odd</option>
+            <option>Even</option>
+          </select>
+        </div>
+      </div>
+      <div id="deptDataFlag"></div>
+    </section>
+
+    <!-- 1b. PDF Header & Branding -->
+    <section class="section" id="sec-branding">
+      <h2>PDF Header &amp; Branding</h2>
+      <p class="hint">This controls the letterhead at the top of the downloaded PDF only &mdash; it doesn't change anything on this page. Both header lines are pre-filled from your institute/department selection above but are fully editable. The right-hand logo is your college's main crest; the left-hand logo is optional (e.g. a trust emblem, NAAC/NBA seal, or affiliating-university mark).</p>
+      <div class="grid">
+        <div class="field">
+          <label>Header Line 1 (college / institute name)</label>
+          <input type="text" id="pdfHeaderLine1" placeholder="e.g. Mahendra Engineering College">
+        </div>
+        <div class="field">
+          <label>Header Line 2 (affiliation / accreditation line)</label>
+          <input type="text" id="pdfHeaderLine2" placeholder="e.g. Autonomous &middot; Approved by AICTE &middot; Affiliated to Anna University">
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px;">
+        <div class="field">
+          <label>Left Logo (optional)</label>
+          <input type="file" id="leftLogoInput" accept="image/*">
+          <div id="leftLogoPreviewWrap" style="display:none;margin-top:8px;align-items:center;gap:10px;">
+            <img id="leftLogoPreview" style="height:52px;width:auto;border:1px solid var(--line);border-radius:4px;background:#fff;padding:3px;">
+            <button class="btn danger small" id="removeLeftLogoBtn" type="button">Remove</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Right Logo (college crest)</label>
+          <input type="file" id="rightLogoInput" accept="image/*">
+          <div id="rightLogoPreviewWrap" style="display:none;margin-top:8px;align-items:center;gap:10px;">
+            <img id="rightLogoPreview" style="height:52px;width:auto;border:1px solid var(--line);border-radius:4px;background:#fff;padding:3px;">
+            <button class="btn danger small" id="removeRightLogoBtn" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Course Details -->
+    <section class="section" id="sec-meta">
+      <h2>2. Course Details</h2>
+      <div class="grid" id="courseMetaGrid"></div>
+    </section>
+
+    <!-- 3. Vision & Mission -->
+    <section class="section" id="sec-vm">
+      <h2>3. Institute &amp; Department Vision / Mission</h2>
+      <div class="two-col">
+        <div>
+          <div class="field"><label>Institute Vision</label><textarea id="instVision" rows="3"></textarea></div>
+          <div class="field" style="margin-top:10px"><label>Institute Mission</label><textarea id="instMission" rows="4"></textarea></div>
+        </div>
+        <div>
+          <div class="field"><label>Department Vision</label><textarea id="deptVision" rows="3"></textarea></div>
+          <div class="field" style="margin-top:10px"><label>Department Mission</label><textarea id="deptMission" rows="4"></textarea></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Prerequisite & Description -->
+    <section class="section" id="sec-prereq">
+      <h2>4. Pre-requisite &amp; Course Description</h2>
+      <div class="field"><label>Pre-requisite course(s)</label><input type="text" id="prereq" placeholder="e.g. MEC18R208 - Materials Science"></div>
+      <div class="field" style="margin-top:12px"><label>Course Description (one point per line)</label><textarea id="courseDesc" rows="5" placeholder="One bullet point per line"></textarea></div>
+    </section>
+
+    <!-- 5. Career Opportunities -->
+    <section class="section" id="sec-career">
+      <h2>5. Career Opportunities</h2>
+      <div class="field"><label>One per line</label><textarea id="careerOpp" rows="5"></textarea></div>
+    </section>
+
+    <!-- 6. Course Outcomes -->
+    <section class="section" id="sec-co">
+      <h2>6. Course Outcomes (COs)</h2>
+      <p class="hint">These drive the CO&ndash;PO mapping matrix, the SDG mapping, assignments, and mark allotment tables below. Bloom's level records the cognitive level each CO is written to.</p>
+      <table class="data" id="coTable">
+        <thead><tr><th style="width:70px">CO</th><th>Outcome Statement</th><th style="width:130px">Bloom's Level</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addCoBtn">+ Add CO</button></div>
+    </section>
+
+    <!-- 7. PEOs -->
+    <section class="section" id="sec-peo">
+      <h2>7. Program Educational Objectives (PEOs)</h2>
+      <table class="data" id="peoTable">
+        <thead><tr><th style="width:70px">Code</th><th style="width:220px">Title</th><th>Statement</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addPeoBtn">+ Add PEO</button></div>
+    </section>
+
+    <!-- 8. PO / PSO -->
+    <section class="section" id="sec-po">
+      <h2>8. Program Outcomes (POs) &amp; Program Specific Outcomes (PSOs)</h2>
+      <p class="hint">POs 1&ndash;11 follow NBA's revised graduate attributes (GAPC v4.0, Washington Accord 2021 alignment) and default the same for every program. PSOs are program-specific &mdash; edit or add as needed.</p>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:6px;">Program Outcomes</h3>
+      <table class="data" id="poTable">
+        <thead><tr><th style="width:70px">Code</th><th>Statement</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:16px;">Program Specific Outcomes</h3>
+      <table class="data" id="psoTable">
+        <thead><tr><th style="width:70px">Code</th><th>Statement</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addPsoBtn">+ Add PSO</button></div>
+    </section>
+
+    <!-- 9. Mapping -->
+    <section class="section" id="sec-mapping">
+      <h2>9. CO &ndash; PO / PSO Mapping</h2>
+      <p class="hint">3 &ndash; Strong Correlation, 2 &ndash; Medium Correlation, 1 &ndash; Low Correlation, blank &ndash; No Correlation</p>
+      <div style="overflow-x:auto;">
+        <table class="data" id="mappingTable"></table>
+      </div>
+    </section>
+
+    <!-- 10. SDG Alignment -->
+    <section class="section sdg" id="sec-sdg">
+      <h2>10. Sustainability &amp; UN SDG Alignment</h2>
+      <p class="hint">Briefly narrate how this course connects to the UN Sustainable Development Goals, then map the specific topics/COs where that connection is real and assessable &mdash; avoid mapping a goal just because it sounds good.</p>
+      <div class="field"><label>Short narrative &mdash; how this course aligns with sustainability &amp; the SDGs</label><textarea id="sdgNarrative" rows="4"></textarea></div>
+      <table class="data" id="sdgTable" style="margin-top:14px;">
+        <thead><tr><th style="width:220px">SDG</th><th style="width:90px">Mapped CO</th><th>Justification</th><th style="width:140px">Activity</th><th style="width:140px">Tool</th><th style="width:150px">Assessment Method</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addSdgBtn">+ Add SDG Mapping</button></div>
+    </section>
+
+    <!-- 11. Books -->
+    <section class="section" id="sec-books">
+      <h2>11. Books</h2>
+      <h3 style="font-size:14px;color:var(--navy);">Textbooks</h3>
+      <table class="data" id="textbookTable">
+        <thead><tr><th style="width:50px">#</th><th>Details</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addTextbookBtn">+ Add Textbook</button></div>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Reference Books</h3>
+      <table class="data" id="refbookTable">
+        <thead><tr><th style="width:50px">#</th><th>Details</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addRefbookBtn">+ Add Reference Book</button></div>
+    </section>
+
+    <!-- 12. Web resources -->
+    <section class="section" id="sec-web">
+      <h2>12. Web Resources</h2>
+      <table class="data" id="webResTable">
+        <thead><tr><th style="width:50px">#</th><th>Unit No. &ndash; Topic</th><th>Web Link</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addWebResBtn">+ Add Row</button></div>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Web Links for Similar Courses at Other Universities</h3>
+      <table class="data" id="webOtherTable">
+        <thead><tr><th style="width:50px">#</th><th>Course Title</th><th>University / Institute</th><th>Web Link</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addWebOtherBtn">+ Add Row</button></div>
+    </section>
+
+    <!-- 13. Journals -->
+    <section class="section" id="sec-journals">
+      <h2>13. Magazines / Journals</h2>
+      <table class="data" id="journalTable">
+        <thead><tr><th style="width:50px">#</th><th>Name</th><th>Web Link</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addJournalBtn">+ Add Row</button></div>
+    </section>
+
+    <!-- 14. Lesson Plan -->
+    <section class="section" id="sec-lesson">
+      <h2>14. Lesson Plan</h2>
+      <p class="hint">Cumulative hours are calculated automatically across all units, in order.</p>
+      <div id="unitsContainer"></div>
+      <div class="toolbar-row"><button class="btn ghost small" id="addUnitBtn">+ Add Unit</button></div>
+    </section>
+
+    <!-- 15. Assignments -->
+    <section class="section" id="sec-assign">
+      <h2>15. Assignments</h2>
+      <table class="data" id="assignTable">
+        <thead><tr><th style="width:110px">Assignment</th><th>Description</th><th>Skill Targeted</th><th style="width:100px">Mapped CO</th><th style="width:130px">Submission Deadline</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addAssignBtn">+ Add Assignment</button></div>
+    </section>
+
+    <!-- 16. Field visits & expert lectures -->
+    <section class="section" id="sec-outreach">
+      <h2>16. Field Visits &amp; Expert Lectures</h2>
+      <h3 style="font-size:14px;color:var(--navy);">Field Visit Plan</h3>
+      <table class="data" id="fieldVisitTable">
+        <thead><tr><th>Purpose</th><th>Proposed Place</th><th style="width:100px">Linked Topic/CO</th><th style="width:120px">Tentative Month</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addFieldVisitBtn">+ Add Field Visit</button></div>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Expert Lecture (Proposed)</h3>
+      <table class="data" id="expertLectureTable">
+        <thead><tr><th style="width:180px">Expert Name &amp; Designation (proposed)</th><th>Organization</th><th>Proposed Topic</th><th style="width:120px">Tentative Month</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addExpertLectureBtn">+ Add Expert Lecture</button></div>
+    </section>
+
+    <!-- 17. Course-linked outcomes -->
+    <section class="section" id="sec-outcomes">
+      <h2>17. Course-linked Outcomes, Real-world Application &amp; Future Scope</h2>
+      <h3 style="font-size:14px;color:var(--navy);">Publication / Patent / Product / Practice / Lab / Equipment / Exercise</h3>
+      <table class="data" id="courseOutcomesTable">
+        <thead><tr><th style="width:170px">Type</th><th>Description</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addCourseOutcomeBtn">+ Add Outcome</button></div>
+      <div class="field" style="margin-top:16px;"><label>Direct use / application of this course in the real world</label><textarea id="realWorldApp" rows="4"></textarea></div>
+      <div class="field" style="margin-top:12px;"><label>Scope for the future</label><textarea id="futureScope" rows="4"></textarea></div>
+    </section>
+
+    <!-- 18. Assessment Plan -->
+    <section class="section" id="sec-assess-plan">
+      <h2>18. Assessment Plan for the Course</h2>
+      <table class="data" id="assessPlanTable">
+        <thead><tr><th style="width:70px">CO</th><th>Measurement Tool</th><th>Time of Measurement</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Assessment Methodologies</h3>
+      <div class="grid">
+        <div class="field"><label>Sessional Examination I (marks)</label><input type="number" id="marksSE1" value="50"></div>
+        <div class="field"><label>Sessional Examination II (marks)</label><input type="number" id="marksSE2" value="50"></div>
+        <div class="field"><label>Assignment (marks)</label><input type="number" id="marksAssign" value="50"></div>
+        <div class="field"><label>Internal Lab / Practical (marks)</label><input type="number" id="marksLabInt" value="50"></div>
+        <div class="field"><label>End Semester Examination (marks)</label><input type="number" id="marksEndSem" value="100"></div>
+        <div class="field"><label>External Lab / Practical (marks)</label><input type="number" id="marksLabExt" value="100"></div>
+      </div>
+    </section>
+
+    <!-- 19. Mark allotment -->
+    <section class="section" id="sec-marks">
+      <h2>19. Mark Allotment for CO Assessment</h2>
+      <table class="data" id="markAllotTable"></table>
+    </section>
+
+    <!-- 20. Weightages -->
+    <section class="section" id="sec-weight">
+      <h2>20. Weightages</h2>
+      <div class="field" style="max-width:260px;"><label>Type of Course</label>
+        <select id="courseTypeSelect">
+          <option value="T">Theory Course (T)</option>
+          <option value="IC">Integrated Course (IC)</option>
+          <option value="TP">Theory with Practical (TP)</option>
+        </select>
+      </div>
+      <table class="data" id="weightTable" style="margin-top:14px;"></table>
+    </section>
+
+    <!-- 21. Test Portions -->
+    <section class="section" id="sec-test">
+      <h2>21. Test Portions</h2>
+      <table class="data" id="testPortionTable">
+        <thead><tr><th>Assessment</th><th style="width:160px">Topic No. Range</th><th style="width:160px">Weightage (%)</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addTestPortionBtn">+ Add Row</button></div>
+    </section>
+
+    <!-- 22. Continuous improvement -->
+    <section class="section" id="sec-improve">
+      <h2>22. Previous Offering, Upskilling &amp; Certifications</h2>
+      <div class="grid">
+        <div class="field"><label>Previous year result / CO-PO attainment summary</label><textarea id="prevAttainment" rows="4"></textarea></div>
+        <div class="field"><label>Feedback / suggestions received from the previous handling teacher</label><textarea id="prevFeedback" rows="4"></textarea></div>
+        <div class="field"><label>Actions taken / planned to close the gap</label><textarea id="prevActions" rows="4"></textarea></div>
+      </div>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Training / Additional Upskilling Plan for the Present Handling Teacher</h3>
+      <table class="data" id="upskillTable">
+        <thead><tr><th>Training / Program</th><th style="width:150px">Mode</th><th style="width:140px">Tentative Month</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addUpskillBtn">+ Add Training</button></div>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Certification Programs (External) for Students Related to this Course</h3>
+      <table class="data" id="certTable">
+        <thead><tr><th>Certification</th><th>Provider</th><th style="width:170px">Mode / Duration</th><th style="width:40px"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="toolbar-row"><button class="btn ghost small" id="addCertBtn">+ Add Certification</button></div>
+    </section>
+
+    <!-- 23. Signatories -->
+    <section class="section" id="sec-sign">
+      <h2>23. Signatories</h2>
+      <div class="grid">
+        <div class="field"><label>Course Coordinator</label><input type="text" id="signCourseCoord"></div>
+        <div class="field"><label>Module Coordinator</label><input type="text" id="signModuleCoord"></div>
+        <div class="field"><label>Program Coordinator</label><input type="text" id="signProgCoord"></div>
+        <div class="field"><label>Head of the Department</label><input type="text" id="signHod"></div>
+        <div class="field"><label>Dean / Academic</label><input type="text" id="signDeanAcademic"></div>
+        <div class="field"><label>Principal</label><input type="text" id="signPrincipal"></div>
+      </div>
+    </section>
+
+    <div class="toolbar-row" style="justify-content:center; margin-top:10px;">
+      <button class="btn primary" id="downloadPdfBtn2">Download Course Plan as PDF</button>
+    </div>
+
+  </main>
+</div>
+
+<footer class="app-footer">Course Plan Designer &middot; a free tool for the teaching &amp; learning community &middot; <b>isiva.in</b> &middot; built to support NBA/OBE course-planning workflows for any institution, not only Mahendra Educational Institutions</footer>
+
+<div id="printArea"></div>
+
+<script>
+/* =====================================================================
+   DATA: Institutes & Departments
+   MEC > Mechanical Engineering is fully populated (sourced from the
+   MEC18R340 course plan template). Other Mahendra institutes/departments
+   are wired up but flagged PENDING until their data is supplied.
+   "OTHER" lets any institution outside the Mahendra group use this tool
+   with fully self-entered Vision/Mission/PEOs/PSOs.
+   ===================================================================== */
+const STANDARD_POS = [
+  {code:"PO1", text:"Engineering Knowledge: Apply the knowledge of mathematics, natural science, computing, and engineering fundamentals and an engineering specialisation to the solution of complex engineering problems."},
+  {code:"PO2", text:"Problem Analysis: Identify, formulate, and analyse complex engineering problems, reaching substantiated conclusions with consideration for the holistic nature of the problem."},
+  {code:"PO3", text:"Design/Development of Solutions: Design creative solutions for complex engineering problems and design systems, components, or processes to meet identified needs, with appropriate consideration for public health and safety, and cultural, societal, and environmental factors, with sustainability intrinsic to the design."},
+  {code:"PO4", text:"Conduct Investigations of Complex Problems: Conduct investigations of complex engineering problems using research-based knowledge and research methods, including design of experiments, analysis and interpretation of data, and synthesis of information to provide valid conclusions."},
+  {code:"PO5", text:"Engineering Tool Usage: Create, select, and apply appropriate techniques, resources, and modern engineering and IT tools, including prediction and modelling, to solve complex engineering problems, with an understanding of their limitations."},
+  {code:"PO6", text:"The Engineer and the World: Analyse and evaluate societal and environmental aspects while solving complex engineering problems, considering their impact on sustainability with reference to economy, health, safety, legal frameworks, culture, and the environment."},
+  {code:"PO7", text:"Ethics: Apply ethical principles and commit to professional ethics, human values, diversity and inclusion, and adhere to relevant national and international laws."},
+  {code:"PO8", text:"Individual and Collaborative Team Work: Function effectively as an individual, and as a member or leader in diverse and multi-disciplinary teams."},
+  {code:"PO9", text:"Communication: Communicate effectively and inclusively within the engineering community and with society at large, such as being able to comprehend and write effective reports and design documentation, make effective presentations, and give and receive clear instructions, considering cultural, language, and learning differences."},
+  {code:"PO10", text:"Project Management and Finance: Apply knowledge and understanding of engineering management principles and economic decision-making, and apply these to one's own work, as a member and leader in a team, to manage projects in multi-disciplinary environments."},
+  {code:"PO11", text:"Life-long Learning: Recognise the need for, and have the preparation and ability for, independent and life-long learning, adaptability to new and emerging technologies, and critical thinking in the broadest context of technological change."}
+];
+
+const INSTITUTES = {
+  MEC: {
+    name: "Mahendra Engineering College",
+    vision: "To be a Center of Excellence of International Repute in Education and Research",
+    mission: "To Produce Technically Competent, Socially Committed Technocrats and Administrators through Quality Education and Research",
+    departments: {
+      MECH: {
+        name: "Department of Mechanical Engineering",
+        school: "School of Automotive and Mechanical Engineering",
+        vision: "To be Recognized Globally as a Lead in Mechanical Engineering through Excellence in Education and Innovative Research in Emerging areas",
+        mission: "To provide quality education and research with state-of-the-art facilities to the student, accomplished by:\n- Enhancing Knowledge and Expertise through Professional Programmes and Research Works.\n- Endowing Students with Academic Leadership, Communication Skills and Professional Awareness towards Social Commitment.",
+        peos: [
+          {code:"PEO-1", title:"DIVERSIFIED KNOWLEDGE", text:"Graduates will apply fundamental technical knowledge and skills to find workable solutions to technological challenges and problems in diversified areas such as Production, Design, Thermal, Industrial and allied fields of Mechanical Engineering."},
+          {code:"PEO-2", title:"CONTEMPORARY ISSUES & SKILLS", text:"Graduates will have an effective communication skill and will recognize the social impacts of problem solving, decision making and creative skills by understanding contemporary issues."},
+          {code:"PEO-3", title:"PROFESSIONAL ATTITUDE", text:"Graduates will gain professional and ethical attitude towards their peers, employers, society and prove as a responsible leader in the establishments in government and private sectors."},
+          {code:"PEO-4", title:"PROFESSIONAL DEVELOPMENT", text:"Graduates will become entrepreneurs to confront business challenges or will continue their professional advancement through their knowledge horizon and inculcate lifelong learning."}
+        ],
+        psos: [
+          {code:"PSO1", text:"An ability to utilize the gained knowledge of mathematics and engineering sciences to real time problems involving thermal, design, manufacturing and materials domain."},
+          {code:"PSO2", text:"An ability to specify, fabricate, test, operate, validate and complete documentation of any basic mechanical systems or processes."},
+          {code:"PSO3", text:"An ability to apply the acquired software's skills to design and analysis of advanced mechanical systems or processes."}
+        ],
+        configured: true
+      },
+      CIVIL: {name:"Department of Civil Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      EEE: {name:"Department of Electrical & Electronics Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      ECE: {name:"Department of Electronics & Communication Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      CSE: {name:"Department of Computer Science & Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false}
+    }
+  },
+  MCE: {
+    name: "Mahendra College of Engineering",
+    vision: "", mission: "",
+    departments: {
+      MECH: {name:"Department of Mechanical Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      ECE: {name:"Department of Electronics & Communication Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      CSE: {name:"Department of Computer Science & Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false}
+    }
+  },
+  MIT: {
+    name: "Mahendra Institute of Technology",
+    vision: "", mission: "",
+    departments: {
+      MECH: {name:"Department of Mechanical Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      IT: {name:"Department of Information Technology", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      CSE: {name:"Department of Computer Science & Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false}
+    }
+  },
+  MECW: {
+    name: "Mahendra Engineering College for Women",
+    vision: "", mission: "",
+    departments: {
+      CSE: {name:"Department of Computer Science & Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      ECE: {name:"Department of Electronics & Communication Engineering", school:"", vision:"", mission:"", peos:[], psos:[], configured:false},
+      IT: {name:"Department of Information Technology", school:"", vision:"", mission:"", peos:[], psos:[], configured:false}
+    }
+  },
+  OTHER: {
+    name: "Other College / Institution",
+    vision: "", mission: "",
+    departments: {
+      OTHER: {name:"Other Department", school:"", vision:"", mission:"", peos:[], psos:[], configured:false}
+    }
+  }
+};
+
+const TEACHING_METHODS = ["Chalk & Talk","PPT / Multimedia","Video Lecture","Flipped Classroom","Group Discussion","Demonstration","Model / Chart","Online Simulation","Case Study","Seminar"];
+const ACTIVITIES = ["Quiz","Assignment","Problem Solving","Group Activity","Lab Demo","Mini Project","Presentation","Discussion","Field Visit","None"];
+const TOOLS = ["Whiteboard","LCD Projector","MS PowerPoint","YouTube / NPTEL Video","LMS / Moodle","Simulation Software","Physical Model","Google Forms Quiz","Smart Board","Kahoot / Quizizz"];
+const BLOOM_LEVELS = ["Remember","Understand","Apply","Analyze","Evaluate","Create"];
+const UN_SDGS = [
+  "SDG 1: No Poverty","SDG 2: Zero Hunger","SDG 3: Good Health and Well-being","SDG 4: Quality Education",
+  "SDG 5: Gender Equality","SDG 6: Clean Water and Sanitation","SDG 7: Affordable and Clean Energy",
+  "SDG 8: Decent Work and Economic Growth","SDG 9: Industry, Innovation and Infrastructure","SDG 10: Reduced Inequalities",
+  "SDG 11: Sustainable Cities and Communities","SDG 12: Responsible Consumption and Production","SDG 13: Climate Action",
+  "SDG 14: Life Below Water","SDG 15: Life on Land","SDG 16: Peace, Justice and Strong Institutions","SDG 17: Partnerships for the Goals"
+];
+const OUTCOME_TYPES = ["Publication","Patent","Product","Practice","Lab Development","Equipment Development","Exercise / Case Study","Other"];
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let state = {
+  institute: "MEC",
+  department: "MECH",
+  customInstituteName: "",
+  customDeptName: "",
+  pdfHeader: { line1: "", line2: "", leftLogo: "", rightLogo: "", line1Touched: false },
+  academicYear: "",
+  semesterTerm: "Even",
+  meta: {courseCode:"", courseName:"", courseType:"", credit:"", program:"", yearSem:"", courseCoordinator:"", moduleCoordinator:"", programCoordinator:""},
+  instVision:"", instMission:"", deptVision:"", deptMission:"",
+  prereq:"", courseDesc:"", careerOpp:"",
+  cos:[{code:"CO1",text:"",bloom:"Apply"},{code:"CO2",text:"",bloom:"Apply"},{code:"CO3",text:"",bloom:"Apply"},{code:"CO4",text:"",bloom:"Apply"},{code:"CO5",text:"",bloom:"Apply"}],
+  peos:[],
+  psos:[],
+  mapping:{},
+  sdgNarrative:"",
+  sdgMapping:[{sdg:UN_SDGS[3], co:"CO1", justification:"", activity:"", tool:"", assessment:""}],
+  textbooks:[{no:1,details:""}],
+  refbooks:[{no:1,details:""}],
+  webRes:[{no:1,topic:"",link:""}],
+  webOther:[{no:1,title:"",uni:"",link:""}],
+  journals:[{no:1,name:"",link:""}],
+  units:[{title:"Unit 1: ", topics:[{desc:"", ref:"", hrs:1, method:TEACHING_METHODS[0], activity:ACTIVITIES[0], tool:TOOLS[0]}]}],
+  assignments:[{no:"Assignment - I", desc:"", skill:"", co:"CO1", deadline:""}],
+  fieldVisits:[{purpose:"", place:"", linkedTopic:"", month:""}],
+  expertLectures:[{expertName:"", org:"", topic:"", month:""}],
+  courseOutcomesBeyond:[{type:OUTCOME_TYPES[0], description:""}],
+  realWorldApp:"",
+  futureScope:"",
+  marks:{SE1:50, SE2:50, ASSIGN:50, LABINT:50, ENDSEM:100, LABEXT:100},
+  markAllot:{},
+  courseType: "T",
+  weightages:{},
+  testPortions:[{name:"Sessional 1", range:"", weight:"17.5"},{name:"Sessional 2", range:"", weight:"17.5"},{name:"Assignments", range:"", weight:"15"},{name:"End Semester", range:"", weight:"50"}],
+  prevAttainment:"", prevFeedback:"", prevActions:"",
+  upskilling:[{program:"", mode:"", month:""}],
+  certifications:[{name:"", provider:"", mode:""}],
+  signatures:{courseCoord:"", moduleCoord:"", progCoord:"", hod:"", deanAcademic:"", principal:""}
+};
+
+const DEFAULT_WEIGHTAGE = {
+  T:[{label:"Sessional Examinations (Two)", value:"35%"},{label:"Assignments / Mini project / Seminars / Tutorials etc.", value:"15%"},{label:"End Semester Examination", value:"50%"}],
+  IC:[{label:"Sessional Examinations (Two)", value:"20%"},{label:"Assignments / Mini project / Seminars / Tutorials etc.", value:"10%"},{label:"Practical (Laboratory)", value:"20%"},{label:"End Semester Examination", value:"35% (T) + 15% (L)"}],
+  TP:[{label:"Sessional Examinations (Two)", value:"20%"},{label:"Assignments / Mini project / Seminars / Tutorials etc.", value:"15%"},{label:"Practical", value:"15%"},{label:"End Semester Examination", value:"50%"}]
+};
+state.weightages = JSON.parse(JSON.stringify(DEFAULT_WEIGHTAGE));
+
+/* =====================================================================
+   HELPERS
+   ===================================================================== */
+function $(id){return document.getElementById(id);}
+function el(tag, attrs, ...children){
+  const e = document.createElement(tag);
+  for(const k in (attrs||{})){
+    if(k==="text") e.textContent = attrs[k];
+    else if(k.startsWith("on")) e.addEventListener(k.substring(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  children.forEach(c=>{ if(c!==null && c!==undefined) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+  return e;
+}
+function currentDept(){ return INSTITUTES[state.institute].departments[state.department]; }
+function effectiveInstituteName(){ return state.institute === "OTHER" ? (state.customInstituteName || "Your Institution") : INSTITUTES[state.institute].name; }
+function effectiveDeptName(){ return state.department === "OTHER" ? (state.customDeptName || "Your Department") : currentDept().name; }
+
+/* =====================================================================
+   RENDER: Institute / Department selectors
+   ===================================================================== */
+function renderInstituteSelectors(){
+  const instSel = $("instituteSelect");
+  instSel.innerHTML = "";
+  Object.keys(INSTITUTES).forEach(code=>{
+    instSel.appendChild(el("option", {value:code, text:INSTITUTES[code].name}));
+  });
+  instSel.value = state.institute;
+
+  const deptSel = $("departmentSelect");
+  function refreshDeptOptions(){
+    deptSel.innerHTML = "";
+    const depts = INSTITUTES[state.institute].departments;
+    Object.keys(depts).forEach(code=>{
+      const d = depts[code];
+      deptSel.appendChild(el("option", {value:code, text:d.name + (d.configured ? "" : (state.institute==="OTHER" ? "" : " (data pending)"))}));
+    });
+    if(!depts[state.department]) state.department = Object.keys(depts)[0];
+    deptSel.value = state.department;
+  }
+  refreshDeptOptions();
+
+  instSel.onchange = ()=>{
+    state.institute = instSel.value;
+    refreshDeptOptions();
+    state.department = deptSel.value;
+    onInstituteOrDeptChange();
+  };
+  deptSel.onchange = ()=>{
+    state.department = deptSel.value;
+    onInstituteOrDeptChange();
+  };
+
+  $("customInstituteName").addEventListener("input", e=> {
+    state.customInstituteName = e.target.value;
+    if(!state.pdfHeader.line1Touched){
+      state.pdfHeader.line1 = effectiveInstituteName();
+      $("pdfHeaderLine1").value = state.pdfHeader.line1;
+    }
+  });
+  $("customDeptName").addEventListener("input", e=> state.customDeptName = e.target.value);
+}
+
+function onInstituteOrDeptChange(){
+  const inst = INSTITUTES[state.institute];
+  const dept = currentDept();
+  state.instVision = inst.vision || "";
+  state.instMission = inst.mission || "";
+  state.deptVision = dept.vision || "";
+  state.deptMission = dept.mission || "";
+  state.peos = JSON.parse(JSON.stringify(dept.peos || []));
+  state.psos = JSON.parse(JSON.stringify(dept.psos || []));
+  syncVMFields();
+  renderPeoTable();
+  renderPsoTable();
+  renderPoTable();
+  renderMappingTable();
+  renderMarkAllotTable();
+  renderAssessPlanTable();
+  renderDeptFlag();
+  toggleCustomFields();
+  if(!state.pdfHeader.line1Touched){
+    state.pdfHeader.line1 = effectiveInstituteName();
+    $("pdfHeaderLine1").value = state.pdfHeader.line1;
+  }
+}
+
+function toggleCustomFields(){
+  $("customInstituteField").style.display = (state.institute === "OTHER") ? "flex" : "none";
+  $("customDeptField").style.display = (state.department === "OTHER") ? "flex" : "none";
+  $("customInstituteName").value = state.customInstituteName;
+  $("customDeptName").value = state.customDeptName;
+}
+
+function renderDeptFlag(){
+  const dept = currentDept();
+  const flagDiv = $("deptDataFlag");
+  flagDiv.innerHTML = "";
+  if(state.institute === "OTHER"){
+    flagDiv.appendChild(el("div", {class:"welcome-flag"},
+      "Welcome! This tool is free to use for any institution. Type your own Institute Name and Department Name above, and fill in your Vision, Mission, PEOs and PSOs in the sections below - everything is yours to edit."));
+  } else if(!dept.configured){
+    flagDiv.appendChild(el("div", {class:"pending-flag"},
+      "This department's Vision, Mission, PEOs and PSOs haven't been supplied yet. Standard POs are pre-filled (they're the same across all engineering programs), but the fields in sections 3, 7 and the PSO table are blank and editable - type them in, or send them to IQAC to add permanently to this tool."));
+  }
+}
+
+function syncVMFields(){
+  $("instVision").value = state.instVision;
+  $("instMission").value = state.instMission;
+  $("deptVision").value = state.deptVision;
+  $("deptMission").value = state.deptMission;
+}
+
+/* =====================================================================
+   RENDER: Course meta
+   ===================================================================== */
+function renderCourseMeta(){
+  const grid = $("courseMetaGrid");
+  grid.innerHTML = "";
+  const fields = [
+    ["courseCode","Course Code"], ["courseName","Course Name"],
+    ["courseType","Course Type (T/IC/TP)"], ["credit","Credit"],
+    ["program","Program"], ["yearSem","Year / Semester"],
+    ["courseCoordinator","Course Coordinator"], ["moduleCoordinator","Module Coordinator"],
+    ["programCoordinator","Program Coordinator"]
+  ];
+  fields.forEach(([key,label])=>{
+    const input = el("input", {type:"text", value: state.meta[key] || ""});
+    input.addEventListener("input", ()=>{ state.meta[key] = input.value; });
+    grid.appendChild(el("div", {class:"field"}, el("label", {text:label}), input));
+  });
+}
+
+/* =====================================================================
+   RENDER: CO table
+   ===================================================================== */
+function renderCoTable(){
+  const tbody = $("coTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.cos.forEach((co, i)=>{
+    const codeInput = el("input", {type:"text", value:co.code});
+    codeInput.addEventListener("input", ()=>{ co.code = codeInput.value; renderMappingTable(); renderAssignCoOptions(); renderMarkAllotTable(); renderAssessPlanTable(); renderSdgTable(); });
+    const textInput = el("textarea", {rows:"2"}, co.text);
+    textInput.value = co.text;
+    textInput.addEventListener("input", ()=>{ co.text = textInput.value; });
+    const bloomSel = el("select", {});
+    BLOOM_LEVELS.forEach(b=>bloomSel.appendChild(el("option",{value:b,text:b})));
+    bloomSel.value = co.bloom || "Apply";
+    bloomSel.addEventListener("change", ()=>{ co.bloom = bloomSel.value; });
+    const delBtn = el("button", {class:"btn danger small", onclick:()=>{ state.cos.splice(i,1); renderCoTable(); renderMappingTable(); renderAssignCoOptions(); renderMarkAllotTable(); renderAssessPlanTable(); renderSdgTable(); }}, "x");
+    tbody.appendChild(el("tr", {},
+      el("td", {}, codeInput),
+      el("td", {}, textInput),
+      el("td", {}, bloomSel),
+      el("td", {}, el("div",{class:"row-actions"}, delBtn))
+    ));
+  });
+}
+$("addCoBtn").addEventListener("click", ()=>{
+  state.cos.push({code:"CO"+(state.cos.length+1), text:"", bloom:"Apply"});
+  renderCoTable(); renderMappingTable(); renderAssignCoOptions(); renderMarkAllotTable(); renderAssessPlanTable(); renderSdgTable();
+});
+
+/* =====================================================================
+   RENDER: PEO / PO / PSO tables
+   ===================================================================== */
+function renderPeoTable(){
+  const tbody = $("peoTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.peos.forEach((p, i)=>{
+    const codeI = el("input", {type:"text", value:p.code}); codeI.addEventListener("input",()=>p.code=codeI.value);
+    const titleI = el("input", {type:"text", value:p.title}); titleI.addEventListener("input",()=>p.title=titleI.value);
+    const textI = el("textarea", {rows:"2"}, p.text); textI.value=p.text; textI.addEventListener("input",()=>p.text=textI.value);
+    const delBtn = el("button", {class:"btn danger small", onclick:()=>{ state.peos.splice(i,1); renderPeoTable(); }}, "x");
+    tbody.appendChild(el("tr", {}, el("td",{},codeI), el("td",{},titleI), el("td",{},textI), el("td",{}, el("div",{class:"row-actions"}, delBtn))));
+  });
+}
+$("addPeoBtn").addEventListener("click", ()=>{ state.peos.push({code:"PEO-"+(state.peos.length+1), title:"", text:""}); renderPeoTable(); });
+
+function renderPoTable(){
+  const tbody = $("poTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  STANDARD_POS.forEach(p=>{
+    tbody.appendChild(el("tr", {}, el("td",{text:p.code}), el("td",{text:p.text})));
+  });
+}
+
+function renderPsoTable(){
+  const tbody = $("psoTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.psos.forEach((p,i)=>{
+    const codeI = el("input", {type:"text", value:p.code}); codeI.addEventListener("input",()=>{p.code=codeI.value; renderMappingTable();});
+    const textI = el("textarea", {rows:"2"}, p.text); textI.value=p.text; textI.addEventListener("input",()=>p.text=textI.value);
+    const delBtn = el("button", {class:"btn danger small", onclick:()=>{ state.psos.splice(i,1); renderPsoTable(); renderMappingTable(); }}, "x");
+    tbody.appendChild(el("tr", {}, el("td",{},codeI), el("td",{},textI), el("td",{}, el("div",{class:"row-actions"}, delBtn))));
+  });
+}
+$("addPsoBtn").addEventListener("click", ()=>{ state.psos.push({code:"PSO"+(state.psos.length+1), text:""}); renderPsoTable(); renderMappingTable(); });
+
+/* =====================================================================
+   RENDER: CO-PO/PSO Mapping matrix
+   ===================================================================== */
+function renderMappingTable(){
+  const table = $("mappingTable");
+  table.innerHTML = "";
+  const cols = [...STANDARD_POS.map(p=>p.code), ...state.psos.map(p=>p.code)];
+  const thead = el("thead", {}, el("tr", {}, el("th",{text:""}), ...cols.map(c=>el("th",{text:c}))));
+  table.appendChild(thead);
+  const tbody = el("tbody");
+  state.cos.forEach(co=>{
+    const row = el("tr", {}, el("td", {text:co.code, style:"font-weight:700;background:#f3f0e6;"}));
+    cols.forEach(col=>{
+      const key = co.code + "|" + col;
+      const sel = el("select", {});
+      ["","1","2","3"].forEach(v=> sel.appendChild(el("option",{value:v, text:v||"-"})) );
+      sel.value = state.mapping[key] || "";
+      sel.addEventListener("change", ()=>{ state.mapping[key] = sel.value; });
+      row.appendChild(el("td", {style:"text-align:center;"}, sel));
+    });
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
+}
+
+/* =====================================================================
+   RENDER: SDG mapping
+   ===================================================================== */
+function renderSdgTable(){
+  const tbody = $("sdgTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.sdgMapping.forEach((row, i)=>{
+    const sdgSel = el("select",{});
+    UN_SDGS.forEach(s=>sdgSel.appendChild(el("option",{value:s,text:s})));
+    sdgSel.value = row.sdg; sdgSel.addEventListener("change",()=>row.sdg=sdgSel.value);
+    const coSel = el("select",{});
+    state.cos.forEach(co=>coSel.appendChild(el("option",{value:co.code,text:co.code})));
+    coSel.value = row.co; coSel.addEventListener("change",()=>row.co=coSel.value);
+    const justI = el("textarea",{rows:"2"}, row.justification); justI.value=row.justification; justI.addEventListener("input",()=>row.justification=justI.value);
+    const actI = el("input",{type:"text", value:row.activity}); actI.addEventListener("input",()=>row.activity=actI.value);
+    const toolI = el("input",{type:"text", value:row.tool}); toolI.addEventListener("input",()=>row.tool=toolI.value);
+    const assessI = el("input",{type:"text", value:row.assessment}); assessI.addEventListener("input",()=>row.assessment=assessI.value);
+    const delBtn = el("button", {class:"btn danger small", onclick:()=>{ state.sdgMapping.splice(i,1); renderSdgTable(); }}, "x");
+    tbody.appendChild(el("tr", {}, el("td",{},sdgSel), el("td",{},coSel), el("td",{},justI), el("td",{},actI), el("td",{},toolI), el("td",{},assessI), el("td",{}, el("div",{class:"row-actions"}, delBtn))));
+  });
+}
+$("addSdgBtn").addEventListener("click", ()=>{
+  state.sdgMapping.push({sdg:UN_SDGS[3], co: state.cos[0]?state.cos[0].code:"CO1", justification:"", activity:"", tool:"", assessment:""});
+  renderSdgTable();
+});
+
+/* =====================================================================
+   RENDER: generic list tables
+   ===================================================================== */
+function renderSimpleListTable(tableId, listKey, columns){
+  const tbody = $(tableId).querySelector("tbody");
+  tbody.innerHTML = "";
+  const list = state[listKey];
+  list.forEach((row, i)=>{
+    const cells = columns.map(col=>{
+      if(col.type === "index"){
+        return el("td", {text:String(i+1)});
+      }
+      if(col.type === "select"){
+        const sel = el("select", {});
+        col.options.forEach(o=>sel.appendChild(el("option",{value:o,text:o})));
+        sel.value = row[col.key] || col.options[0];
+        sel.addEventListener("change", ()=>{ row[col.key] = sel.value; });
+        return el("td", {}, sel);
+      }
+      const input = el(col.multiline ? "textarea" : "input", col.multiline ? {rows:"2"} : {type:"text", value: row[col.key] || ""});
+      if(col.multiline){ input.value = row[col.key] || ""; }
+      input.addEventListener("input", ()=>{ row[col.key] = input.value; });
+      return el("td", {}, input);
+    });
+    const delBtn = el("button", {class:"btn danger small", onclick:()=>{ list.splice(i,1); renderSimpleListTable(tableId, listKey, columns); }}, "x");
+    tbody.appendChild(el("tr", {}, ...cells, el("td",{}, el("div",{class:"row-actions"}, delBtn))));
+  });
+}
+
+function wireAddButton(btnId, listKey, factory, tableId, columns){
+  $(btnId).addEventListener("click", ()=>{
+    state[listKey].push(factory(state[listKey].length));
+    renderSimpleListTable(tableId, listKey, columns);
+  });
+}
+
+const textbookCols = [{type:"index"},{key:"details", multiline:true}];
+const webResCols = [{type:"index"},{key:"topic"},{key:"link"}];
+const webOtherCols = [{type:"index"},{key:"title"},{key:"uni"},{key:"link"}];
+const journalCols = [{type:"index"},{key:"name"},{key:"link"}];
+const testPortionCols = [{key:"name"},{key:"range"},{key:"weight"}];
+const fieldVisitCols = [{key:"purpose"},{key:"place"},{key:"linkedTopic"},{key:"month"}];
+const expertLectureCols = [{key:"expertName"},{key:"org"},{key:"topic"},{key:"month"}];
+const courseOutcomeCols = [{type:"select", key:"type", options:OUTCOME_TYPES},{key:"description", multiline:true}];
+const upskillCols = [{key:"program"},{type:"select", key:"mode", options:["Online","Offline","Hybrid","Self-paced"]},{key:"month"}];
+const certCols = [{key:"name"},{key:"provider"},{key:"mode"}];
+
+wireAddButton("addTextbookBtn","textbooks", (n)=>({no:n+1, details:""}), "textbookTable", textbookCols);
+wireAddButton("addRefbookBtn","refbooks", (n)=>({no:n+1, details:""}), "refbookTable", textbookCols);
+wireAddButton("addWebResBtn","webRes", (n)=>({no:n+1, topic:"", link:""}), "webResTable", webResCols);
+wireAddButton("addWebOtherBtn","webOther", (n)=>({no:n+1, title:"", uni:"", link:""}), "webOtherTable", webOtherCols);
+wireAddButton("addJournalBtn","journals", (n)=>({no:n+1, name:"", link:""}), "journalTable", journalCols);
+wireAddButton("addTestPortionBtn","testPortions", ()=>({name:"", range:"", weight:""}), "testPortionTable", testPortionCols);
+wireAddButton("addFieldVisitBtn","fieldVisits", ()=>({purpose:"", place:"", linkedTopic:"", month:""}), "fieldVisitTable", fieldVisitCols);
+wireAddButton("addExpertLectureBtn","expertLectures", ()=>({expertName:"", org:"", topic:"", month:""}), "expertLectureTable", expertLectureCols);
+wireAddButton("addCourseOutcomeBtn","courseOutcomesBeyond", ()=>({type:OUTCOME_TYPES[0], description:""}), "courseOutcomesTable", courseOutcomeCols);
+wireAddButton("addUpskillBtn","upskilling", ()=>({program:"", mode:"Online", month:""}), "upskillTable", upskillCols);
+wireAddButton("addCertBtn","certifications", ()=>({name:"", provider:"", mode:""}), "certTable", certCols);
+
+/* =====================================================================
+   RENDER: Lesson Plan (units + topics)
+   ===================================================================== */
+function renderUnits(){
+  const container = $("unitsContainer");
+  container.innerHTML = "";
+  let cumHours = 0;
+  let topicCounter = 0;
+  state.units.forEach((unit, ui)=>{
+    const block = el("div", {class:"unit-block"});
+    const titleInput = el("input", {type:"text", value:unit.title});
+    titleInput.addEventListener("input", ()=>{ unit.title = titleInput.value; });
+    const delUnitBtn = el("button", {class:"btn danger small", onclick:()=>{ state.units.splice(ui,1); renderUnits(); }}, "Remove Unit");
+    block.appendChild(el("div", {class:"unit-block-header"}, titleInput, delUnitBtn));
+
+    const table = el("table", {class:"data"});
+    table.appendChild(el("thead", {}, el("tr", {},
+      el("th",{text:"Topic",style:"width:40px"}), el("th",{text:"Description"}), el("th",{text:"Reference",style:"width:110px"}),
+      el("th",{text:"Hr",style:"width:50px"}), el("th",{text:"Cum. Hr",style:"width:60px"}),
+      el("th",{text:"Teaching Method",style:"width:150px"}), el("th",{text:"Activity",style:"width:130px"}), el("th",{text:"Tool Used",style:"width:150px"}), el("th",{style:"width:40px"})
+    )));
+    const tbody = el("tbody");
+    unit.topics.forEach((t, ti)=>{
+      topicCounter++;
+      const hrsNum = Number(t.hrs) || 0;
+      cumHours += hrsNum;
+      const descI = el("textarea",{rows:"2"}, t.desc); descI.value = t.desc; descI.addEventListener("input",()=>t.desc=descI.value);
+      const refI = el("input",{type:"text", value:t.ref}); refI.addEventListener("input",()=>t.ref=refI.value);
+      const hrsI = el("input",{type:"number", value:t.hrs, min:"0", step:"0.5"}); hrsI.addEventListener("input",()=>{ t.hrs = hrsI.value; renderUnits(); });
+      const methodSel = el("select",{}); TEACHING_METHODS.forEach(m=>methodSel.appendChild(el("option",{value:m,text:m}))); methodSel.value=t.method; methodSel.addEventListener("change",()=>t.method=methodSel.value);
+      const actSel = el("select",{}); ACTIVITIES.forEach(a=>actSel.appendChild(el("option",{value:a,text:a}))); actSel.value=t.activity; actSel.addEventListener("change",()=>t.activity=actSel.value);
+      const toolSel = el("select",{}); TOOLS.forEach(tl=>toolSel.appendChild(el("option",{value:tl,text:tl}))); toolSel.value=t.tool; toolSel.addEventListener("change",()=>t.tool=toolSel.value);
+      const delBtn = el("button", {class:"btn danger small", onclick:()=>{ unit.topics.splice(ti,1); renderUnits(); }}, "x");
+      tbody.appendChild(el("tr", {},
+        el("td",{text:String(topicCounter), style:"text-align:center;font-weight:600;"}),
+        el("td",{}, descI), el("td",{}, refI), el("td",{}, hrsI),
+        el("td",{text:String(cumHours), style:"text-align:center;"}),
+        el("td",{}, methodSel), el("td",{}, actSel), el("td",{}, toolSel),
+        el("td",{}, el("div",{class:"row-actions"}, delBtn))
+      ));
+    });
+    table.appendChild(tbody);
+    block.appendChild(table);
+    block.appendChild(el("div", {class:"toolbar-row"}, el("button", {class:"btn ghost small", onclick:()=>{ unit.topics.push({desc:"",ref:"",hrs:1,method:TEACHING_METHODS[0],activity:ACTIVITIES[0],tool:TOOLS[0]}); renderUnits(); }}, "+ Add Topic")));
+    container.appendChild(block);
+  });
+}
+$("addUnitBtn").addEventListener("click", ()=>{
+  state.units.push({title:"Unit "+(state.units.length+1)+": ", topics:[{desc:"",ref:"",hrs:1,method:TEACHING_METHODS[0],activity:ACTIVITIES[0],tool:TOOLS[0]}]});
+  renderUnits();
+});
+
+/* =====================================================================
+   RENDER: Assignments
+   ===================================================================== */
+function renderAssignTable(){
+  const tbody = $("assignTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.assignments.forEach((a,i)=>{
+    const noI = el("input",{type:"text", value:a.no}); noI.addEventListener("input",()=>a.no=noI.value);
+    const descI = el("textarea",{rows:"2"}, a.desc); descI.value=a.desc; descI.addEventListener("input",()=>a.desc=descI.value);
+    const skillI = el("input",{type:"text", value:a.skill}); skillI.addEventListener("input",()=>a.skill=skillI.value);
+    const coSel = el("select",{});
+    state.cos.forEach(co=>coSel.appendChild(el("option",{value:co.code, text:co.code})));
+    coSel.value = a.co; coSel.addEventListener("change",()=>a.co=coSel.value);
+    const dateI = el("input",{type:"date", value:a.deadline}); dateI.addEventListener("input",()=>a.deadline=dateI.value);
+    const delBtn = el("button", {class:"btn danger small", onclick:()=>{ state.assignments.splice(i,1); renderAssignTable(); }}, "x");
+    tbody.appendChild(el("tr", {}, el("td",{},noI), el("td",{},descI), el("td",{},skillI), el("td",{},coSel), el("td",{},dateI), el("td",{}, el("div",{class:"row-actions"}, delBtn))));
+  });
+}
+function renderAssignCoOptions(){ renderAssignTable(); }
+$("addAssignBtn").addEventListener("click", ()=>{
+  const romans=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+  state.assignments.push({no:"Assignment - "+(romans[state.assignments.length]||(state.assignments.length+1)), desc:"", skill:"", co: state.cos[0]?state.cos[0].code:"CO1", deadline:""});
+  renderAssignTable();
+});
+
+/* =====================================================================
+   RENDER: Assessment plan (per CO)
+   ===================================================================== */
+function renderAssessPlanTable(){
+  const tbody = $("assessPlanTable").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.cos.forEach(co=>{
+    const toolI = el("input",{type:"text"});
+    const timeI = el("input",{type:"text"});
+    tbody.appendChild(el("tr", {}, el("td",{text:co.code, style:"font-weight:700;"}), el("td",{}, toolI), el("td",{}, timeI)));
+  });
+}
+
+/* =====================================================================
+   RENDER: Mark allotment (auto rows per CO)
+   ===================================================================== */
+function renderMarkAllotTable(){
+  const table = $("markAllotTable");
+  table.innerHTML = "";
+  table.appendChild(el("thead", {}, el("tr", {},
+    el("th",{text:"CO"}), el("th",{text:"SE-I"}), el("th",{text:"SE-II"}), el("th",{text:"ASSIGN/TUT"}),
+    el("th",{text:"Lab Int.*"}), el("th",{text:"Lab Ext.*"}), el("th",{text:"END SEM"}), el("th",{text:"Total"})
+  )));
+  const tbody = el("tbody");
+  state.cos.forEach(co=>{
+    if(!state.markAllot[co.code]) state.markAllot[co.code] = {se1:"",se2:"",assign:"",labint:"",labext:"",endsem:""};
+    const m = state.markAllot[co.code];
+    const mkNum = (field)=>{
+      const inp = el("input",{type:"number", value:m[field]});
+      inp.addEventListener("input", ()=>{ m[field]=inp.value; updateMarkTotals(); });
+      return inp;
+    };
+    const rowTotal = el("td", {text:"0", style:"font-weight:700;text-align:center;"});
+    const row = el("tr", {}, el("td",{text:co.code,style:"font-weight:700;"}),
+      el("td",{},mkNum("se1")), el("td",{},mkNum("se2")), el("td",{},mkNum("assign")),
+      el("td",{},mkNum("labint")), el("td",{},mkNum("labext")), el("td",{},mkNum("endsem")), rowTotal);
+    row.dataset.co = co.code;
+    tbody.appendChild(row);
+  });
+  const totalRow = el("tr", {}, el("td",{text:"Total", style:"font-weight:700;background:#f3f0e6;"}),
+    el("td",{id:"totSe1",text:"0"}), el("td",{id:"totSe2",text:"0"}), el("td",{id:"totAssign",text:"0"}),
+    el("td",{id:"totLabint",text:"0"}), el("td",{id:"totLabext",text:"0"}), el("td",{id:"totEndsem",text:"0"}), el("td",{id:"totAll",text:"0", style:"font-weight:700;"}));
+  tbody.appendChild(totalRow);
+  table.appendChild(tbody);
+  updateMarkTotals();
+}
+function updateMarkTotals(){
+  let sums = {se1:0,se2:0,assign:0,labint:0,labext:0,endsem:0};
+  document.querySelectorAll("#markAllotTable tbody tr[data-co]").forEach(row=>{
+    const co = row.dataset.co;
+    const m = state.markAllot[co];
+    let rowTotal = 0;
+    ["se1","se2","assign","labint","labext","endsem"].forEach(f=>{
+      const v = Number(m[f])||0;
+      sums[f]+=v; rowTotal+=v;
+    });
+    row.lastChild.textContent = rowTotal;
+  });
+  if($("totSe1")){
+    $("totSe1").textContent = sums.se1; $("totSe2").textContent = sums.se2; $("totAssign").textContent = sums.assign;
+    $("totLabint").textContent = sums.labint; $("totLabext").textContent = sums.labext; $("totEndsem").textContent = sums.endsem;
+    $("totAll").textContent = sums.se1+sums.se2+sums.assign+sums.labint+sums.labext+sums.endsem;
+  }
+}
+
+/* =====================================================================
+   RENDER: Weightages
+   ===================================================================== */
+function renderWeightTable(){
+  const table = $("weightTable");
+  table.innerHTML = "";
+  table.appendChild(el("thead", {}, el("tr", {}, el("th",{text:"Component"}), el("th",{text:"Weightage"}))));
+  const tbody = el("tbody");
+  const rows = state.weightages[state.courseType];
+  rows.forEach((r)=>{
+    const valInput = el("input", {type:"text", value:r.value});
+    valInput.addEventListener("input", ()=>{ r.value = valInput.value; });
+    tbody.appendChild(el("tr", {}, el("td", {text:r.label}), el("td",{}, valInput)));
+  });
+  table.appendChild(tbody);
+}
+$("courseTypeSelect").addEventListener("change", (e)=>{ state.courseType = e.target.value; renderWeightTable(); });
+
+/* =====================================================================
+   INIT bindings for simple text fields
+   ===================================================================== */
+function bindSimpleFields(){
+  $("pdfHeaderLine1").addEventListener("input", e=> { state.pdfHeader.line1 = e.target.value; state.pdfHeader.line1Touched = true; });
+  $("pdfHeaderLine2").addEventListener("input", e=> state.pdfHeader.line2 = e.target.value);
+  $("academicYear").addEventListener("input", e=> state.academicYear = e.target.value);
+  $("semesterTerm").addEventListener("change", e=> state.semesterTerm = e.target.value);
+  $("instVision").addEventListener("input", e=> state.instVision = e.target.value);
+  $("instMission").addEventListener("input", e=> state.instMission = e.target.value);
+  $("deptVision").addEventListener("input", e=> state.deptVision = e.target.value);
+  $("deptMission").addEventListener("input", e=> state.deptMission = e.target.value);
+  $("prereq").addEventListener("input", e=> state.prereq = e.target.value);
+  $("courseDesc").addEventListener("input", e=> state.courseDesc = e.target.value);
+  $("careerOpp").addEventListener("input", e=> state.careerOpp = e.target.value);
+  $("sdgNarrative").addEventListener("input", e=> state.sdgNarrative = e.target.value);
+  $("realWorldApp").addEventListener("input", e=> state.realWorldApp = e.target.value);
+  $("futureScope").addEventListener("input", e=> state.futureScope = e.target.value);
+  $("prevAttainment").addEventListener("input", e=> state.prevAttainment = e.target.value);
+  $("prevFeedback").addEventListener("input", e=> state.prevFeedback = e.target.value);
+  $("prevActions").addEventListener("input", e=> state.prevActions = e.target.value);
+  $("marksSE1").addEventListener("input", e=> state.marks.SE1 = e.target.value);
+  $("marksSE2").addEventListener("input", e=> state.marks.SE2 = e.target.value);
+  $("marksAssign").addEventListener("input", e=> state.marks.ASSIGN = e.target.value);
+  $("marksLabInt").addEventListener("input", e=> state.marks.LABINT = e.target.value);
+  $("marksEndSem").addEventListener("input", e=> state.marks.ENDSEM = e.target.value);
+  $("marksLabExt").addEventListener("input", e=> state.marks.LABEXT = e.target.value);
+  $("signCourseCoord").addEventListener("input", e=> state.signatures.courseCoord = e.target.value);
+  $("signModuleCoord").addEventListener("input", e=> state.signatures.moduleCoord = e.target.value);
+  $("signProgCoord").addEventListener("input", e=> state.signatures.progCoord = e.target.value);
+  $("signHod").addEventListener("input", e=> state.signatures.hod = e.target.value);
+  $("signDeanAcademic").addEventListener("input", e=> state.signatures.deanAcademic = e.target.value);
+  $("signPrincipal").addEventListener("input", e=> state.signatures.principal = e.target.value);
+}
+
+/* =====================================================================
+   TOC scroll spy
+   ===================================================================== */
+function setupTocSpy(){
+  const links = Array.from(document.querySelectorAll("nav.toc a"));
+  const sections = links.map(l=> document.querySelector(l.getAttribute("href")));
+  window.addEventListener("scroll", ()=>{
+    let idx = 0;
+    sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top < 140) idx = i; });
+    links.forEach(l=>l.classList.remove("active"));
+    if(links[idx]) links[idx].classList.add("active");
+  });
+}
+
+/* =====================================================================
+   LOGO UPLOAD (left optional, right = college crest)
+   ===================================================================== */
+function readImageAsDataUrl(file, cb){
+  const reader = new FileReader();
+  reader.onload = (e)=> cb(e.target.result);
+  reader.onerror = ()=> alert("Could not read that image file. Try a different file (PNG/JPG under a few MB).");
+  reader.readAsDataURL(file);
+}
+function renderLogoPreviews(){
+  const leftWrap = $("leftLogoPreviewWrap"), rightWrap = $("rightLogoPreviewWrap");
+  if(state.pdfHeader.leftLogo){
+    $("leftLogoPreview").src = state.pdfHeader.leftLogo;
+    leftWrap.style.display = "flex";
+  } else {
+    leftWrap.style.display = "none";
+  }
+  if(state.pdfHeader.rightLogo){
+    $("rightLogoPreview").src = state.pdfHeader.rightLogo;
+    rightWrap.style.display = "flex";
+  } else {
+    rightWrap.style.display = "none";
+  }
+}
+$("leftLogoInput").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  readImageAsDataUrl(file, (dataUrl)=>{ state.pdfHeader.leftLogo = dataUrl; renderLogoPreviews(); });
+});
+$("rightLogoInput").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  readImageAsDataUrl(file, (dataUrl)=>{ state.pdfHeader.rightLogo = dataUrl; renderLogoPreviews(); });
+});
+$("removeLeftLogoBtn").addEventListener("click", ()=>{ state.pdfHeader.leftLogo = ""; $("leftLogoInput").value = ""; renderLogoPreviews(); });
+$("removeRightLogoBtn").addEventListener("click", ()=>{ state.pdfHeader.rightLogo = ""; $("rightLogoInput").value = ""; renderLogoPreviews(); });
+
+/* =====================================================================
+   DRAFT SAVE / LOAD (localStorage)
+   ===================================================================== */
+$("saveDraftBtn").addEventListener("click", ()=>{
+  try{
+    localStorage.setItem("mei_course_plan_draft", JSON.stringify(state));
+    alert("Draft saved on this device.");
+  }catch(err){ alert("Could not save draft: " + err.message); }
+});
+$("loadDraftBtn").addEventListener("click", ()=>{
+  const raw = localStorage.getItem("mei_course_plan_draft");
+  if(!raw){ alert("No saved draft found on this device."); return; }
+  state = JSON.parse(raw);
+  renderAll();
+  alert("Draft loaded.");
+});
+
+/* =====================================================================
+   PDF GENERATION
+   ===================================================================== */
+function escapeHtml(str){
+  return (str||"").toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function bulletsFromLines(text){
+  return (text||"").split("\n").map(l=>l.trim()).filter(Boolean).map(l=>"<li>"+escapeHtml(l)+"</li>").join("");
+}
+function buildPrintHtml(){
+  const instName = effectiveInstituteName();
+  const deptName = effectiveDeptName();
+  const dept = currentDept();
+  const cols = [...STANDARD_POS.map(p=>p.code), ...state.psos.map(p=>p.code)];
+
+  let mappingRows = state.cos.map(co=>{
+    const cells = cols.map(c=> "<td style=\"text-align:center;\">"+(state.mapping[co.code+"|"+c]||"")+"</td>").join("");
+    return "<tr><td style=\"font-weight:700;\">"+escapeHtml(co.code)+"</td>"+cells+"</tr>";
+  }).join("");
+  let mappingHeader = cols.map(c=>"<th>"+c+"</th>").join("");
+
+  let lessonRows = "";
+  let cum = 0, tCount=0;
+  state.units.forEach(u=>{
+    lessonRows += "<tr><td colspan=\"9\" style=\"background:#eee;font-weight:700;\">"+escapeHtml(u.title)+"</td></tr>";
+    u.topics.forEach(t=>{
+      tCount++; cum += Number(t.hrs)||0;
+      lessonRows += "<tr><td>"+tCount+"</td><td>"+escapeHtml(t.desc)+"</td><td>"+escapeHtml(t.ref)+"</td><td>"+t.hrs+"</td><td>"+cum+"</td><td>"+escapeHtml(t.method)+"</td><td>"+escapeHtml(t.activity)+"</td><td>"+escapeHtml(t.tool)+"</td></tr>";
+    });
+  });
+
+  let assignRows = state.assignments.map(a=>"<tr><td>"+escapeHtml(a.no)+"</td><td>"+escapeHtml(a.desc)+"</td><td>"+escapeHtml(a.skill)+"</td><td>"+escapeHtml(a.co)+"</td><td>"+escapeHtml(a.deadline)+"</td></tr>").join("");
+
+  let assessPlanRows = "";
+  document.querySelectorAll("#assessPlanTable tbody tr").forEach((row,i)=>{
+    const co = state.cos[i];
+    const toolVal = row.children[1].querySelector("input").value;
+    const timeVal = row.children[2].querySelector("input").value;
+    assessPlanRows += "<tr><td style=\"font-weight:700;\">"+escapeHtml(co.code)+"</td><td>"+escapeHtml(toolVal)+"</td><td>"+escapeHtml(timeVal)+"</td></tr>";
+  });
+
+  let markRows = state.cos.map(co=>{
+    const m = state.markAllot[co.code] || {};
+    const total = ["se1","se2","assign","labint","labext","endsem"].reduce((s,f)=>s+(Number(m[f])||0),0);
+    return "<tr><td style=\"font-weight:700;\">"+escapeHtml(co.code)+"</td><td>"+(m.se1||"")+"</td><td>"+(m.se2||"")+"</td><td>"+(m.assign||"")+"</td><td>"+(m.labint||"")+"</td><td>"+(m.labext||"")+"</td><td>"+(m.endsem||"")+"</td><td style=\"font-weight:700;\">"+total+"</td></tr>";
+  }).join("");
+
+  let weightRows = (state.weightages[state.courseType]||[]).map(r=>"<tr><td>"+escapeHtml(r.label)+"</td><td>"+escapeHtml(r.value)+"</td></tr>").join("");
+  let testRows = state.testPortions.map(r=>"<tr><td>"+escapeHtml(r.name)+"</td><td>"+escapeHtml(r.range)+"</td><td>"+escapeHtml(r.weight)+"</td></tr>").join("");
+  let textbookRows = state.textbooks.map((b,i)=>"<tr><td>"+(i+1)+"</td><td>"+escapeHtml(b.details)+"</td></tr>").join("");
+  let refbookRows = state.refbooks.map((b,i)=>"<tr><td>"+(i+1)+"</td><td>"+escapeHtml(b.details)+"</td></tr>").join("");
+  let webResRows = state.webRes.map((w,i)=>"<tr><td>"+(i+1)+"</td><td>"+escapeHtml(w.topic)+"</td><td>"+escapeHtml(w.link)+"</td></tr>").join("");
+  let webOtherRows = state.webOther.map((w,i)=>"<tr><td>"+(i+1)+"</td><td>"+escapeHtml(w.title)+"</td><td>"+escapeHtml(w.uni)+"</td><td>"+escapeHtml(w.link)+"</td></tr>").join("");
+  let journalRows = state.journals.map((j,i)=>"<tr><td>"+(i+1)+"</td><td>"+escapeHtml(j.name)+"</td><td>"+escapeHtml(j.link)+"</td></tr>").join("");
+  let peoBlocks = state.peos.map(p=>"<p><b>"+escapeHtml(p.code)+": "+escapeHtml(p.title)+"</b><br>"+escapeHtml(p.text)+"</p>").join("");
+  let poBlocks = STANDARD_POS.map(p=>"<p><b>"+p.code+"</b> - "+escapeHtml(p.text)+"</p>").join("");
+  let psoBlocks = state.psos.map(p=>"<p><b>"+escapeHtml(p.code)+"</b> - "+escapeHtml(p.text)+"</p>").join("");
+  let coRows = state.cos.map(co=>"<tr><td style=\"font-weight:700;width:60px;\">"+escapeHtml(co.code)+"</td><td>"+escapeHtml(co.text)+"</td><td style=\"width:90px;\">"+escapeHtml(co.bloom||"")+"</td></tr>").join("");
+  let sdgRows = state.sdgMapping.map(r=>"<tr><td>"+escapeHtml(r.sdg)+"</td><td>"+escapeHtml(r.co)+"</td><td>"+escapeHtml(r.justification)+"</td><td>"+escapeHtml(r.activity)+"</td><td>"+escapeHtml(r.tool)+"</td><td>"+escapeHtml(r.assessment)+"</td></tr>").join("");
+  let fieldVisitRows = state.fieldVisits.map(f=>"<tr><td>"+escapeHtml(f.purpose)+"</td><td>"+escapeHtml(f.place)+"</td><td>"+escapeHtml(f.linkedTopic)+"</td><td>"+escapeHtml(f.month)+"</td></tr>").join("");
+  let expertRows = state.expertLectures.map(x=>"<tr><td>"+escapeHtml(x.expertName)+"</td><td>"+escapeHtml(x.org)+"</td><td>"+escapeHtml(x.topic)+"</td><td>"+escapeHtml(x.month)+"</td></tr>").join("");
+  let outcomeRows = state.courseOutcomesBeyond.map(o=>"<tr><td>"+escapeHtml(o.type)+"</td><td>"+escapeHtml(o.description)+"</td></tr>").join("");
+  let upskillRows = state.upskilling.map(u=>"<tr><td>"+escapeHtml(u.program)+"</td><td>"+escapeHtml(u.mode)+"</td><td>"+escapeHtml(u.month)+"</td></tr>").join("");
+  let certRows = state.certifications.map(c=>"<tr><td>"+escapeHtml(c.name)+"</td><td>"+escapeHtml(c.provider)+"</td><td>"+escapeHtml(c.mode)+"</td></tr>").join("");
+
+  const css = "<style>"
+    +"body{font-family:'Computer Modern Serif',Georgia,'Times New Roman',serif; color:#111; font-size:12px; line-height:1.55;}"
+    +".letterhead{width:100%; border-collapse:collapse; margin-bottom:0;}"
+    +".letterhead td{border:none; padding:0; vertical-align:middle;}"
+    +".letterhead .logo-cell{width:70px;}"
+    +".letterhead .logo-cell img{max-height:58px; max-width:70px; width:auto; height:auto;}"
+    +".letterhead .text-cell{text-align:center; padding:0 8px;}"
+    +".college-name{font-size:18px; font-weight:700; letter-spacing:.01em; text-transform:uppercase;}"
+    +".college-line2{font-size:10px; color:#333; margin-top:2px; letter-spacing:.02em;}"
+    +".dept-name{font-size:13px; font-weight:700; margin-top:8px;}"
+    +".rule-thick{border:none; border-top:1.6px solid #000; margin:8px 0 2px;}"
+    +".rule-thin{border:none; border-top:0.6px solid #000; margin:0 0 10px;}"
+    +".doc-title{text-align:center; font-size:12.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin:2px 0 14px;}"
+    +"h3{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; border-bottom:1.1px solid #000; padding-bottom:3px; margin:20px 0 8px; color:#111;}"
+    +"table.data-tbl{width:100%; border-collapse:collapse; margin:6px 0 14px;}"
+    +"table.data-tbl th{border-top:1.3px solid #000; border-bottom:0.8px solid #000; text-align:left; padding:5px 7px; font-size:10.5px; font-weight:700; background:none;}"
+    +"table.data-tbl td{border-bottom:0.4px solid #bbb; padding:5px 7px; font-size:10.5px; vertical-align:top;}"
+    +"table.data-tbl tr:last-child td{border-bottom:1.3px solid #000;}"
+    +".meta-table{width:100%; border-collapse:collapse; margin:4px 0 4px;}"
+    +".meta-table td{width:33%; padding:6px 8px; vertical-align:top; font-size:10.5px; border:none;}"
+    +".meta-table b{font-weight:700; text-transform:uppercase; font-size:8.5px; letter-spacing:.05em; color:#444; display:block; margin-bottom:2px;}"
+    +".center{text-align:center;}"
+    +"ul{margin:4px 0; padding-left:18px;}"
+    +"p{margin:4px 0;}"
+    +".sign-table{width:100%; border-collapse:collapse; margin-top:6px;}"
+    +".sign-table td{border:none; padding:0 8px; height:52px; vertical-align:bottom; font-weight:700; font-size:10.5px; border-bottom:0.8px solid #000;}"
+    +".sign-caption{font-weight:400; text-align:center; font-size:9px; text-transform:uppercase; letter-spacing:.04em; padding-top:4px; border-bottom:none !important;}"
+    +".footer-note{margin-top:22px; font-size:8.5px; color:#666; text-align:center; border-top:0.4px solid #ccc; padding-top:6px;}"
+    +"</style>";
+
+  const leftLogoCell = state.pdfHeader.leftLogo
+    ? "<img src=\"" + state.pdfHeader.leftLogo + "\" alt=\"\">"
+    : "";
+  const rightLogoCell = state.pdfHeader.rightLogo
+    ? "<img src=\"" + state.pdfHeader.rightLogo + "\" alt=\"\">"
+    : "";
+  const headerLine1 = state.pdfHeader.line1 || instName;
+  const headerLine2 = state.pdfHeader.line2;
+
+  return css
+   +"<div style=\"padding:26px 30px;\">"
+
+   +"<table class=\"letterhead\"><tr>"
+   +"<td class=\"logo-cell\">"+leftLogoCell+"</td>"
+   +"<td class=\"text-cell\">"
+   +"<div class=\"college-name\">"+escapeHtml(headerLine1)+"</div>"
+   +(headerLine2 ? "<div class=\"college-line2\">"+escapeHtml(headerLine2)+"</div>" : "")
+   +"<div class=\"dept-name\">"+escapeHtml(dept.school ? dept.school + " &middot; " : "")+escapeHtml(deptName)+"</div>"
+   +"</td>"
+   +"<td class=\"logo-cell\" style=\"text-align:right;\">"+rightLogoCell+"</td>"
+   +"</tr></table>"
+   +"<hr class=\"rule-thick\"><hr class=\"rule-thin\">"
+   +"<div class=\"doc-title\">Course Plan &nbsp;&middot;&nbsp; "+escapeHtml(state.semesterTerm)+" "+escapeHtml(state.academicYear)+"</div>"
+
+   +"<table class=\"meta-table\">"
+   +"<tr><td><b>Course Code / Name</b>"+escapeHtml(state.meta.courseCode)+" &mdash; "+escapeHtml(state.meta.courseName)+"</td>"
+   +"<td><b>Course Type / Credit</b>"+escapeHtml(state.meta.courseType)+" / "+escapeHtml(state.meta.credit)+"</td>"
+   +"<td><b>Program</b>"+escapeHtml(state.meta.program)+"</td></tr>"
+   +"<tr><td><b>Year / Semester</b>"+escapeHtml(state.meta.yearSem)+"</td>"
+   +"<td><b>Course Coordinator</b>"+escapeHtml(state.meta.courseCoordinator)+"</td>"
+   +"<td><b>Module Coordinator</b>"+escapeHtml(state.meta.moduleCoordinator)+"</td></tr>"
+   +"<tr><td><b>Program Coordinator</b>"+escapeHtml(state.meta.programCoordinator)+"</td><td></td><td></td></tr>"
+   +"</table>"
+
+   +"<h3>Institute Vision &amp; Mission</h3>"
+   +"<p><b>Vision:</b> "+escapeHtml(state.instVision)+"</p>"
+   +"<p><b>Mission:</b> "+escapeHtml(state.instMission)+"</p>"
+
+   +"<h3>Department Vision &amp; Mission</h3>"
+   +"<p><b>Vision:</b> "+escapeHtml(state.deptVision)+"</p>"
+   +"<p><b>Mission:</b> "+escapeHtml(state.deptMission)+"</p>"
+
+   +"<h3>Pre-requisite</h3><p>"+escapeHtml(state.prereq)+"</p>"
+   +"<h3>Course Description</h3><ul>"+bulletsFromLines(state.courseDesc)+"</ul>"
+   +"<h3>Career Opportunities</h3><ul>"+bulletsFromLines(state.careerOpp)+"</ul>"
+
+   +"<h3>Course Outcomes (COs)</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>CO</th><th>Statement</th><th>Bloom's Level</th></tr></thead><tbody>"+coRows+"</tbody></table>"
+
+   +"<h3>Program Educational Objectives (PEOs)</h3>"+peoBlocks
+   +"<h3>Program Outcomes (POs)</h3>"+poBlocks
+   +"<h3>Program Specific Outcomes (PSOs)</h3>"+psoBlocks
+
+   +"<h3>CO - PO / PSO Mapping</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th></th>"+mappingHeader+"</tr></thead><tbody>"+mappingRows+"</tbody></table>"
+   +"<p style=\"font-size:10px;\">3 - Strong, 2 - Medium, 1 - Low Correlation</p>"
+
+   +"<h3>Sustainability &amp; UN SDG Alignment</h3>"
+   +"<p>"+escapeHtml(state.sdgNarrative)+"</p>"
+   +"<table class=\"data-tbl\"><thead><tr><th>SDG</th><th>Mapped CO</th><th>Justification</th><th>Activity</th><th>Tool</th><th>Assessment Method</th></tr></thead><tbody>"+sdgRows+"</tbody></table>"
+
+   +"<h3>Textbooks</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Details</th></tr></thead><tbody>"+textbookRows+"</tbody></table>"
+   +"<h3>Reference Books</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Details</th></tr></thead><tbody>"+refbookRows+"</tbody></table>"
+   +"<h3>Web Resources</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Unit - Topic</th><th>Link</th></tr></thead><tbody>"+webResRows+"</tbody></table>"
+   +"<h3>Web Links - Similar Courses at Other Universities</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Course Title</th><th>University</th><th>Link</th></tr></thead><tbody>"+webOtherRows+"</tbody></table>"
+   +"<h3>Magazines / Journals</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Name</th><th>Link</th></tr></thead><tbody>"+journalRows+"</tbody></table>"
+
+   +"<h3>Lesson Plan</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Topic</th><th>Description</th><th>Reference</th><th>Hr</th><th>Cum. Hr</th><th>Teaching Method</th><th>Activity</th><th>Tool Used</th></tr></thead><tbody>"+lessonRows+"</tbody></table>"
+
+   +"<h3>Assignments</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Assignment</th><th>Description</th><th>Skill Targeted</th><th>Mapped CO</th><th>Deadline</th></tr></thead><tbody>"+assignRows+"</tbody></table>"
+
+   +"<h3>Field Visit Plan</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Purpose</th><th>Proposed Place</th><th>Linked Topic/CO</th><th>Tentative Month</th></tr></thead><tbody>"+fieldVisitRows+"</tbody></table>"
+   +"<h3>Expert Lecture (Proposed)</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Expert Name &amp; Designation</th><th>Organization</th><th>Proposed Topic</th><th>Tentative Month</th></tr></thead><tbody>"+expertRows+"</tbody></table>"
+
+   +"<h3>Course-linked Outcomes</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody>"+outcomeRows+"</tbody></table>"
+   +"<p><b>Direct use / application of this course in the real world:</b> "+escapeHtml(state.realWorldApp)+"</p>"
+   +"<p><b>Scope for the future:</b> "+escapeHtml(state.futureScope)+"</p>"
+
+   +"<h3>Assessment Plan for the Course</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>CO</th><th>Measurement Tool</th><th>Time of Measurement</th></tr></thead><tbody>"+assessPlanRows+"</tbody></table>"
+
+   +"<h3>Assessment Methodologies</h3>"
+   +"<p>Sessional Examination I: "+escapeHtml(state.marks.SE1)+" marks | Sessional Examination II: "+escapeHtml(state.marks.SE2)+" marks | Assignment: "+escapeHtml(state.marks.ASSIGN)+" marks<br>"
+   +"Internal Lab/Practical: "+escapeHtml(state.marks.LABINT)+" marks | External Lab/Practical: "+escapeHtml(state.marks.LABEXT)+" marks | End Semester Examination: "+escapeHtml(state.marks.ENDSEM)+" marks</p>"
+
+   +"<h3>Mark Allotment for CO Assessment</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>CO</th><th>SE-I</th><th>SE-II</th><th>ASSIGN/TUT</th><th>Lab Int.</th><th>Lab Ext.</th><th>End Sem</th><th>Total</th></tr></thead><tbody>"+markRows+"</tbody></table>"
+
+   +"<h3>Weightages ("+escapeHtml(state.courseType)+")</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Component</th><th>Weightage</th></tr></thead><tbody>"+weightRows+"</tbody></table>"
+
+   +"<h3>Test Portions</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Assessment</th><th>Topic No. Range</th><th>Weightage (%)</th></tr></thead><tbody>"+testRows+"</tbody></table>"
+
+   +"<h3>Previous Offering - Result / Attainment / Feedback</h3>"
+   +"<p><b>Previous year result / CO-PO attainment summary:</b> "+escapeHtml(state.prevAttainment)+"</p>"
+   +"<p><b>Feedback / suggestions received from the previous handling teacher:</b> "+escapeHtml(state.prevFeedback)+"</p>"
+   +"<p><b>Actions taken / planned to close the gap:</b> "+escapeHtml(state.prevActions)+"</p>"
+
+   +"<h3>Training / Upskilling Plan for the Present Handling Teacher</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Training / Program</th><th>Mode</th><th>Tentative Month</th></tr></thead><tbody>"+upskillRows+"</tbody></table>"
+
+   +"<h3>Certification Programs (External) for Students</h3>"
+   +"<table class=\"data-tbl\"><thead><tr><th>Certification</th><th>Provider</th><th>Mode / Duration</th></tr></thead><tbody>"+certRows+"</tbody></table>"
+
+   +"<h3>Signatories</h3>"
+   +"<table class=\"sign-table\">"
+   +"<tr><td>"+escapeHtml(state.signatures.courseCoord)+"</td><td>"+escapeHtml(state.signatures.moduleCoord)+"</td><td>"+escapeHtml(state.signatures.progCoord)+"</td></tr>"
+   +"<tr><td class=\"sign-caption\">Course Coordinator</td><td class=\"sign-caption\">Module Coordinator</td><td class=\"sign-caption\">Program Coordinator</td></tr>"
+   +"<tr><td>"+escapeHtml(state.signatures.hod)+"</td><td>"+escapeHtml(state.signatures.deanAcademic)+"</td><td>"+escapeHtml(state.signatures.principal)+"</td></tr>"
+   +"<tr><td class=\"sign-caption\">Head of the Department</td><td class=\"sign-caption\">Dean / Academic</td><td class=\"sign-caption\">Principal</td></tr>"
+   +"</table>"
+   +"<div class=\"footer-note\">Generated with the Course Plan Designer &middot; isiva.in/course-plan.html</div>"
+   +"</div>";
+}
+
+function downloadPdf(){
+  const printArea = $("printArea");
+  printArea.innerHTML = buildPrintHtml();
+  printArea.style.display = "block";
+  const fileName = ((state.meta.courseCode||"Course") + "_CoursePlan_" + (state.academicYear||"")).replace(/\s+/g,"_") + ".pdf";
+  const opt = {
+    margin: [10,10,10,10],
+    filename: fileName,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS:true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all','css','legacy'] }
+  };
+  html2pdf().set(opt).from(printArea).save().then(()=>{ printArea.style.display = "none"; });
+}
+$("downloadPdfBtn").addEventListener("click", downloadPdf);
+$("downloadPdfBtn2").addEventListener("click", downloadPdf);
+
+/* =====================================================================
+   RENDER ALL
+   ===================================================================== */
+function renderAll(){
+  renderInstituteSelectors();
+  onInstituteOrDeptChange();
+  renderCourseMeta();
+  renderCoTable();
+  renderMappingTable();
+  renderSdgTable();
+  renderSimpleListTable("textbookTable","textbooks",textbookCols);
+  renderSimpleListTable("refbookTable","refbooks",textbookCols);
+  renderSimpleListTable("webResTable","webRes",webResCols);
+  renderSimpleListTable("webOtherTable","webOther",webOtherCols);
+  renderSimpleListTable("journalTable","journals",journalCols);
+  renderUnits();
+  renderAssignTable();
+  renderSimpleListTable("fieldVisitTable","fieldVisits",fieldVisitCols);
+  renderSimpleListTable("expertLectureTable","expertLectures",expertLectureCols);
+  renderSimpleListTable("courseOutcomesTable","courseOutcomesBeyond",courseOutcomeCols);
+  renderWeightTable();
+  renderSimpleListTable("testPortionTable","testPortions",testPortionCols);
+  renderSimpleListTable("upskillTable","upskilling",upskillCols);
+  renderSimpleListTable("certTable","certifications",certCols);
+  $("academicYear").value = state.academicYear;
+  $("pdfHeaderLine1").value = state.pdfHeader.line1;
+  $("pdfHeaderLine2").value = state.pdfHeader.line2;
+  renderLogoPreviews();
+  $("semesterTerm").value = state.semesterTerm;
+  $("prereq").value = state.prereq;
+  $("courseDesc").value = state.courseDesc;
+  $("careerOpp").value = state.careerOpp;
+  $("sdgNarrative").value = state.sdgNarrative;
+  $("realWorldApp").value = state.realWorldApp;
+  $("futureScope").value = state.futureScope;
+  $("prevAttainment").value = state.prevAttainment;
+  $("prevFeedback").value = state.prevFeedback;
+  $("prevActions").value = state.prevActions;
+  $("courseTypeSelect").value = state.courseType;
+  $("marksSE1").value = state.marks.SE1; $("marksSE2").value = state.marks.SE2; $("marksAssign").value = state.marks.ASSIGN;
+  $("marksLabInt").value = state.marks.LABINT; $("marksEndSem").value = state.marks.ENDSEM; $("marksLabExt").value = state.marks.LABEXT;
+  $("signCourseCoord").value = state.signatures.courseCoord; $("signModuleCoord").value = state.signatures.moduleCoord;
+  $("signProgCoord").value = state.signatures.progCoord; $("signHod").value = state.signatures.hod;
+  $("signDeanAcademic").value = state.signatures.deanAcademic; $("signPrincipal").value = state.signatures.principal;
+}
+
+bindSimpleFields();
+renderAll();
+setupTocSpy();
+</script>
+</body>
+</html>
