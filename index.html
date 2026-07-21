@@ -12,15 +12,14 @@
 <body>
 <!-- 
   VISITOR COUNTER for isiva.in/index.html
-  Paste this snippet anywhere in your index.html — recommended: just before </body>
-  It increments the site-wide counter on every homepage visit and shows the count.
+  Paste this snippet just before </body> in your index.html
 -->
 <div style="text-align:center;padding:12px;font-size:12px;color:#888;border-top:1px solid #eee;margin-top:20px">
   🌐 This page has been visited <strong id="site-visit-count">...</strong> times
 </div>
 <script>
-fetch('https://api.countapi.xyz/hit/isiva.in/site')
-  .then(function(r){return r.json();})
+fetch('https://countapi.mileshilliard.com/api/v1/hit/isiva-dot-in-site-hits-2024')
+  .then(function(r){ return r.json(); })
   .then(function(d){
     var el = document.getElementById('site-visit-count');
     if(el) el.textContent = Number(d.value).toLocaleString('en-IN');
@@ -30,11 +29,6 @@ fetch('https://api.countapi.xyz/hit/isiva.in/site')
     if(el) el.textContent = 'many';
   });
 </script>
-<!--
-  NOTE: The CO Training page (co-training.html) has its own counter built in.
-  This snippet is only needed on index.html (and any other pages you want counted).
-  Both counters are free — no account, no limit, data persists forever.
--->
 <header class="site-header">
   <div class="site-header__inner">
     <a href="index.html" class="brand">Dr. I. Siva <small>ME · PhD</small></a>
