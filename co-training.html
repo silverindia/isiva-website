@@ -1437,8 +1437,12 @@ function apPrint() {
 // Uses countapi.xyz — free, no account needed
 // Namespace: isiva | Keys: co-training and site
 function loadVisitorCounts() {
-  // CO Training page counter — increments on each visit
-  fetch('https://api.countapi.xyz/hit/isiva.in/co-training')
+  // Using countapi.mileshilliard.com — free replacement for discontinued countapi.xyz
+  // Unique keys to avoid collisions with other users
+  var coKey   = 'isiva-co-training-page-hits-2024';
+  var siteKey = 'isiva-dot-in-site-hits-2024';
+
+  fetch('https://countapi.mileshilliard.com/api/v1/hit/' + coKey)
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var el = document.getElementById('vc-co');
@@ -1448,8 +1452,8 @@ function loadVisitorCounts() {
       var el = document.getElementById('vc-co');
       if (el) el.textContent = '—';
     });
-  // Site-wide counter — read only (incremented by main index page)
-  fetch('https://api.countapi.xyz/hit/isiva.in/site')
+
+  fetch('https://countapi.mileshilliard.com/api/v1/hit/' + siteKey)
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var el = document.getElementById('vc-site');
