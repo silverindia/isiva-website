@@ -352,15 +352,15 @@ footer.app-footer b{color:var(--navy);}
     <section class="section" id="sec-books">
       <h2>11. Books</h2>
       <h3 style="font-size:14px;color:var(--navy);">Textbooks</h3>
-      <p class="hint">Paste the full citation into Details &mdash; the ISBN/DOI is auto-detected from it where possible; edit or fill it in yourself if not. Once an ISBN is in that field, click "Fetch Title/Author" to pull the title, author(s) and publisher/edition from Google Books (best-effort, needs internet access).</p>
+      <p class="hint">Paste the full citation into Details &mdash; the ISBN/DOI/ASIN is auto-detected from it where possible; edit or fill it in yourself if not. For ISBNs, click "Fetch Title/Author" to pull the title, author(s) and publisher/edition from Google Books, falling back to Open Library if Google has no match (best-effort, needs internet access; many regional or older editions aren't indexed by either). ASINs (Amazon's own codes) can't be auto-looked-up &mdash; there's no free public API for that &mdash; but they're still detected and flagged so you know to check Amazon manually.</p>
       <table class="data" id="textbookTable">
-        <thead><tr><th style="width:50px">#</th><th>Details</th><th style="width:230px">ISBN / DOI</th><th style="width:40px"></th></tr></thead>
+        <thead><tr><th style="width:50px">#</th><th>Details</th><th style="width:230px">ISBN / DOI / ASIN</th><th style="width:40px"></th></tr></thead>
         <tbody></tbody>
       </table>
       <div class="toolbar-row"><button class="btn ghost small" id="addTextbookBtn">+ Add Textbook</button></div>
       <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Reference Books</h3>
       <table class="data" id="refbookTable">
-        <thead><tr><th style="width:50px">#</th><th>Details</th><th style="width:230px">ISBN / DOI</th><th style="width:40px"></th></tr></thead>
+        <thead><tr><th style="width:50px">#</th><th>Details</th><th style="width:230px">ISBN / DOI / ASIN</th><th style="width:40px"></th></tr></thead>
         <tbody></tbody>
       </table>
       <div class="toolbar-row"><button class="btn ghost small" id="addRefbookBtn">+ Add Reference Book</button></div>
@@ -538,7 +538,7 @@ footer.app-footer b{color:var(--navy);}
     </section>
 
     <div class="toolbar-row" style="justify-content:center; margin-top:10px;">
-      <button class="btn primary" id="downloadPdfBtn2">Download Course Plan as PDF</button>
+      <p class="hint" style="margin:0;">Use the "Download PDF" button in the header above to generate your course plan.</p>
     </div>
 
   </main>
@@ -1009,56 +1009,113 @@ function extractIsbnDoi(text){
     const digits = raw.replace(/[-\s]/g,"");
     if(digits.length === 10 || digits.length === 13) return "ISBN: " + raw.trim();
   }
+  const asinMatch = text.match(/\bASIN:?\s*([A-Z0-9]{10})\b/i) || text.match(/\b(B0[A-Z0-9]{8})\b/);
+  if(asinMatch) return "ASIN: " + asinMatch[1].toUpperCase();
   return "";
 }
 
-function cleanIsbnDigits(isbnField){
-  if(!isbnField) return "";
-  const m = isbnField.match(/(\d[\d\-]{8,16}[\dXx])/);
+function cleanIsbnDigits(field){
+  if(!field) return "";
+  const m = field.match(/(\d[\d\-]{8,16}[\dXx])/);
   if(!m) return "";
   const digits = m[1].replace(/[-\s]/g,"");
   return (digits.length===10 || digits.length===13) ? digits : "";
 }
 
+function cleanAsin(field){
+  if(!field) return "";
+  const m = field.match(/\b([A-Z0-9]{10})\b/i);
+  if(!m) return "";
+  const candidate = m[1].toUpperCase();
+  // ASINs are alphanumeric and not purely numeric (a purely-numeric 10-char code is more likely an ISBN-10)
+  return /[A-Z]/.test(candidate) ? candidate : "";
+}
+
+async function tryGoogleBooks(digits){
+  const res = await fetch("https://www.googleapis.com/books/v1/volumes?q=isbn:"+digits);
+  const data = await res.json();
+  if(data.totalItems && data.items && data.items.length){
+    const vi = data.items[0].volumeInfo || {};
+    return {
+      title: vi.title || "",
+      subtitle: vi.subtitle || "",
+      authors: (vi.authors||[]).join(", "),
+      edition: vi.publishedDate || "",
+      publisher: vi.publisher || "",
+      source: "Google Books"
+    };
+  }
+  return null;
+}
+
+async function tryOpenLibrary(digits){
+  const res = await fetch("https://openlibrary.org/api/books?bibkeys=ISBN:"+digits+"&format=json&jscmd=data");
+  const data = await res.json();
+  const rec = data["ISBN:"+digits];
+  if(rec){
+    return {
+      title: rec.title || "",
+      subtitle: rec.subtitle || "",
+      authors: (rec.authors||[]).map(a=>a.name).join(", "),
+      edition: rec.publish_date || "",
+      publisher: (rec.publishers||[]).map(p=>p.name).join(", "),
+      source: "Open Library"
+    };
+  }
+  return null;
+}
+
 async function fetchBookInfo(row, detailsI, infoEl, btn){
-  const digits = cleanIsbnDigits(row.isbn || "");
-  if(!digits){
+  const rawField = row.isbn || "";
+  const digits = cleanIsbnDigits(rawField);
+  const asin = digits ? "" : cleanAsin(rawField);
+
+  if(!digits && !asin){
     infoEl.style.color = "var(--danger)";
-    infoEl.textContent = "No valid 10- or 13-digit ISBN found in that field to look up.";
+    infoEl.textContent = "No valid ISBN (10/13-digit) or ASIN (10-character code) found in that field.";
     return;
   }
+
+  if(asin){
+    infoEl.style.color = "var(--muted)";
+    infoEl.textContent = "This looks like an ASIN (" + asin + "), not an ISBN. Amazon doesn't offer a free, no-key API for ASIN look-ups, so this can't be auto-filled — " +
+      "you can check it manually at amazon.in/dp/" + asin + " and paste the details in yourself.";
+    return;
+  }
+
   const origLabel = btn.textContent;
   btn.disabled = true; btn.textContent = "Looking up...";
   infoEl.style.color = "var(--muted)";
   infoEl.textContent = "Contacting Google Books...";
+
+  let result = null;
   try{
-    const res = await fetch("https://www.googleapis.com/books/v1/volumes?q=isbn:"+digits);
-    const data = await res.json();
-    if(data.totalItems && data.items && data.items.length){
-      const vi = data.items[0].volumeInfo || {};
-      const title = vi.title || "";
-      const subtitle = vi.subtitle ? (": " + vi.subtitle) : "";
-      const authors = (vi.authors||[]).join(", ");
-      const edition = vi.publishedDate || "";
-      const publisher = vi.publisher || "";
-      row.fetchedTitle = title + subtitle;
-      row.fetchedAuthors = authors;
-      row.fetchedEdition = edition;
-      row.fetchedPublisher = publisher;
-      infoEl.style.color = "var(--good)";
-      infoEl.textContent = "Found: " + (title+subtitle) + (authors ? " — " + authors : "") + (publisher ? ", " + publisher : "") + (edition ? " (" + edition + ")" : "") + ". This reflects the edition tied to this exact ISBN, not necessarily the newest edition of the book.";
-      if(!detailsI.value.trim()){
-        const built = (title+subtitle) + (authors ? ", by " + authors : "") + (publisher ? ", " + publisher : "") + (edition ? ", " + edition : "");
-        row.details = built;
-        detailsI.value = built;
-      }
-    } else {
-      infoEl.style.color = "var(--danger)";
-      infoEl.textContent = "No match found on Google Books for ISBN " + digits + ".";
+    result = await tryGoogleBooks(digits);
+  }catch(err){ /* fall through to Open Library */ }
+
+  if(!result){
+    infoEl.textContent = "Not on Google Books, trying Open Library...";
+    try{
+      result = await tryOpenLibrary(digits);
+    }catch(err){ /* both failed */ }
+  }
+
+  if(result){
+    const fullTitle = result.title + (result.subtitle ? (": " + result.subtitle) : "");
+    row.fetchedTitle = fullTitle;
+    row.fetchedAuthors = result.authors;
+    row.fetchedEdition = result.edition;
+    row.fetchedPublisher = result.publisher;
+    infoEl.style.color = "var(--good)";
+    infoEl.textContent = "Found via " + result.source + ": " + fullTitle + (result.authors ? " — " + result.authors : "") + (result.publisher ? ", " + result.publisher : "") + (result.edition ? " (" + result.edition + ")" : "") + ". This reflects the edition tied to this exact ISBN, not necessarily the newest edition of the book.";
+    if(!detailsI.value.trim()){
+      const built = fullTitle + (result.authors ? ", by " + result.authors : "") + (result.publisher ? ", " + result.publisher : "") + (result.edition ? ", " + result.edition : "");
+      row.details = built;
+      detailsI.value = built;
     }
-  }catch(err){
+  } else {
     infoEl.style.color = "var(--danger)";
-    infoEl.textContent = "Lookup failed (network or CORS issue): " + err.message;
+    infoEl.textContent = "No match for ISBN " + digits + " on Google Books or Open Library. Many regional/older textbook editions simply aren't indexed by either — please fill in the details manually.";
   }
   btn.disabled = false; btn.textContent = origLabel;
 }
@@ -1638,8 +1695,8 @@ function buildPrintHtml(){
    +"<p>"+escapeHtml(state.sdgNarrative)+"</p>"
    +"<table class=\"data-tbl\"><thead><tr><th>SDG</th><th>Mapped CO</th><th>Level</th><th>Justification</th><th>Activity</th><th>Tool</th><th>Assessment Method</th></tr></thead><tbody>"+sdgRows+"</tbody></table>"
 
-   +"<h3>Textbooks</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Details</th><th style=\"width:110px;\">ISBN / DOI</th></tr></thead><tbody>"+textbookRows+"</tbody></table>"
-   +"<h3>Reference Books</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Details</th><th style=\"width:110px;\">ISBN / DOI</th></tr></thead><tbody>"+refbookRows+"</tbody></table>"
+   +"<h3>Textbooks</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Details</th><th style=\"width:110px;\">ISBN / DOI / ASIN</th></tr></thead><tbody>"+textbookRows+"</tbody></table>"
+   +"<h3>Reference Books</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Details</th><th style=\"width:110px;\">ISBN / DOI / ASIN</th></tr></thead><tbody>"+refbookRows+"</tbody></table>"
    +"<h3>Web Resources</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Unit - Topic</th><th>Link</th></tr></thead><tbody>"+webResRows+"</tbody></table>"
    +"<h3>Web Links - Similar Courses at Other Universities</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Course Title</th><th>University</th><th>Link</th></tr></thead><tbody>"+webOtherRows+"</tbody></table>"
    +"<h3>Magazines / Journals</h3><table class=\"data-tbl\"><thead><tr><th style=\"width:30px;\">#</th><th>Name</th><th>Link</th></tr></thead><tbody>"+journalRows+"</tbody></table>"
@@ -1704,7 +1761,7 @@ function buildPrintHtml(){
 
 function downloadPdf(){
   const printArea = $("printArea");
-  const btns = [$("downloadPdfBtn"), $("downloadPdfBtn2")];
+  const btns = [$("downloadPdfBtn")];
   try{
     printArea.innerHTML = buildPrintHtml();
   }catch(err){
@@ -1744,7 +1801,6 @@ function downloadPdf(){
   });
 }
 $("downloadPdfBtn").addEventListener("click", downloadPdf);
-$("downloadPdfBtn2").addEventListener("click", ()=> $("downloadPdfBtn").click());
 
 /* =====================================================================
    RENDER ALL
