@@ -1,0 +1,298 @@
+/* ============================================
+   Home page — Nova look
+   Loads after base.css. Only used by index.html.
+   ============================================ */
+
+/* ===== Hero ===== */
+
+.hero {
+  padding: var(--space-5) 0 var(--space-6);
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.hero__text h1 {
+  font-size: var(--step-5);
+  margin-top: var(--space-2);
+  letter-spacing: -0.04em;
+}
+
+.hero__lede {
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  max-width: 54ch;
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.hero__partners {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.5rem;
+  margin: var(--space-5) 0 0;
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.hero__partners span:first-child {
+  font-weight: 400;
+  color: var(--sage);
+}
+
+/* Portrait inside an organic blob, as in Nova */
+
+.hero__visual {
+  display: flex;
+  justify-content: center;
+}
+
+.portrait-frame {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 4 / 5;
+}
+
+.portrait-frame__shape {
+  position: absolute;
+  inset: 0;
+  transform: translate(18px, 18px) rotate(3deg);
+  background: var(--accent-tint);
+  border-radius: 58% 42% 52% 48% / 46% 54% 46% 54%;
+}
+
+.portrait-frame__img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 58% 42% 52% 48% / 46% 54% 46% 54%;
+  background: var(--paper-deep);
+}
+
+/* ===== Metrics band (dark) ===== */
+
+.metrics-section {
+  padding: 0 0 var(--space-6);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3);
+  background: var(--ply-green-deep);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-4);
+  text-align: center;
+}
+
+.metrics-grid .stat {
+  padding: 0 0.25rem;
+}
+
+.metrics-grid .stat + .stat {
+  border-left: 1px solid rgba(255, 253, 249, 0.14);
+}
+
+.metrics-grid .stat .num {
+  color: var(--resin);
+  font-size: var(--step-3);
+  font-weight: 500;
+}
+
+.metrics-grid .stat .label {
+  color: var(--thread);
+}
+
+/* ===== About strip ===== */
+
+.about-strip__inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.about-strip h2 {
+  font-size: var(--step-3);
+  margin: var(--space-2) 0 var(--space-3);
+}
+
+.about-strip p {
+  color: var(--ink-soft);
+}
+
+.text-link {
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-weight: 500;
+  color: var(--resin-deep);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s var(--ease);
+}
+.text-link:hover { border-bottom-color: var(--resin-deep); }
+
+.about-strip__list {
+  background: var(--surface-warm);
+  border: 1px solid var(--thread);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.about-strip__list h3 {
+  font-size: var(--step-1);
+  margin-bottom: var(--space-2);
+}
+
+.role-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.role-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--thread);
+  font-size: var(--step--1);
+  color: var(--ink);
+}
+
+.role-list li:first-child { border-top: 0; }
+
+/* ===== Research pillars ===== */
+
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.pillar-grid .card {
+  position: relative;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+}
+
+.pillar-grid .card h3 {
+  font-size: var(--step-1);
+  margin: var(--space-2) 0 var(--space-1);
+}
+
+.pillar-grid .card p:not(.tag) {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  margin: 0;
+}
+
+.card__index {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--sage);
+}
+
+/* ===== International network ===== */
+
+.network-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4) var(--space-3);
+}
+
+.network-item {
+  border-top: 2px solid var(--ply-green-deep);
+  padding-top: var(--space-2);
+}
+
+.network-item__country {
+  display: block;
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ply-green-deep);
+  margin-bottom: 0.4rem;
+}
+
+.network-item__detail {
+  display: block;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+/* ===== Call to action (dark panel) ===== */
+
+.cta-section {
+  padding: var(--space-5) 0 0;
+}
+
+.cta-section__inner {
+  background: var(--ply-green-deep);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.cta-section__inner h2 {
+  color: var(--paper);
+  font-size: var(--step-3);
+  max-width: 24ch;
+}
+
+.cta-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 1000px) {
+  .metrics-grid { grid-template-columns: repeat(3, 1fr); row-gap: var(--space-4); }
+  .metrics-grid .stat:nth-child(4) { border-left: 0; }
+  .pillar-grid { grid-template-columns: repeat(2, 1fr); }
+  .network-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 820px) {
+  .hero { padding-top: var(--space-4); }
+  .hero__inner { grid-template-columns: 1fr; gap: var(--space-4); }
+  .hero__visual { order: -1; }
+  .portrait-frame { max-width: 320px; }
+  .about-strip__inner { grid-template-columns: 1fr; gap: var(--space-4); }
+}
+
+@media (max-width: 600px) {
+  .section { padding: var(--space-5) 0; }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: var(--space-4) var(--space-3);
+  }
+  .metrics-grid .stat:nth-child(odd) { border-left: 0; }
+  .metrics-grid .stat:nth-child(even) { border-left: 1px solid rgba(255, 253, 249, 0.14); }
+  .pillar-grid,
+  .network-grid { grid-template-columns: 1fr; }
+  .cta-section__inner { padding: var(--space-5) var(--space-3); }
+}
