@@ -694,9 +694,27 @@ h1,h2,h3,h4{letter-spacing:-.02em}
 .hero::after{background:rgba(185,139,110,.10)}
 .tab-nav{border-radius:12px}
 
+
+/* ===== Email-code sign-in flow ===== */
+[hidden]{display:none !important}
+.reg-hint{font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px}
+.reg-link{background:none;border:none;padding:0;font:inherit;font-size:12px;font-weight:600;color:var(--mid);cursor:pointer;text-decoration:underline;font-family:'Inter',system-ui,sans-serif}
+.reg-link:hover{color:#161616}
+.reg-link:disabled{color:var(--muted);text-decoration:none;cursor:default}
+.reg-codehead{font-size:14px;line-height:1.6;color:var(--ink);margin-bottom:2px}
+.reg-codehead strong{overflow-wrap:anywhere}
+.reg-row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:6px}
+.reg-verified{background:var(--green-bg);color:var(--green);border:1px solid #A9DFBF;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:600;margin-bottom:16px;overflow-wrap:anywhere}
+#step-code .otp-inputs{gap:8px;margin:14px 0 6px}
+#step-code .otp-digit{flex:1;min-width:0;width:auto;max-width:56px;height:52px;border-color:var(--border);font-size:22px}
+#step-code .otp-digit:focus{border-color:#8c5a3c;box-shadow:0 0 0 3px rgba(185,139,110,.25)}
+#step-code .otp-digit:disabled{opacity:.55}
+.reg-status{font-size:12px;color:var(--muted);min-height:18px}
+.reg-error{line-height:1.5}
+.reg-detail{display:block;font-size:10.5px;opacity:.8;margin-top:2px;word-break:break-word}
 </style>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("XiIqPBh9qXU9V4qI6");</script>
+<script>try{emailjs.init("XiIqPBh9qXU9V4qI6");}catch(e){}</script>
 </head>
 <body>
 <nav class="isiva-nav" aria-label="Site navigation">
@@ -766,36 +784,71 @@ h1,h2,h3,h4{letter-spacing:-.02em}
     <div class="reg-card-top">
       <div class="reg-eyebrow">Free · NBA + NAAC Aligned · 5 Modules</div>
       <div class="reg-title">OBE Faculty Training Portal</div>
-      <div class="reg-subtitle">Register once to access all modules, quizzes, interactive tools, and your certificate of completion.</div>
+      <div class="reg-subtitle" id="reg-subtitle" aria-live="polite">Register or sign back in — enter your email and we'll send a 6-digit code. No password.</div>
     </div>
 
     <!-- REGISTRATION FORM -->
     <div class="reg-body" id="reg-form-wrap">
-      <form id="reg-form" onsubmit="return false">
+      <form id="reg-form" onsubmit="return false" novalidate>
 
-        <div class="reg-grid">
+        <!-- STEP 1 · EMAIL -->
+        <div id="step-email">
           <div class="reg-field">
-            <label class="reg-label" for="rf-name">Full name <span>*</span></label>
-            <input class="reg-input" type="text" id="rf-name" placeholder="Dr. / Prof. / Mr. / Ms." autocomplete="name" required>
-            <div class="reg-error" id="err-name">Please enter your full name</div>
+            <label class="reg-label" for="rf-email">Your email address <span>*</span></label>
+            <input class="reg-input" type="email" id="rf-email" placeholder="your@institution.ac.in" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false">
+            <div class="reg-error" id="err-email" role="alert">Please enter a valid email address</div>
           </div>
-          <div class="reg-field">
-            <label class="reg-label" for="rf-desig">Designation <span>*</span></label>
-            <input class="reg-input" type="text" id="rf-desig" placeholder="Professor / HOD / IQAC Director" required>
-            <div class="reg-error" id="err-desig">Please enter your designation</div>
-          </div>
+          <button class="reg-submit" type="button" id="btn-send" onclick="requestCode(false)">Email me a code →</button>
+          <p class="reg-hint">New here or coming back — the steps are the same. We email a 6-digit code; there is no password to remember.</p>
         </div>
 
-        <div class="reg-field">
-          <label class="reg-label" for="rf-inst">Institution <span>*</span></label>
-          <input class="reg-input" type="text" id="rf-inst" placeholder="Institution / University name" required>
-          <div class="reg-error" id="err-inst">Please enter your institution name</div>
+        <!-- STEP 2 · CODE -->
+        <div id="step-code" hidden>
+          <div class="reg-codehead">We emailed a 6-digit code to <strong id="code-email"></strong>. <button type="button" class="reg-link" onclick="changeEmail()">Change</button></div>
+          <div class="otp-inputs" id="otp-inputs">
+            <input class="otp-digit" id="od1" maxlength="6" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" aria-label="Digit 1 of 6">
+            <input class="otp-digit" id="od2" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Digit 2 of 6">
+            <input class="otp-digit" id="od3" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Digit 3 of 6">
+            <input class="otp-digit" id="od4" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Digit 4 of 6">
+            <input class="otp-digit" id="od5" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Digit 5 of 6">
+            <input class="otp-digit" id="od6" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Digit 6 of 6">
+          </div>
+          <div class="reg-error" id="err-otp" role="alert" style="display:none"></div>
+          <div class="reg-status" id="otp-status" aria-live="polite"></div>
+          <div class="reg-row">
+            <button type="button" class="reg-link" id="btn-resend" onclick="requestCode(true)" disabled>Resend code</button>
+            <span class="otp-timer" id="otp-timer"></span>
+          </div>
+          <p class="reg-hint">It usually arrives within a minute. If you cannot see it, look in your <strong>Spam / Promotions</strong> folder. It comes from “OBE Training Portal”.</p>
         </div>
 
-        <div class="reg-grid">
+        <!-- STEP 3 · DETAILS (first time only) -->
+        <div id="step-details" hidden>
+          <div class="reg-verified">✓ Email verified — <span id="verified-email"></span></div>
+
+          <div class="reg-grid">
+            <div class="reg-field">
+              <label class="reg-label" for="rf-name">Full name <span>*</span></label>
+              <input class="reg-input" type="text" id="rf-name" placeholder="Dr. / Prof. / Mr. / Ms." autocomplete="name">
+              <div class="reg-error" id="err-name">Please enter your full name</div>
+            </div>
+            <div class="reg-field">
+              <label class="reg-label" for="rf-desig">Designation <span>*</span></label>
+              <input class="reg-input" type="text" id="rf-desig" placeholder="Professor / HOD / IQAC Director" autocomplete="organization-title">
+              <div class="reg-error" id="err-desig">Please enter your designation</div>
+            </div>
+          </div>
+
           <div class="reg-field">
-            <label class="reg-label" for="rf-role">Role <span>*</span></label>
-            <select class="reg-input reg-select" id="rf-role" required>
+            <label class="reg-label" for="rf-inst">Institution <span>*</span></label>
+            <input class="reg-input" type="text" id="rf-inst" placeholder="Institution / University name" autocomplete="organization">
+            <div class="reg-error" id="err-inst">Please enter your institution name</div>
+          </div>
+
+          <div class="reg-grid">
+            <div class="reg-field">
+              <label class="reg-label" for="rf-role">Role <span>*</span></label>
+              <select class="reg-input reg-select" id="rf-role">
               <option value="">Select role…</option>
               <option>Faculty (Course designer)</option>
               <option>HOD / Programme coordinator</option>
@@ -805,67 +858,35 @@ h1,h2,h3,h4{letter-spacing:-.02em}
               <option>Research Scholar</option>
               <option>Other</option>
             </select>
-            <div class="reg-error" id="err-role">Please select your role</div>
-          </div>
-          <div class="reg-field">
-            <label class="reg-label" for="rf-dept">Department</label>
-            <input class="reg-input" type="text" id="rf-dept" placeholder="Mechanical / CSE / Civil…">
-          </div>
-        </div>
-
-        <div class="reg-field">
-          <label class="reg-label" for="rf-email">Email address <span>*</span></label>
-          <input class="reg-input" type="email" id="rf-email" placeholder="your@institution.ac.in" autocomplete="email" required>
-          <div class="reg-error" id="err-email">Please enter a valid email address</div>
-        </div>
-
-        <div class="reg-field">
-          <label class="reg-label" for="rf-phone">Mobile number <span>*</span></label>
-          <div class="reg-otp-row">
-            <div class="reg-otp-label">
-              <input class="reg-input" type="tel" id="rf-phone" placeholder="+91 98765 43210" autocomplete="tel" required style="width:100%">
-              <div class="reg-error" id="err-phone">Please enter a valid 10-digit mobile number</div>
+              <div class="reg-error" id="err-role">Please select your role</div>
             </div>
-            <button class="reg-otp-btn" type="button" id="otp-send-btn" onclick="sendOTP()">Send OTP</button>
+            <div class="reg-field">
+              <label class="reg-label" for="rf-dept">Department</label>
+              <input class="reg-input" type="text" id="rf-dept" placeholder="Mechanical / CSE / Civil…">
+            </div>
           </div>
-        </div>
 
-        <!-- OTP BOX -->
-        <div id="otp-box">
-          <div style="font-size:12px;font-weight:600;color:#04342C;margin-bottom:6px">Enter the 6-digit OTP sent to your email</div>
-          <div style="font-size:11px;color:#0F6E56;margin-bottom:8px">Check your inbox (and spam folder) for an email from OBE Training Portal.</div>
-          <div class="otp-inputs">
-            <input class="otp-digit" id="od1" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od2')" onkeydown="otpBack(event,this,'')">
-            <input class="otp-digit" id="od2" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od3')" onkeydown="otpBack(event,this,'od1')">
-            <input class="otp-digit" id="od3" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od4')" onkeydown="otpBack(event,this,'od2')">
-            <input class="otp-digit" id="od4" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od5')" onkeydown="otpBack(event,this,'od3')">
-            <input class="otp-digit" id="od5" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'od6')" onkeydown="otpBack(event,this,'od4')">
-            <input class="otp-digit" id="od6" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'')" onkeydown="otpBack(event,this,'od5')">
+          <div class="reg-field">
+            <label class="reg-label" for="rf-phone">Mobile number <span>*</span></label>
+            <input class="reg-input" type="tel" id="rf-phone" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel">
+            <div class="reg-error" id="err-phone">Please enter a valid 10-digit mobile number</div>
           </div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <button class="otp-verify-btn" type="button" onclick="verifyOTP()">Verify OTP</button>
-            <span class="otp-timer" id="otp-timer"></span>
-          </div>
-          <div class="reg-error" id="err-otp" style="display:none;margin-top:6px">Incorrect OTP. Please try again.</div>
-          <div id="otp-verified-msg" style="display:none;font-size:12px;color:#0F6E56;font-weight:600;margin-top:6px">✓ Email verified</div>
-        </div>
 
-        <div class="reg-divider"></div>
+          <div class="reg-divider"></div>
 
-        <!-- PRIVACY NOTICE -->
-        <div class="reg-privacy">
+          <div class="reg-privacy">
           <strong>Data Privacy Notice</strong> — In accordance with India's Digital Personal Data Protection Act 2023 (DPDP Act), your personal information (name, institution, email, mobile number) is collected solely for the purpose of OBE training access, progress tracking, certificate issuance, and training feedback. Your data will not be shared with any third party without your explicit consent. You may request deletion of your data at any time by writing to <a href="mailto:isiva@mahendraengineeringcollege.ac.in">isiva@mahendraengineeringcollege.ac.in</a>. By registering, you consent to these terms.
         </div>
 
-        <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#2b2a28;margin-bottom:16px;cursor:pointer">
-          <input type="checkbox" id="rf-consent" style="margin-top:3px;flex-shrink:0">
-          <span>I have read and agree to the data privacy notice. I consent to being contacted for training feedback and related communication.</span>
-        </label>
-        <div class="reg-error" id="err-consent">Please accept the privacy notice to continue</div>
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#2b2a28;margin-bottom:16px;cursor:pointer">
+            <input type="checkbox" id="rf-consent" style="margin-top:3px;flex-shrink:0">
+            <span>I have read and agree to the data privacy notice. I consent to being contacted for training feedback and related communication.</span>
+          </label>
+          <div class="reg-error" id="err-consent">Please accept the privacy notice to continue</div>
+          <div class="reg-error" id="err-form" role="alert"></div>
 
-        <button class="reg-submit" type="button" id="reg-submit-btn" onclick="submitRegistration()">
-          Register &amp; Access Portal →
-        </button>
+          <button class="reg-submit" type="button" id="reg-submit-btn" onclick="submitRegistration()">Register &amp; open the portal →</button>
+        </div>
 
       </form>
     </div>
@@ -878,23 +899,19 @@ h1,h2,h3,h4{letter-spacing:-.02em}
 
       <!-- HOW TO RETURN -->
       <div style="background:#f7f5f2;border-radius:10px;padding:16px;text-align:left;margin-bottom:20px">
-        <div style="font-size:12px;font-weight:700;color:#161616;margin-bottom:4px;text-align:center">📌 How to return next time</div>
+        <div style="font-size:12px;font-weight:700;color:#161616;margin-bottom:4px;text-align:center">📌 Coming back later</div>
         <div class="howto-steps">
           <div class="howto-step">
             <div class="howto-num">1</div>
-            <span><strong>Same device / browser:</strong> Simply visit <strong>isiva.in/obe-portal.html</strong> again — your session is saved and the portal opens directly. No login needed.</span>
+            <span><strong>Same phone or laptop:</strong> just open <strong>isiva.in/obe-portal.html</strong> — you stay signed in.</span>
           </div>
           <div class="howto-step">
             <div class="howto-num">2</div>
-            <span><strong>Different device / phone / new browser:</strong> Check your registered email for the welcome message from OBE Training Portal. Click the <strong>"Return to Portal"</strong> link in that email — it will open the portal with your session automatically restored.</span>
+            <span id="howto-other"><strong>Another device, or after clearing your browser:</strong> open the same page, type your email, enter the 6-digit code we send — you are straight back in. No need to fill the form again.</span>
           </div>
           <div class="howto-step">
             <div class="howto-num">3</div>
-            <span><strong>Bookmark this page:</strong> Press <strong>Ctrl+D</strong> (Windows/Linux) or <strong>Cmd+D</strong> (Mac) to bookmark the portal URL right now for easy access.</span>
-          </div>
-          <div class="howto-step">
-            <div class="howto-num">4</div>
-            <span><strong>If asked to register again:</strong> Your session was cleared (browser data deleted). Simply re-register — it takes under a minute, and your certificate record is preserved in our registry.</span>
+            <span><strong>Bookmark it:</strong> press <strong>Ctrl+D</strong> (Windows) or <strong>Cmd+D</strong> (Mac), or use “Add to Home screen” on your phone.</span>
           </div>
         </div>
       </div>
@@ -2127,14 +2144,24 @@ function govEsc(id){const info=GESC[id];const box=document.getElementById('gov-e
 
 
 
-// ══ REGISTRATION & SESSION MANAGEMENT ══════════════════════════════════
+// ══ REGISTRATION & SESSION MANAGEMENT ════════════════════════════════
+// Sign-in is:  email  →  6-digit code  →  in.   First-time people fill one short form after the code.
+//
+// OTP_API_URL — paste the Google Apps Script web-app URL here (setup steps are in obe-otp-backend.gs).
+//   filled → the code is emailed AND CHECKED ON THE SERVER, and anyone already registered can sign
+//            back in on ANY device (their details come back from your Google Sheet).
+//   empty  → falls back to EmailJS: the code is checked in the browser and "sign back in" only works
+//            on the device the person originally used.
+const OTP_API_URL = 'https://script.google.com/macros/s/AKfycbzGpCBXmHyNpx79nMOsbJAlLNDM0ZENJeoiAMuRUaoq9W1g5Ihan-iWBa3HNWfdD8C-/exec';
 
-const EMAILJS_SERVICE          = 'service_e8m44a1';
-const EMAILJS_TEMPLATE         = 'template_l4zyg6i';    // OTP template
-const EMAILJS_WELCOME_TEMPLATE = 'template_5xwkeg5'; // create this in EmailJS → replace here
-const EMAILJS_KEY              = 'XiIqPBh9qXU9V4qI6';
-const GFORM_URL                = 'https://docs.google.com/forms/d/1eRbGfLmUS8nb-l06cTWmbR1LFKM70GHN7lJjFVByLTI/formResponse'; // replace with your form's formResponse URL
-// Google Form field entry IDs (replace with yours):
+// EmailJS (only used while OTP_API_URL is empty)
+const EMAILJS_SERVICE  = 'service_e8m44a1';
+const EMAILJS_TEMPLATE = 'template_l4zyg6i';   // OTP template — "To Email" must be {{to_email}}
+const EMAILJS_KEY      = 'XiIqPBh9qXU9V4qI6';
+
+// Google Form copy of every NEW registration (kept as before; set GFORM_URL to '' to switch it off)
+const GFORM_URL                = 'https://docs.google.com/forms/d/1eRbGfLmUS8nb-l06cTWmbR1LFKM70GHN7lJjFVByLTI/formResponse';
+// Google Form field entry IDs:
 const GF = {
   name:    'entry.1986181708',
   desig:   'entry.146752952',
@@ -2147,346 +2174,327 @@ const GF = {
   date:    'entry.406134361'
 };
 
-let generatedOTP = null;
-let otpVerified  = false;
-let otpTimer     = null;
+const SESSION_KEY = 'obe_portal_user';
+const $ = id => document.getElementById(id);
+const pending = { email: '', proof: '', localCode: null, localExpires: 0, localTries: 0 };
+let otpTimer = null, resendTimer = null, verifying = false;
 
-// ── Session check on page load ──────────────────────────────────────────
-(function checkSession() {
-  const user = getUser();
-  if (user) {
-    // Check for magic link token in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken  = urlParams.get('token');
-    if (urlToken && urlToken !== user.token) {
-      // Token mismatch — might be a different user's link
-      showGate(); return;
-    }
-    // Valid session
-    showPortal(user);
-  } else {
-    // Check URL token (magic link from email)
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken  = urlParams.get('token');
-    if (urlToken) {
-      // Try to restore session from URL token
-      // In a real implementation, this would verify against the DB
-      // For now, ask for quick re-registration or show a minimal restore form
-      showGate();
-    } else {
-      showGate();
-    }
-  }
-})();
+const MSG = {
+  bad_email: 'That email address does not look right.',
+  bad_code:  'Please enter all 6 digits.',
+  rate:      'Too many codes were requested for this email. Please wait an hour and try again.',
+  quota:     'Our email service is busy today. Please try again tomorrow, or write to isiva@mahendraengineeringcollege.ac.in.',
+  mail:      'We could not send the email. Please check the address and try again.',
+  network:   'Could not reach the server. Please check your internet connection and try again.',
+  service:   'The email service did not load. Please refresh the page and try again.',
+  expired:   'That code has expired. Please tap “Resend code”.',
+  locked:    'Too many wrong attempts. Please tap “Resend code” to get a new one.',
+  wrong:     'That code is not correct.',
+  proof:     'Your verification timed out. Please start again.',
+  missing:   'Please fill in all the required fields.',
+  server:    'Something went wrong on our side. Please try again in a minute.'
+};
 
+// ── Session ─────────────────────────────────────────────────────────────
 function getUser() {
-  try { return JSON.parse(localStorage.getItem('obe_portal_user')); }
-  catch(e) { return null; }
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; }
 }
-
-function saveUser(userData) {
-  localStorage.setItem('obe_portal_user', JSON.stringify(userData));
+function saveUser(u) {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify(u)); } catch (e) {}
 }
-
+function normUser(u) {
+  return { name: u.name || '', desig: u.desig || '', inst: u.inst || u.institution || '', role: u.role || '',
+           dept: u.dept || '', email: (u.email || '').toLowerCase(), phone: u.phone || '',
+           token: u.token || '', date: u.date || new Date().toISOString() };
+}
 function showGate() {
-  document.getElementById('reg-gate').style.display   = 'flex';
-  document.getElementById('portal-main').style.display = 'none';
-  document.getElementById('welcome-bar').classList.remove('show');
+  $('reg-gate').style.display = 'flex';
+  $('portal-main').style.display = 'none';
+  $('welcome-bar').classList.remove('show');
+  goStep('email');
 }
-
 function showPortal(user) {
-  document.getElementById('reg-gate').style.display    = 'none';
-  document.getElementById('portal-main').style.display = 'block';
-  // Show welcome bar
-  const wb = document.getElementById('welcome-bar');
-  wb.classList.add('show');
-  document.getElementById('wb-name').textContent = user.name.split(' ').slice(0,2).join(' ');
-  document.getElementById('wb-inst').textContent = user.institution;
+  $('reg-gate').style.display = 'none';
+  $('portal-main').style.display = 'block';
+  $('wb-name').textContent = (user.name || '').split(' ').slice(0, 2).join(' ');
+  $('wb-inst').textContent = user.inst || user.institution || '';
+  $('welcome-bar').classList.add('show');
+  window.scrollTo(0, 0);
 }
-
 function openPortal() {
   const user = getUser();
   if (user) showPortal(user);
 }
-
 function portalLogout() {
-  if (confirm('Sign out? You will need to register again on this device (or use your welcome email link).')) {
-    localStorage.removeItem('obe_portal_user');
+  if (confirm('Sign out on this device? You can sign back in any time with your email and a 6-digit code.')) {
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
     window.location.reload();
   }
 }
 
-// ── OTP Logic ──────────────────────────────────────────────────────────
-function sendOTP() {
-  const email = document.getElementById('rf-email').value.trim();
+// ── Steps ───────────────────────────────────────────────────────────────
+const SUBTITLES = {
+  email:   'Register or sign back in — enter your email and we\'ll send a 6-digit code. No password.',
+  code:    'Enter the 6-digit code we emailed you.',
+  details: 'Almost there — tell us a little about yourself. This is needed only the first time.'
+};
+function goStep(name) {
+  ['email', 'code', 'details'].forEach(n => { $('step-' + n).hidden = (n !== name); });
+  $('reg-subtitle').textContent = SUBTITLES[name];
+  $('reg-form-wrap').style.display = 'block';
+  $('reg-success').style.display = 'none';
+}
+function changeEmail() {
+  clearInterval(otpTimer); clearInterval(resendTimer);
+  clearOtpBoxes(); clearErr('err-otp'); clearErr('err-email');
+  pending.localCode = null;
+  goStep('email');
+  $('rf-email').focus(); $('rf-email').select();
+}
 
-  if (!email || !validateEmail(email)) {
-    showErr('err-email', 'Please enter a valid email address first');
-    document.getElementById('rf-email').focus(); return;
-  }
+// ── Providers: server (Apps Script) or browser-only fallback (EmailJS) ───
+const backend = {
+  call(action, data) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 30000);
+    return fetch(OTP_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // plain text → no CORS pre-flight with Apps Script
+      body: JSON.stringify(Object.assign({ action }, data)),
+      redirect: 'follow', signal: ctrl.signal
+    }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .finally(() => clearTimeout(t));
+  },
+  send:     email        => backend.call('sendOtp', { email }),
+  verify:   (email, code) => backend.call('verifyOtp', { email, code }),
+  register: profile      => backend.call('register', { email: pending.email, proof: pending.proof, profile })
+};
 
-  // ── FIX 2: Check if email already registered (localStorage) ──
-  // Also check sessionStorage for a known-registered flag
-  const existingUser = getUser();
-  if (existingUser && existingUser.email === email) {
-    // Already registered on this device — skip OTP, go straight to portal
-    showPortal(existingUser);
-    return;
-  }
-
-  // Check registered-emails list stored in localStorage
-  let knownEmails = [];
-  try { knownEmails = JSON.parse(localStorage.getItem('obe_known_emails') || '[]'); } catch(e) {}
-  if (knownEmails.includes(email.toLowerCase())) {
-    // Known email — show a "already registered" message instead of sending OTP
-    document.getElementById('otp-box').style.display = 'block';
-    document.getElementById('otp-box').style.background = '#FAEEDA';
-    document.getElementById('otp-box').style.borderColor = '#FAC775';
-    document.getElementById('otp-box').innerHTML = `
-      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:6px">⚠ Email already registered</div>
-      <div style="font-size:12px;color:#633806;line-height:1.65;margin-bottom:10px">
-        <strong>${email}</strong> is already registered on this portal.<br>
-        If you are on a new device, please check your welcome email for your personal access link,
-        or use the device where you originally registered.
-      </div>
-      <button onclick="alreadyRegisteredLogin('${email}')" style="padding:8px 16px;background:#854F0B;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">
-        Re-enter portal →
-      </button>
-      <div style="font-size:11px;color:#854F0B;margin-top:8px">
-        Not your email? <a href="#" onclick="document.getElementById('rf-email').value='';document.getElementById('otp-box').style.display='none';return false;" style="color:#993C1D">Change email</a>
-      </div>`;
-    return;
-  }
-
-  // Generate 6-digit OTP
-  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
-
-  // ── FIX 3: Send OTP to registrant's email (to_email must be dynamic) ──
-  if (typeof emailjs !== 'undefined') {
-    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      to_email:  email,           // registrant's email — NOT hardcoded
-      to_name:   document.getElementById('rf-name').value.trim() || 'Participant',
-      otp_code:  generatedOTP,
-      reply_to:  ' '
-    }, EMAILJS_KEY)
-    .then(() => {
-      console.log('OTP sent to', email);
-    })
-    .catch(e => {
-      console.warn('EmailJS OTP error:', e);
-      showErr('err-phone', 'Could not send OTP. Please check your email address and try again.');
-    });
-  }
-
-  // Show OTP box
-  document.getElementById('otp-box').style.display = 'block';
-  document.getElementById('od1').focus();
-
-  // Start countdown timer (5 min)
-  let seconds = 300;
-  clearInterval(otpTimer);
-  const timerEl = document.getElementById('otp-timer');
-  otpTimer = setInterval(() => {
-    seconds--;
-    const m = Math.floor(seconds/60), s = seconds%60;
-    timerEl.textContent = `OTP valid for ${m}:${s.toString().padStart(2,'0')}`;
-    if (seconds <= 0) {
-      clearInterval(otpTimer);
-      timerEl.textContent = 'OTP expired. Click Send OTP to resend.';
-      generatedOTP = null;
+function knownUsers() { try { return JSON.parse(localStorage.getItem('obe_known_users') || '{}'); } catch (e) { return {}; } }
+const local = {
+  send(email) {
+    if (typeof emailjs === 'undefined') return Promise.resolve({ ok: false, error: 'service' });
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    return emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE,
+        { to_email: email, to_name: 'Participant', otp_code: code, reply_to: ' ' }, EMAILJS_KEY)
+      .then(() => {
+        pending.localCode = code; pending.localExpires = Date.now() + 5 * 60 * 1000; pending.localTries = 0;
+        return { ok: true, ttl: 300 };
+      })
+      .catch(e => {
+        console.warn('EmailJS error:', e);
+        return { ok: false, error: 'mail', detail: (e && (e.text || e.message)) || '' };
+      });
+  },
+  verify(email, code) {
+    if (!pending.localCode || Date.now() > pending.localExpires) return Promise.resolve({ ok: false, error: 'expired' });
+    if (code !== pending.localCode) {
+      pending.localTries++;
+      if (pending.localTries >= 5) { pending.localCode = null; return Promise.resolve({ ok: false, error: 'locked' }); }
+      return Promise.resolve({ ok: false, error: 'wrong', left: 5 - pending.localTries });
     }
-  }, 1000);
-
-  const btn = document.getElementById('otp-send-btn');
-  btn.disabled = true; btn.textContent = 'Resend in 60s';
-  let cooldown = 60;
-  const cdTimer = setInterval(() => {
-    cooldown--;
-    btn.textContent = `Resend in ${cooldown}s`;
-    if (cooldown <= 0) {
-      clearInterval(cdTimer);
-      btn.disabled = false; btn.textContent = 'Resend OTP';
-    }
-  }, 1000);
-}
-
-function otpMove(el, nextId) {
-  if (el.value && nextId) document.getElementById(nextId).focus();
-}
-function otpBack(e, el, prevId) {
-  if (e.key === 'Backspace' && !el.value && prevId)
-    document.getElementById(prevId).focus();
-}
-
-function alreadyRegisteredLogin(email) {
-  // Restore minimal session from known email and open portal
-  const knownEmails = JSON.parse(localStorage.getItem('obe_known_emails') || '[]');
-  if (knownEmails.includes(email.toLowerCase())) {
-    // We have the email but not the full user object (different device / cleared storage)
-    // Show a prompt to enter their name to restore a lightweight session
-    document.getElementById('otp-box').innerHTML = `
-      <div style="font-size:12px;font-weight:600;color:#0F6E56;margin-bottom:8px">✓ Email recognised — quick re-entry</div>
-      <div style="font-size:11px;color:#444;margin-bottom:8px">Enter your name to re-enter the portal on this device:</div>
-      <input type="text" id="restore-name" placeholder="Your full name"
-        style="width:100%;font-size:13px;padding:8px 10px;border-radius:7px;border:1px solid #5DCAA5;outline:none;margin-bottom:8px;font-family:inherit">
-      <button onclick="restoreSession('${email}')" style="padding:8px 16px;background:#0F6E56;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">
-        Enter portal →
-      </button>`;
+    pending.localCode = null;
+    const known = knownUsers()[email];
+    return Promise.resolve(known ? { ok: true, returning: true, user: known } : { ok: true, returning: false, proof: 'local' });
+  },
+  register(profile) {
+    return Promise.resolve({ ok: true, user: Object.assign({ email: pending.email, date: new Date().toISOString() }, profile) });
   }
-}
+};
+const provider = OTP_API_URL ? backend : local;
 
-function restoreSession(email) {
-  const name = document.getElementById('restore-name') ?
-    document.getElementById('restore-name').value.trim() : '';
-  if (!name) { return; }
-  const userData = {
-    name, email,
-    desig: 'Returning user', inst: 'Previously registered',
-    role: '', dept: '', phone: '',
-    token: btoa(email).slice(0,16),
-    date: new Date().toISOString(),
-    restored: true
-  };
-  saveUser(userData);
-  showPortal(userData);
-}
-
-function verifyOTP() {
-  const entered = ['od1','od2','od3','od4','od5','od6']
-    .map(id => document.getElementById(id).value).join('');
-
-  if (!generatedOTP) {
-    document.getElementById('err-otp').textContent = 'OTP expired. Click Send OTP to get a new one.';
-    document.getElementById('err-otp').style.display = 'block'; return;
-  }
-
-  if (entered === generatedOTP) {
-    otpVerified = true;
-    document.getElementById('otp-box').style.display = 'none';
-    document.getElementById('otp-verified-msg').style.display = 'block';
-    document.getElementById('otp-send-btn').textContent = '✓ Verified';
-    document.getElementById('otp-send-btn').style.cssText = 'background:#0F6E56;color:#fff;border-color:#0F6E56';
-    document.getElementById('otp-send-btn').disabled = true;
-    clearInterval(otpTimer);
-  } else {
-    document.getElementById('err-otp').textContent = 'Incorrect OTP. Please try again.';
-    document.getElementById('err-otp').style.display = 'block';
-    ['od1','od2','od3','od4','od5','od6'].forEach(id => {
-      document.getElementById(id).value = '';
-      document.getElementById(id).style.borderColor = '#993C1D';
-    });
-    document.getElementById('od1').focus();
-  }
-}
-
-// ── Form validation helpers ─────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────────────────
 function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-function validatePhone(p) { return /^[+]?[0-9]{10,13}$/.test(p.replace(/\s/g,'')); }
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  if (el) { el.textContent = msg; el.style.display = 'block'; }
+function validatePhone(p) { return /^[+]?[0-9]{10,13}$/.test(p.replace(/[\s-]/g, '')); }
+function showErr(id, msg, detail) {
+  const el = $(id); if (!el) return;
+  el.textContent = msg;
+  if (detail) { const d = document.createElement('span'); d.className = 'reg-detail'; d.textContent = 'Technical detail: ' + detail; el.appendChild(d); }
+  el.style.display = 'block';
 }
-function clearErr(id) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = 'none';
+function clearErr(id) { const el = $(id); if (el) el.style.display = 'none'; }
+function setBusy(btn, busy, text) { btn.disabled = busy; if (text) btn.textContent = text; }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+const boxes = () => [1, 2, 3, 4, 5, 6].map(i => $('od' + i));
+function clearOtpBoxes() { boxes().forEach(b => { b.value = ''; }); }
+function otpValue() { return boxes().map(b => b.value).join(''); }
+
+// ── Step 1 → send the code ──────────────────────────────────────────────
+function requestCode(isResend) {
+  const email = $('rf-email').value.trim().toLowerCase();
+  clearErr('err-email'); clearErr('err-otp');
+  if (!validateEmail(email)) { showErr('err-email', MSG.bad_email); $('rf-email').focus(); return; }
+
+  const btn = $('btn-send'), rbtn = $('btn-resend');
+  setBusy(btn, true, 'Sending code…');
+  if (isResend) { rbtn.disabled = true; rbtn.textContent = 'Sending…'; }
+
+  provider.send(email).then(res => {
+    if (!res || !res.ok) return sendFailed(res || { error: 'server' }, isResend);
+    pending.email = email; pending.proof = '';
+    $('code-email').textContent = email;
+    clearOtpBoxes(); goStep('code');
+    startOtpTimer(res.ttl || 600); startResendCooldown(60);
+    $('od1').focus();
+  }).catch(() => sendFailed({ error: 'network' }, isResend))
+    .finally(() => setBusy(btn, false, 'Email me a code →'));
+}
+function sendFailed(res, isResend) {
+  const msg = MSG[res.error] || MSG.server;
+  if (isResend) { showErr('err-otp', msg, res.detail); startResendCooldown(10); }
+  else showErr('err-email', msg, res.detail);
 }
 
-// ── Main submission ─────────────────────────────────────────────────────
-function submitRegistration() {
-  let valid = true;
-  ['name','desig','inst','role','email','phone'].forEach(f => clearErr('err-'+f));
-  clearErr('err-consent');
+function startOtpTimer(seconds) {
+  clearInterval(otpTimer);
+  const el = $('otp-timer');
+  const tick = () => {
+    if (seconds <= 0) { clearInterval(otpTimer); el.textContent = 'Code expired — tap Resend code.'; pending.localCode = null; return; }
+    el.textContent = 'Code valid for ' + Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
+    seconds--;
+  };
+  tick(); otpTimer = setInterval(tick, 1000);
+}
+function startResendCooldown(seconds) {
+  clearInterval(resendTimer);
+  const btn = $('btn-resend'); btn.disabled = true;
+  const tick = () => {
+    if (seconds <= 0) { clearInterval(resendTimer); btn.disabled = false; btn.textContent = 'Resend code'; return; }
+    btn.textContent = 'Resend code in ' + seconds + 's'; seconds--;
+  };
+  tick(); resendTimer = setInterval(tick, 1000);
+}
 
-  const name  = document.getElementById('rf-name').value.trim();
-  const desig = document.getElementById('rf-desig').value.trim();
-  const inst  = document.getElementById('rf-inst').value.trim();
-  const role  = document.getElementById('rf-role').value;
-  const dept  = document.getElementById('rf-dept').value.trim();
-  const email = document.getElementById('rf-email').value.trim();
-  const phone = document.getElementById('rf-phone').value.trim();
-  const consent = document.getElementById('rf-consent').checked;
+// ── Step 2 → code boxes (type, paste, or autofill) ──────────────────────
+(function initOtpBoxes() {
+  const bx = boxes();
+  const fill = digits => {
+    digits.split('').slice(0, 6).forEach((ch, k) => { bx[k].value = ch; });
+    bx[Math.min(digits.length, 5)].focus();
+  };
+  bx.forEach((b, i) => {
+    b.addEventListener('input', () => {
+      const v = b.value.replace(/\D/g, '');
+      if (i === 0 && v.length > 1) fill(v);                  // email-code autofill drops all 6 digits in box 1
+      else { b.value = v.slice(-1); if (b.value && i < 5) bx[i + 1].focus(); }
+      clearErr('err-otp');
+      if (otpValue().length === 6) verifyCode();
+    });
+    b.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !b.value && i > 0) { bx[i - 1].focus(); bx[i - 1].value = ''; }
+      else if (e.key === 'ArrowLeft' && i > 0) bx[i - 1].focus();
+      else if (e.key === 'ArrowRight' && i < 5) bx[i + 1].focus();
+      else if (e.key === 'Enter') verifyCode();
+    });
+    b.addEventListener('focus', () => b.select());
+    b.addEventListener('paste', e => {
+      const t = ((e.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '');
+      if (!t) return;
+      e.preventDefault(); fill(t); clearErr('err-otp');
+      if (otpValue().length === 6) verifyCode();
+    });
+  });
+  $('rf-email').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); requestCode(false); } });
+})();
 
-  if (!name)  { showErr('err-name','Please enter your full name'); valid=false; }
-  if (!desig) { showErr('err-desig','Please enter your designation'); valid=false; }
-  if (!inst)  { showErr('err-inst','Please enter your institution name'); valid=false; }
-  if (!role)  { showErr('err-role','Please select your role'); valid=false; }
-  if (!email || !validateEmail(email)) { showErr('err-email','Please enter a valid email address'); valid=false; }
-  if (!phone || !validatePhone(phone)) { showErr('err-phone','Please enter a valid mobile number'); valid=false; }
-  if (!consent) { showErr('err-consent','Please accept the privacy notice to continue'); valid=false; }
+function verifyCode() {
+  if (verifying) return;
+  const code = otpValue();
+  if (code.length < 6) { showErr('err-otp', MSG.bad_code); return; }
+  verifying = true; clearErr('err-otp');
+  boxes().forEach(b => { b.disabled = true; });
+  $('otp-status').textContent = 'Checking…';
 
-  if (!otpVerified) {
-    showErr('err-phone', 'Please verify your email with OTP before submitting');
-    if (!document.getElementById('otp-box').style.display || document.getElementById('otp-box').style.display === 'none') {
-      sendOTP();
+  provider.verify(pending.email, code).then(res => {
+    if (res && res.ok) {
+      clearInterval(otpTimer); clearInterval(resendTimer);
+      if (res.returning && res.user) {                       // signing BACK in → straight to the portal
+        const u = normUser(res.user); saveUser(u); showPortal(u);
+      } else {                                               // first time → short form
+        pending.proof = res.proof || '';
+        $('verified-email').textContent = pending.email;
+        goStep('details'); $('rf-name').focus();
+      }
+      return;
     }
-    valid = false;
-  }
+    const err = (res && res.error) || 'server';
+    let msg = MSG[err] || MSG.server;
+    if (err === 'wrong' && res.left != null) msg += ' ' + res.left + (res.left === 1 ? ' try' : ' tries') + ' left.';
+    showErr('err-otp', msg); clearOtpBoxes();
+    if (err === 'expired' || err === 'locked') { clearInterval(otpTimer); $('otp-timer').textContent = ''; startResendCooldown(1); }
+  }).catch(() => { showErr('err-otp', MSG.network); })
+    .finally(() => {
+      verifying = false;
+      boxes().forEach(b => { b.disabled = false; });
+      $('otp-status').textContent = '';
+      if (!$('step-code').hidden) $('od1').focus();
+    });
+}
 
+// ── Step 3 → first-time details ─────────────────────────────────────────
+function submitRegistration() {
+  ['name', 'desig', 'inst', 'role', 'phone', 'consent', 'form'].forEach(f => clearErr('err-' + f));
+  const name  = $('rf-name').value.trim();
+  const desig = $('rf-desig').value.trim();
+  const inst  = $('rf-inst').value.trim();
+  const role  = $('rf-role').value;
+  const dept  = $('rf-dept').value.trim();
+  const phone = $('rf-phone').value.replace(/[\s-]/g, '');      // stored without spaces or dashes
+  let valid = true;
+  if (!name)  { showErr('err-name', 'Please enter your full name'); valid = false; }
+  if (!desig) { showErr('err-desig', 'Please enter your designation'); valid = false; }
+  if (!inst)  { showErr('err-inst', 'Please enter your institution name'); valid = false; }
+  if (!role)  { showErr('err-role', 'Please select your role'); valid = false; }
+  if (!phone || !validatePhone(phone)) { showErr('err-phone', 'Please enter a valid mobile number (10–13 digits)'); valid = false; }
+  if (!$('rf-consent').checked) { showErr('err-consent', 'Please accept the privacy notice to continue'); valid = false; }
   if (!valid) return;
 
-  const btn = document.getElementById('reg-submit-btn');
-  btn.disabled = true; btn.textContent = 'Registering…';
+  const btn = $('reg-submit-btn');
+  setBusy(btn, true, 'Registering…');
+  provider.register({ name, desig, inst, role, dept, phone }).then(res => {
+    if (!res || !res.ok) {
+      const err = (res && res.error) || 'server';
+      showErr('err-form', MSG[err] || MSG.server);
+      if (err === 'proof') setTimeout(changeEmail, 2500);
+      return;
+    }
+    const u = normUser(res.user);
+    u.token = btoa(u.email + '_' + Date.now()).replace(/=/g, '').slice(0, 24);
+    saveUser(u);
+    try {                                                    // lets this browser recognise the person after a sign-out
+      const ku = knownUsers(); ku[u.email] = u; localStorage.setItem('obe_known_users', JSON.stringify(ku));
+    } catch (e) {}
+    if (!res.existing) copyToGoogleForm(u);
 
-  // Generate unique token
-  const token = btoa(email + '_' + Date.now()).replace(/=/g,'').slice(0,24);
-  const userData = { name, desig, inst, role, dept, email, phone, token, date: new Date().toISOString() };
-
-  // Save to localStorage
-  saveUser(userData);
-
-  // Save email to known-emails list (prevents duplicate OTP sending)
-  let knownEmails = [];
-  try { knownEmails = JSON.parse(localStorage.getItem('obe_known_emails') || '[]'); } catch(e) {}
-  if (!knownEmails.includes(email.toLowerCase())) {
-    knownEmails.push(email.toLowerCase());
-    localStorage.setItem('obe_known_emails', JSON.stringify(knownEmails));
-  }
-
-  // ── FIX: Submit to Google Form using URLSearchParams (more reliable than FormData with no-cors) ──
-  const gfParams = new URLSearchParams();
-  gfParams.append(GF.name,  name);
-  gfParams.append(GF.desig, desig);
-  gfParams.append(GF.inst,  inst);
-  gfParams.append(GF.role,  role);
-  gfParams.append(GF.dept,  dept || '');
-  gfParams.append(GF.email, email);
-  gfParams.append(GF.phone, phone);
-  gfParams.append(GF.token, token);
-  gfParams.append(GF.date,  userData.date);
-  fetch(GFORM_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: gfParams.toString()
-  }).then(() => console.log('Google Form submitted'))
-    .catch(e => console.warn('Google Form error:', e));
-
-  // ── FIX 3: Send welcome email with magic link ──
-  // Uses a SECOND EmailJS template — must be created in EmailJS dashboard
-  // Template name: obe_welcome_template  (create this if not done yet)
-  const magicLink = `https://isiva.in/obe-portal.html?token=${token}`;
-  if (typeof emailjs !== 'undefined') {
-    emailjs.send(EMAILJS_SERVICE, EMAILJS_WELCOME_TEMPLATE, {
-      to_email:     email,           // registrant's email
-      to_name:      name,
-      institution:  inst,
-      role:         role,
-      magic_link:   magicLink,
-      portal_url:   'https://isiva.in/obe-portal.html',
-      reply_to:     'drisivamech@gmail.com'
-    }, EMAILJS_KEY)
-    .then(() => console.log('Welcome email sent to', email))
-    .catch(e => console.warn('Welcome email error:', e));
-  }
-
-  // Show success
-  document.getElementById('reg-form-wrap').style.display = 'none';
-  document.getElementById('reg-success').style.display   = 'block';
-  document.getElementById('reg-success-msg').innerHTML   =
-    `Thank you, <strong>${name}</strong>! You are now registered as <em>${role}</em> from <strong>${inst}</strong>.<br><br>
-     A welcome email has been sent to <strong>${email}</strong> with your personal return link. Please check your inbox (including spam).`;
+    $('reg-form-wrap').style.display = 'none';
+    $('reg-success').style.display = 'block';
+    $('reg-subtitle').textContent = 'You are in.';
+    $('reg-success-msg').innerHTML =
+      'Thank you, <strong>' + esc(u.name) + '</strong>! You are registered as <em>' + esc(u.role) +
+      '</em> from <strong>' + esc(u.inst) + '</strong>.';
+    if (!OTP_API_URL) {
+      $('howto-other').innerHTML = '<strong>Another device:</strong> sign-in on a new device needs the one-time server set-up. Until then, use this same phone or laptop.';
+    }
+  }).catch(() => showErr('err-form', MSG.network))
+    .finally(() => setBusy(btn, false, 'Register & open the portal →'));
 }
 
+function copyToGoogleForm(u) {
+  if (!GFORM_URL) return;
+  const p = new URLSearchParams();
+  p.append(GF.name, u.name);  p.append(GF.desig, u.desig); p.append(GF.inst, u.inst);
+  p.append(GF.role, u.role);  p.append(GF.dept, u.dept || ''); p.append(GF.email, u.email);
+  p.append(GF.phone, u.phone); p.append(GF.token, u.token);  p.append(GF.date, u.date);
+  fetch(GFORM_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: p.toString() })
+    .catch(e => console.warn('Google Form error:', e));
+}
+
+// ── Start: signed in on this device? open the portal; otherwise show the email step ──
+// (kept at the very end so every constant above exists before it runs)
+(function checkSession() {
+  const user = getUser();
+  if (user && user.name) showPortal(user); else showGate();
+})();
 
 function isivaMobileNav(){
   const n=document.getElementById('isiva-mobile-nav');
