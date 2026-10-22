@@ -53,7 +53,7 @@
   --space-6: 6rem;
   --space-7: 9rem;
 
-  --content-width: 1560px;   /* page container: wide screens use more of the window */
+  --content-width: 1800px;   /* page container: wide screens use more of the window */
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --content-narrow: 760px;
 
